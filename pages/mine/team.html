@@ -1,0 +1,145 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="team-height">
+			<div class="head-ban">
+				<div class="head-left"><img src="/Public/images/left.png" onclick="team_tz()"></div>
+				<div class="head-main">
+					<div class="bui-navbar bui-box-align-middle inte-nav team-nav">
+		                <div class="span1" id="uiSlideNavbar4">
+		                    <ul id="uiNewsTabNav4" class="bui-nav row">
+		                        <li class="bui-btn" onclick="team_dq(1)" href="pages/mine/team1.html"><span>直推列表</span></li>
+		                        <li class="bui-btn" onclick="team_dq(2)" href="pages/mine/team2.html"><span>团队列表</span></li>
+		                    </ul>
+		                </div>
+		           </div> 
+				</div>
+				<div class="head-right"></div>
+			</div>
+			<div class="team-ul team_1">
+				<ul class="row">
+					<li>
+						<span class="team-ul-right"></span>
+						<div>直推矿力</div>
+						<span class="team_zt"></span>
+					</li>
+					<li>
+						<span class="team-ul-right"></span>
+						<div>直推人数</div>
+						<span class="team_zt_num"></span>
+					</li>
+					<li>
+						<div>星级人数</div>
+						<span class="team_yj_num"></span>
+					</li>
+				</ul>
+			</div>
+			<div class="team-ul team_2" style="display:none;">
+				<ul class="row">
+					<li>
+						<span class="team-ul-right"></span>
+						<div>团队矿力</div>
+						<span class="team_td"></span>
+					</li>
+					<li>
+						<span class="team-ul-right"></span>
+						<div>团队人数</div>
+						<span class="team_td_num"></span>
+					</li>
+					<li>
+						<div>大神矿力</div>
+						<span class="team_yx"></span>
+					</li>
+				</ul>
+			</div>
+			<div class="fri-ss">
+				<input type="text" class="team_neirong" placeholder="搜索用户ID/账号">
+				<input type="hidden" class="team_dq_ye" value="1" />
+				<img onclick="search()" src="/Public/images/sousuo.png">
+			</div>
+		</div>
+		
+		<div id="uiNewsTab4" class="bui-tab">
+			<div class="bui-tab-main">
+				<ul>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
+	</main>
+</div>
+<script>
+var adm = 0;
+function team_dq(num){
+	$('.team_dq_ye').val(num);
+	$('.bui-mask').click();
+	uiList.empty();
+	if(num==1){
+		team1_sx('.');
+		$('.team_1').show();
+		$('.team_2').hide();
+	}else{
+		if(adm === 0){
+			adm=adm+1;
+		}else{
+			team2_sx('a');
+		}
+		$('.team_2').show();
+		$('.team_1').hide();
+	}
+}
+function team_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				mine_sx();
+			})
+		}
+	})
+}
+function team_sx(){
+	bui.ajax({
+		url: "/Home/User/team_mas",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			$('.team_zt').html(res['data']['ww_zt']*1);
+			$('.team_zt_num').html(res['data']['r_nums']*1);
+			$('.team_yj_num').html(res['data']['jyji']*1);
+			
+			$('.team_td_num').html(res['data']['xq_nums']*1);
+			
+			$('.team_td').html(res['data']['ww_td']*1);
+			$('.team_yx').html(res['data']['ww_yx']*1);
+		}
+	});
+}
+team_sx();
+function search(){
+	var team_neirong=$('.team_neirong').val();
+	if(team_neirong==''){
+		//bui.hint({content:'请输入搜索用户账号', position:"center" , effect:"fadeInDown"});
+		//return false;
+	}
+	$('.bui-mask').click();
+	uiList.empty();
+	var ye=$('.team_dq_ye').val();
+	if(ye==1){
+		team1_sx(team_neirong);
+	}else{
+		team2_sx(team_neirong);
+	}
+}
+</script>

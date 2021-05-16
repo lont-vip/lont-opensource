@@ -1,0 +1,89 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==1){
+		bui.load({ url: "pages/total", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main style="background: url(/Public/images/login_bg.png) 0% 0% / 100% 100% no-repeat rgb(255, 255, 255); height: 667px;">
+		<div class="login-head">
+			<img class="login-head-lo" src="/Public/images/logo_login_new.png">
+		</div>
+		<div class="login-main">
+			<form class="login_index">
+				<div class="login-main-inp">
+					<div class="login-main-div">
+						<img src="/Public/images/name.png">
+						<input type="tel" name="mobile" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="输入手机号" />
+					</div>
+		   		</div>
+		   		<div class="login-main-inp">
+		   			<div class="login-main-div">
+		   				<img src="/Public/images/passd.png">
+		   				<input placeholder="输入登录密码" type="password" id="password" name="password" maxlength="18" />
+		   			</div>
+		   		</div>
+		   		<button class="login-main-btn loadToSuccess login_index_tj">登录</button>
+		   		<div class="login-main-for"  style="margin-bottom: .4rem;">
+		   			<a class="bui-btn" href="pages/register">注册账号</a>|
+		   			<a class=" bui-btn" href="pages/forget">忘记密码</a>
+		   		</div>
+		   		<div class=" bui-btn" href="pages/app" style="text-align: center;margin-bottom: .3rem;color: #868686;font-size: .28rem;">
+		   			APP下载
+		   		</div>
+		   	</form>
+	   	</div>
+	 </main>
+</div>
+<script>
+bui.ready(function(){
+	$(".login_index_tj").on("click",function (argument) {
+		setTimeout(function(){
+			var data = $('.login_index').serialize();
+			$.ajax({
+				url: '/Home/Login/submit',
+				type: 'POST',
+				dataType: 'json',
+				data:data,
+				cache:false,
+				success:function(data){
+					if(data.status==3){
+						var uiHint = bui.hint({ autoTrigger: false, appendTo: "#main", content: "<i class='icon-infofill'></i>", position: "top", skin: 'warning', showClose: true, autoClose: false });
+						bui.hint(data['info']);
+					}else{
+						bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+					}
+					if(data.status==1){
+						bui.load({ url: "pages/total", replace:true });
+					}
+				}
+			})
+		},100)	
+	});
+});
+$('input').blur(function () {
+	window.scroll(0,0);
+})
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1000);
+	return false;
+});
+</script>

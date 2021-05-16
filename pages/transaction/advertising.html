@@ -1,0 +1,168 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div id="sidebarDoubleWrap" class="bui-sidebar-wrap" style="background:#fbfbfb;">
+	<div class="bui-sidebar swipeleft" style="background: #fff;">
+		<div class="parti-kr">
+			<div class="head"> <h1>订单筛选</h1></div>
+			<div class="currency" style="padding-left: 0.38rem;">
+				<label class="label-li">交易币对</label>
+				<select class="market_dq_list" name="market_dq"></select>
+			</div>
+			<div class="currency" style="padding-left: 0.38rem;">
+				<label class="label-li">交易类型</label>
+				<ul class="zhifu-box zhifu-box2 leixing">
+					<li onclick="market_xz(1,this)" data-id="0">购买</li>
+					<li onclick="market_xz(2,this)" data-id="1">出售</li>
+				</ul>
+			</div>
+			<div class="screenn">
+				<input type="hidden" class="dq_list" value="1" />
+				<input type="hidden" value="" class="market_dq_lx" />
+				<button type="button" class="chongzhis">重置</button>
+				<button type="button" class="chongzh" onclick="search()">筛选</button>
+			</div>
+		</div>
+	</div>
+	<input type="hidden" value="" name="market" class="advertising_market"/>
+	<div class="bui-page" id="newsPage2" style="background:#fbfbfb;">
+		<main style="background:#fbfbfb;">
+			<div class="adve-height">
+					<div class="head-ban">
+						<div class="head-left"><img src="/Public/images/left.png" onclick="advertising_tz()" /></div>
+						<div class="head-main" >我的订单</div>
+						<div class="head-right bui-align-center" id="menu2"><img style="width: .4rem;" src="/Public/images/sx-01.png" /></div>
+					</div>
+					<div class="bui-navbar bui-box-align-middle adve-nav">
+						<div class="span1" id="uiSlideNavbar2">
+							<ul id="uiNewsTabNav2" class="bui-nav">
+								<li onclick="list_dqxx(1)" class="bui-btn" href="pages/transaction/advertising1.html"><span>委托订单</span></li>
+								<li onclick="list_dqxx(2)" class="bui-btn" href="pages/transaction/advertising2.html"><span>订单管理</span></li>
+								<li onclick="list_dqxx(3)" class="bui-btn" href="pages/transaction/advertising3.html"><span>已完成</span></li>
+								<li onclick="list_dqxx(4)" class="bui-btn" href="pages/transaction/advertising4.html"><span>已取消</span></li>
+								<li onclick="list_dqxx(5)" class="bui-btn" href="pages/transaction/advertising5.html"><span>申诉中</span></li>
+							</ul>
+						</div>
+					</div>
+			</div>
+		
+			<div id="uiNewsTab2" class="bui-tab"><div class="bui-tab-main"><ul><li></li><li></li><li></li><li></li><li></li></ul></div></div>
+				<div class="lock-tan">
+		<div class="lock-k">
+			<form class="weituo_index">
+				<span class="lock-k-q">确认撤销订单吗？</span>
+				<input type="hidden" name="id" class="quxiao_id"  value="" />
+				<div class="lock-k-btn">
+					<button type="button" onclick="quxiaoxx()" class="lock-btn-off">取消</button>
+					<button class="loadToSuccess weituo_index_tj" type="button" style="background: linear-gradient(to right,#2ab7a1,#3be3ad);color: #FFFFFF;margin-left: .15rem;">确定</button>
+				</div>
+			</form>
+		</div>
+	</div>
+		</main>
+		
+	</div>
+	
+</div>
+<script>
+function advertising_tz(){
+	var market=$('.advertising_market').val();
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/transaction"], function(main) {
+				xuanzedq(market);
+			})
+		}
+	})
+}
+
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	$('.advertising_market').val(result['market']);
+});
+
+bui.ready(function(){
+	$(".weituo_index_tj").on("click",function (argument) {
+		var data = $('.weituo_index').serialize();
+		$.ajax({
+			url: '/Home/Entruy/trade_chexiao',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+              	bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					search();
+					$('.lock-tan').hide();
+				}
+			}
+		})
+	});
+});
+function chexiao_weituo(id){
+	$('.quxiao_id').val(id);
+	$('.lock-tan').show();
+}
+function quxiaoxx(){
+	$('.lock-tan').hide();
+}
+function search(){
+	var dq_list=$('.dq_list').val();
+	var market_dq=$('.market_dq_list').val();
+	var market_dq_lx=$('.market_dq_lx').val();
+	uiList.empty();
+	if(dq_list==2){
+		advertising_sx_2(market_dq,market_dq_lx);
+	}else if(dq_list==3){
+		advertising_sx_3(market_dq,market_dq_lx);
+	}else if(dq_list==4){
+		advertising_sx_4(market_dq,market_dq_lx);
+	}else if(dq_list==5){
+		advertising_sx_5(market_dq,market_dq_lx);
+	}else{
+		advertising_sx_1(market_dq,market_dq_lx);
+	}
+}
+function list_dqxx(num){
+	$('.dq_list').val(num);
+}
+function market_xz(num,zj){
+	$('.zhifu-box li').attr('class','');
+	$(zj).attr('class','avico')
+	$('.market_dq_lx').val(num);
+}
+function advertising_sx(){
+	bui.ajax({
+		url: "/Home/Entruy/market_mas",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['market_arr']){
+			var market_dq_list='<option value="">选择交易市场</option>';
+			var market_cd=res['market_arr'].length;
+			for(var j=0;j<market_cd;j++){
+				market_dq_list+='<option value="'+res['market_arr'][j]['name']+'">'+res['market_arr'][j]['name2']+'</option>';
+			}
+			$('.market_dq_list').html(market_dq_list);
+		}
+	});
+}
+advertising_sx();
+
+var uiSidebar = bui.sidebar({
+	id: "#sidebarDoubleWrap",
+	width: 600,
+});
+$("#menu2").on("click",function () {
+	uiSidebar.open({target:"swipeleft"})
+})
+</script>

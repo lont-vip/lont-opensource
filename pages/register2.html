@@ -1,0 +1,117 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==1){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main style="background: url(/Public/images/login_bg.png) no-repeat;background-size:100% 100%;">
+		<div class="reg-left">
+			<img src="/Public/images/left.png" style="width: .4rem;margin: .25rem;" onclick="register2_tz();" />
+		</div>
+		<div class="login-head" style="margin: 0;">
+			<img style="margin: 0;" class="login-head-lo" src="/Public/images/logo_login_new.png">
+		</div>
+		<div class="regis-main">
+			<form class="register2_index">
+	   			<input type="hidden" class="invit" name="invit" value="" />
+	   			<input type="hidden" class="yaoqing2" value="" />
+	   			<input type="hidden" class="username" name="username" value="" />
+	   			<input type="hidden" class="mobile" name="mobile" value="" />
+		   		<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">登录密码</span>
+						<input type="password" name="password" maxlength="18" placeholder="输入登录密码" />
+					</div>
+				</div>
+				<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">确认密码</span>
+						<input type="password" name="password2" maxlength="18" placeholder="确认登录密码" />
+					</div>
+				</div>
+				<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">交易密码</span>
+						<input type="password" name="paypassword" maxlength="18" placeholder="输入交易密码" />
+					</div>
+				</div>
+				<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">确认密码</span>
+						<input type="password" name="paypassword2" maxlength="18" placeholder="确认交易密码" />
+					</div>
+				</div>
+				<div class="poi">
+		   			<img src="/Public/images/gth.png">密码支持8-18位数字大小写字母特殊符号
+		   		</div>
+		   		<button class="regis-main-btn loadToSuccess register2_index_tj" type="button">注册</button>
+		   	</form>
+	   </div>
+	</main>
+</div>
+
+<script>
+bui.ready(function(){
+	$(".register2_index_tj").on("click",function (argument) {
+		var data = $('.register2_index').serialize();
+		var yaoqing=$(".yaoqing2").val();
+		$.ajax({
+			url: '/Home/login/register',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				if(data.status==1){
+					if(yaoqing==1){
+						bui.load({ url: "pages/app" });
+					}else{
+						bui.load({ url: "pages/total" });
+					}
+				}else{
+					bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			}
+		})
+	});
+});
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	$(".invit").val(result['invit']);
+	$(".username").val(result['username']);
+	$(".mobile").val(result['mobile']);
+	$(".yaoqing2").val(result['yaoqing']);
+});
+function register2_tz(yemian) {
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/register"], function(main) {
+			})
+		}
+	})
+}
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1000);
+	return false;
+});
+
+</script>

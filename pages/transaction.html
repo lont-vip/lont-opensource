@@ -1,0 +1,1017 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<style>
+	
+	.pull-main{
+		
+	}
+	.pull-main-left{
+		text-align: center;
+    float: left;
+    font-size: .28rem;
+    width: 50%;
+    height: .8rem;
+    line-height: .8rem;
+    box-shadow: 0 0 0.18rem 0.04rem rgba(3, 0, 0, 0.03);
+	}
+	.pull-main-left>span{
+		    position: relative;
+    width: .3rem;
+    display: inline-block;
+    height: .3rem;
+    margin-top: 0;
+    vertical-align: middle;
+    margin-left: .1rem;
+	}
+	.pull-up{
+		    width: .15rem;
+    position: absolute;
+    height: .15rem;
+    top: 0;
+    left: 0;
+	}
+	.pull-up2{
+		    width: .15rem;
+    position: absolute;
+    height: .15rem;
+    top: 0;
+    left: 0;
+	}
+	.pull-img1{
+		  width: .15rem;
+    position: absolute;
+    height: .15rem;
+    top: 0;
+    left: 0;
+	}
+	.pull-img1-z{
+		display: none;
+		 position: absolute;
+    height: .15rem;
+    top: 0;
+    left: 0;
+	}
+	.pull-down{
+		    width: .15rem;
+    position: absolute;
+    height: .15rem;
+    bottom: 0;
+    left: 0;
+	}
+	.pull-down2{
+		    width: .15rem;
+    position: absolute;
+    height: .15rem;
+    bottom: 0;
+    left: 0;
+	}
+	.pull-img2{
+		position: absolute;
+    height: .15rem;
+    bottom: 0;
+    left: 0;
+	}
+	.pull-img2-z{
+		display: none;
+		position: absolute;
+    height: .15rem;
+    bottom: 0;
+    left: 0;
+	}
+</style>
+
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="tran-height row">
+			<div class="head-ban">
+				<div class="head-left"><img class="transaction-x" src="/Public/images/transaction_x.png"  /></div>
+				<div class="head-main transac_title" style="font-size: .32rem;font-weight: 600;color: #000;"></div>
+				<div class="head-right"></div>
+			</div>
+			<div class="buy-sell row">
+				<div class="bui-navbar bui-box-align-middle buy-sell-hd">
+					<div class="span1" id="uiSlideNavbar">
+						<ul id="uiNewsTabNav" class="bui-nav reco-nav">
+							<li onclick="xuanzexx(1)" class="bui-btn transa_xz1" href="pages/transaction1.html"><span>我要买</span></li>
+							<li onclick="xuanzexx(2)" class="bui-btn transa_xz2" href="pages/transaction2.html"><span>我要卖</span></li>
+						</ul>
+					</div>
+				</div>
+				<input type="hidden" class="dangqian_lx" value="1" />
+				<div class="right-xuanz">
+					<ul class="scr-fabu bui-btn transa_fabu" href="pages/transaction/fabu.html">
+						<li><img src="/Public/images/db-01.png"></li>
+						<li>发布</li>
+					</ul>
+					<ul class="bui-btn transa_dingdan" href="pages/transaction/advertising.html">
+						<li><img src="/Public/images/dd-01.png"></li>
+						<li>订单</li>
+					</ul>
+				</div>
+			</div>
+			<input type="hidden" value="" class="dq_bizhong" />
+			<div class="transa-main">
+				<div class="transa-main-d row">
+					<div class="transa-main-dl">
+						<div>当前价格(<font class="transac_title"></font>)</div>
+						<span class="transac_dq_price"></span>
+					</div>
+					<div class="transa-main-drc bui-btn transac_zhangdie"></div>
+				</div>
+				<div class="transa-main-d transa-main-d2 row">
+					<div class="transa-main-dl">
+						<div>今日均价(<font class="transac_title"></font>)</div>
+						<span class="transac_dq_pingju"></span>
+					</div>
+					<div class="transa-main-dr">
+						<div>今日最高(<font class="transac_title"></font>)</div>
+						<span class="transac_dq_max"></span>
+					</div>
+				</div>
+			</div>
+		    <!--
+			<div class="tran-jl row">
+				<div class="tran-jl-d">
+					<div class="tran-jl-d1">今日成交(<font class="transac_title2"></font>)</div>
+					<div class="tran-jl-d2 transac_day_chengjiao"></div>
+				</div>
+				<div class="tran-jl-l">
+					<div class="tran-jl-d1">历史成交(<font class="transac_title2"></font>)</div>
+				<div class="tran-jl-d2 transac_chengjiao"></div>
+			</div>
+			-->
+				<div class="pull-main">
+					<div class="pull-main-left">
+						数量排序
+						<span>
+							<span class="pull-up">
+									<img class="pull-img1 " src="/Public/images/pull-up.png" onclick="sort('num',1)"/>
+									<img class="pull-img1-z " src="/Public/images/pull-up2.png" onclick="sort('num',2)" />
+							</span>
+							<span class="pull-down">
+									<img class="pull-img2" src="/Public/images/pull-down.png"  onclick="sort('num',2)" />
+									<img class="pull-img2-z" src="/Public/images/pull-down2.png" onclick="sort('num',1)"/>
+							</span>
+						
+						</span>
+					</div>
+					<div class="pull-main-left">
+						价格排序
+					<span>
+							<span class="pull-up2">
+									<img class="pull-img1 " src="/Public/images/pull-up.png" onclick="sort('price',1)"/>
+									<img class="pull-img1-z " src="/Public/images/pull-up2.png" onclick="sort('price',2)"/>
+							</span>
+							<span class="pull-down2">
+									<img class="pull-img2" style="display:none;" src="/Public/images/pull-down.png" onclick="sort('price',2)"/>
+							<img class="pull-img2-z" style="display:block;" src="/Public/images/pull-down2.png" onclick="sort('price',1)"/>
+							</span>
+						
+						</span>
+				·</div>
+				</div>
+			</div>
+	
+		
+		<div id="uiNewsTab" class="bui-tab">
+			<div class="bui-tab-main"><ul><li></li><li></li><li></li></ul></div>
+		</div>
+	</main>
+	<div class="tran-box">
+		<div class="home_top_menu_pop" >
+			<div class="pop_User_Information">
+				<div class="bibi"><span>交易币对</span><img class="guanbi" src="/Public/images/off2.png"></div>
+				<ul class="tab-nav mt-tabpage-title row market_fenqu_list"></ul>
+				<div class="sousuo">
+					<input type="text" style="margin-top: 0rem;" placeholder="搜索币种"><img src="/Public/images/sousuo.png" style="margin-top: .3rem;">	
+				</div>
+				<div class="result">
+					<div class="head">
+						<div>交易币对</div>
+						<div style="text-align: right;float: right;padding-right: .5rem;">市场参考价</div>
+					</div>
+					<div class="entcoins_list_11"></div>
+				</div>
+			</div>
+        </div>
+    </div>
+    <div class="popup-tan anquan" style="display: none;">
+    	<form class="mairu_index">
+    		<input type="hidden" value="0" name="mairu_id" class="mairu_tid" />
+    		<input type="hidden" value="1" name="mairu_lx" class="mairu_lx" />
+    		<div class="parti-k parti-btc" style="margin-left: 0;width: 100%;">
+    			<div class="parti-x">
+	    			<div class="popup-k-d1"><font class="mairu_market"></font><span class="popup-cha">取消</span></div>
+					<div class="popup-k-d2"><!-- mairu_mas_coin_2 -->
+						单价：<span><font class="mairu_mas_price"></font> <font class=" mairu_market"></font></span>
+					</div>
+					<div style="display:none;" class="popup-k-d2">总数量：<font class="mairu_mas_num_zong"></font> </div>
+					<div style="display:none;" class="popup-k-d2">总金额：<font class="mairu_mas_price_zong"></font> </div>
+					
+					<div class="popup-k-d3">
+						<span class="active" onclick="mairu_mas_xuanze(1)" data-num="1" style="margin-left: 0;">按金额购买</span>|<span onclick="mairu_mas_xuanze(2)" data-num="2">按数量购买</span>
+					</div>
+					<div class="popup-k-d4 popup-k-d4-j">
+						<div>金额</div>
+						<input type="text" class="mairu_mas_money" name="mairu_money" onkeyup="nu(this)" oninput="mairu_ze(1)" placeholder="请输入交易金额" />
+						<span><font class="mairu_mas_coin_2"></font><span onclick="mairu_quan(1)">全部买入</span></span>
+					</div>
+					<div class="popup-k-d4 popup-k-d4-s" style="display: none;">
+						<div>数量</div>
+						<input type="text" class="mairu_mas_num" name="mairu_num" onkeyup="nu(this)" oninput="mairu_ze(2)" placeholder="请输入交易数量" />
+						<span><font class="mairu_mas_coin_1"></font><span onclick="mairu_quan(2)">全部买入</span></span>
+					</div>
+					<div class="popup-k-d4">
+						<div>最小限额：</div>
+						<span class="mairu_xiane"></span>
+					</div>
+					<input type="hidden" value="0" name="mairu_pay_1" class="mairu_pay_1" />
+					<input type="hidden" value="0" name="mairu_pay_2" class="mairu_pay_2" />
+					<input type="hidden" value="0" name="mairu_pay_3" class="mairu_pay_3" />
+					<div class="fukuan_fashi_1" style="display:none;">
+						<div class="popup-k-d5">选择付款方式</div>
+						<div class="popup-k-d6 mairu_xuanze_fangshi"></div>
+					</div>
+					<div class="popup-k-d7">
+						<span>交易数量</span>
+						<span class="popup-k-d7-l"><font class="mairu_mas_num_jy">0</font> <font class="mairu_mas_coin_1"></font></span>
+					</div>
+					<div class="popup-k-d7">
+						<span>实付款</span>
+						<span class="popup-k-d7-l"><font class="mairu_mas_money_jy">0</font> <font class="mairu_mas_coin_2"></font></span>
+					</div>
+					<button type="button" class="parti-x-btn loadToSuccess mairu_index_tj">购买<font class="mairu_mas_coin_1"></font></button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="popup-tan anquan2" style="display: none;">
+		<form class="maichu_index">
+    		<input type="hidden" value="0" name="maichu_id" class="maichu_tid" />
+    		<input type="hidden" value="1" name="maichu_lx" class="maichu_lx" />
+			<div class="parti-k parti-btc" style="margin-left: 0;width: 100%;">
+				<div class="parti-x">
+					<div class="popup-k-d1"><font class="maichu_market"></font><span class="popup-cha">取消</span></div>
+					<div class="popup-k-d2">
+						单价：<span><font class="maichu_mas_price"></font> <font class="maichu_market"></font></span>
+					</div>
+					<div style="display:none;" class="popup-k-d2">总数量：<font class="maichu_mas_num_zong"></font> </div>
+					<div style="display:none;" class="popup-k-d2">总金额：<font class="maichu_mas_price_zong"></font> </div>
+					
+					<div class="popup-k-d3">
+						<span class="active" onclick="maichu_mas_xuanze(1)" data-num="1" style="margin-left: 0;">按金额出售</span>|<span onclick="maichu_mas_xuanze(2)" data-num="2">按数量出售</span>
+					</div>
+					<div class="popup-k-d4 popup-k-d4-j">
+						<div>金额</div>
+						<input type="text" class="maichu_mas_money" name="maichu_money" onkeyup="nu(this)" oninput="maichu_ze(1)" placeholder="请输入交易金额" />
+						<span><font class="maichu_mas_coin_2"></font><span onclick="maichu_quan(1)">全部出售</span></span>
+					</div>
+					<div class="popup-k-d4 popup-k-d4-s" style="display: none;">
+						<div>数量</div>
+						<input type="text" class="maichu_mas_num" name="maichu_num" onkeyup="nu(this)" oninput="maichu_ze(2)" placeholder="请输入交易数量" />
+						<span><font class="maichu_mas_coin_1"></font><span onclick="maichu_quan(2)">全部出售</span></span>
+					</div>
+					<div class="popup-k-d4">
+						<div>最小限额：</div>
+						<span class="maichu_xiane" style="margin-top: -.4rem;"></span>
+					</div>
+					<input type="hidden" value="0" name="maichu_pay_1" class="maichu_pay_1" />
+					<input type="hidden" value="0" name="maichu_pay_2" class="maichu_pay_2" />
+					<input type="hidden" value="0" name="maichu_pay_3" class="maichu_pay_3" />
+					<div class="fukuan_fashi_2" style="display:none;">
+						<div class="popup-k-d5">选择收款方式</div>
+						<div class="popup-k-d6-s">
+							<img class="popup-k-d6-simg maichu_moren_img" src="" />
+							<span class="popup-k-d6-ssp maichu_moren_name"></span>
+							<div class="popup-k-d6-sdiv">
+								<span class="maichu_moren_card"></span>
+								<img src="/Public/images/right.png" />
+							</div>
+						</div>
+					</div>
+					<div class="popup-k-d7">
+						<span>交易数量</span>
+						<span class="popup-k-d7-l"><font class="maichu_mas_num_jy">0</font> <font class="maichu_mas_coin_1"></font></span>
+					</div>
+					<div class="popup-k-d7">
+						<span>总价值</span>
+						<span class="popup-k-d7-l"><font class="maichu_mas_money_jy">0</font> <font class="maichu_mas_coin_2"></font></span>
+					</div>
+					<button class="parti-x-btn parti-x-btn2 loadToSuccess maichu_index_tj" type="button">出售<font class="maichu_mas_coin_1"></font></button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="popup-tan anquan3" style="display: none;">
+		<form>
+			<div class="parti-k parti-btc" style="margin-left: 0;width: 100%;">
+				<div class="parti-x">
+					<div class="popup-k-d1">
+						<img class="popup-cha2" src="/Public/images/lo_left.png" />
+						 选择收款方式
+					</div>
+					<div onclick="xuanze_yhk()" class="popup-k-d6-s maichu_xin_1" style="display:none;">
+						<img class="popup-k-z popup-k-z1" src="/Public/images/xy_1.png" />
+						<img  class="popup-k-z popup-k-z2" src="/Public/images/xy_2.png" />
+						<img class="popup-k-d6-simg" src="/Public/images/card.png" />
+						<span class="popup-k-d6-ssp">银行卡</span>
+						<div class="popup-k-d6-sdiv">
+							<span class="maichu_xin_1_card"></span>
+						</div>
+					</div>
+					<div onclick="xuanze_zfb()" class="popup-k-d6-s maichu_xin_2" style="display:none;">
+						<img  class="popup-k-z popup-k-z1" src="/Public/images/xy_1.png" />
+						<img  class="popup-k-z popup-k-z2" src="/Public/images/xy_2.png" />
+						<img class="popup-k-d6-simg" src="/Public/images/zfb.png" />
+						<span class="popup-k-d6-ssp">支付宝</span>
+						<div class="popup-k-d6-sdiv">
+							<span class="maichu_xin_2_card"></span>
+						</div>
+					</div>
+					<div  onclick="xuanze_wx()" class="popup-k-d6-s maichu_xin_3" style="display:none;">
+						<img  class="popup-k-z popup-k-z1" src="/Public/images/xy_1.png" />
+						<img  class="popup-k-z popup-k-z2" src="/Public/images/xy_2.png" />
+						<img class="popup-k-d6-simg" src="/Public/images/wx-wx.png" />
+						<span class="popup-k-d6-ssp">微信</span>
+						<div class="popup-k-d6-sdiv">
+							<span class="maichu_xin_3_card"></span>
+						</div>
+					</div>
+					<div class="popup-k-sz bui-btn" href="pages/mine/financial">
+						设置我的收款方式<img src="/Public/images/right.png" />
+					</div>
+					<button type="button" onclick="queding()" class="parti-x-btn parti-x-btn2">确定</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+
+       slideHeight = $(window).height() - $(".tran-height").height() - $(".foot-ul").height();
+       console.log($(window).height())
+       console.log($(".tran-height").height())
+       console.log($(".foot-ul").height())
+       // 新闻导航选项卡 js 初始化:
+       uiNewsTab = bui.tab({
+           id:"#uiNewsTab",
+           menu:"#uiNewsTabNav",
+           height: slideHeight,
+           scroll: false,
+           animate: false,
+           // 1: 声明是动态加载的tab
+           autoload: true
+       })
+       
+function queding(){
+	$('.anquan2').show();
+	$('.anquan3').hide();
+}
+function xuanze_yhk(){
+	$('.maichu_pay_1').val(1);
+	$('.maichu_pay_2').val(0);
+	$('.maichu_pay_3').val(0);
+	$('.maichu_moren_img').attr('src','/Public/images/card.png');
+	$('.maichu_moren_name').html($('.maichu_xin_1_card').html());
+}
+
+function xuanze_zfb(){
+	$('.maichu_pay_1').val(0);
+	$('.maichu_pay_2').val(1);
+	$('.maichu_pay_3').val(0);
+	$('.maichu_moren_img').attr('src','/Public/images/zfb.png');
+	$('.maichu_moren_name').html($('.maichu_xin_2_card').html());
+}
+
+function xuanze_wx(){
+	$('.maichu_pay_1').val(0);
+	$('.maichu_pay_2').val(0);
+	$('.maichu_pay_3').val(1);
+	$('.maichu_moren_img').attr('src','/Public/images/wx-wx.png');
+	$('.maichu_moren_name').html($('.maichu_xin_3_card').html());
+}
+
+var adm = 0;
+function xuanzexx(num){
+	$('.bui-scroll-foot').html('');
+	$('.dangqian_lx').val(num);
+	var market=$('.dq_bizhong').val();
+	$('.bui-mask').click();
+	$('.tran-box').hide();
+	$('.transa_xz1').attr('href','pages/transaction1.html?market='+market);
+	$('.transa_xz2').attr('href','pages/transaction2.html?market='+market);
+	$('.transa_fabu').attr('href','pages/transaction/fabu?market='+market);
+	$('.transa_dingdan').attr('href','pages/transaction/advertising?market='+market);
+	if(num==1){
+		console.log('----88-----');
+			$('.pull-up .pull-img1').show()
+		$('.pull-up .pull-img1-z').hide()
+		$('.pull-down .pull-img2').show()
+		$('.pull-down .pull-img2-z').hide()
+		$('.pull-up2 .pull-img1').show()
+		$('.pull-up2 .pull-img1-z').hide()
+		$('.pull-down2 .pull-img2').hide()
+		$('.pull-down2 .pull-img2-z').show()
+		uiList_mr.empty(true);
+		uiList_mr.destroy();
+		$('.bui-scroll-foot').html('');
+        $('.bui-scroll-head').html('');
+		transaction_mr(market);
+	}else{
+		console.log('----99-----');
+		$('.pull-up .pull-img1').show()
+		$('.pull-up .pull-img1-z').hide()
+		$('.pull-down .pull-img2').show()
+		$('.pull-down .pull-img2-z').hide()
+		$('.pull-up2 .pull-img1').hide()
+		$('.pull-up2 .pull-img1-z').show()
+		$('.pull-down2 .pull-img2').show()
+		$('.pull-down2 .pull-img2-z').hide()
+		if(adm === 0){
+			adm = adm + 1;
+			setTimeout(function(){
+				uiList_mc.empty(true);
+				uiList_mc.destroy();
+				transaction_mc(market);
+				console.log(market)
+			},500)
+		}else{
+			uiList_mc.empty(true);
+			uiList_mc.destroy();
+			$('.bui-scroll-foot').html('');
+			$('.bui-scroll-head').html('');
+			transaction_mc(market);
+		}
+	}
+}
+$('.pull-up img').click(function(){
+	$('.pull-up img').toggle();
+	$('.pull-img2').show()
+	$('.pull-img2-z').hide()
+});
+$('.pull-down img').click(function(){
+	$('.pull-down img').toggle();
+	$('.pull-img1').show()
+	$('.pull-img1-z').hide()
+});
+$('.pull-up2 img').click(function(){
+	$('.pull-up2 img').toggle();
+	$('.pull-img2').show()
+	$('.pull-img2-z').hide()
+});
+$('.pull-down2 img').click(function(){
+	$('.pull-down2 img').toggle();
+	$('.pull-img1').show()
+	$('.pull-img1-z').hide()
+});
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	if(result['market']=='' || result['market']==undefined){
+		bui.ajax({
+			url: "/Home/Entruy/market_moren",
+			data: {},
+			async:false
+		}).then(function(res){
+			$('.transac_title').html(res['market2']);
+			$('.dq_bizhong').val(res['market']);
+			
+			$('.transa_xz1').attr('href','pages/transaction1.html?market='+res['market']);
+			$('.transa_xz2').attr('href','pages/transaction2.html?market='+res['market']);
+			$('.transac_dq_price').html(res['market_arr']['price']*1);
+			$('.transac_dq_pingju').html(res['market_arr']['price_junjia']*1);
+			$('.transac_dq_max').html(res['market_arr']['price_max']*1);
+			$('.transac_day_chengjiao').html(res['market_arr']['day_chengjiao']*1);
+			$('.transac_chengjiao').html(res['market_arr']['chengjiao']*1);
+			$('.transac_title2').html(res['market_arr']['name']);
+			$('.transac_zhangdie').html(res['market_arr']['zhangdie']);
+		});
+		console.log('----111-----');
+	}
+	
+});
+function bizhong_mas2(){
+	var market=$('.dq_bizhong').val();
+	bui.ajax({
+			url: "/Home/Entruy/market_coin_xz",
+			data: {market:market},
+			async:false
+		}).then(function(res){
+			$('.transac_dq_price').html(res['market_arr']['price']*1);
+			$('.transac_dq_pingju').html(res['market_arr']['price_junjia']*1);
+			$('.transac_dq_max').html(res['market_arr']['price_max']*1);
+			$('.transac_day_chengjiao').html(res['market_arr']['day_chengjiao']*1);
+			$('.transac_chengjiao').html(res['market_arr']['chengjiao']*1);
+			$('.transac_zhangdie').html(res['market_arr']['zhangdie']);
+		});
+}
+function bizhong_mas(market){
+	bui.ajax({
+			url: "/Home/Entruy/market_coin_xz",
+			data: {market:market},
+			async:false
+		}).then(function(res){
+			$('.dq_bizhong').val(market);
+			
+			$('.transa_xz1').attr('href','pages/transaction1.html?market='+market);
+			$('.transa_xz2').attr('href','pages/transaction2.html?market='+market);
+			
+			$('.transac_title').html(res['market2']);
+			$('.transac_dq_price').html(res['market_arr']['price']*1);
+			$('.transac_dq_pingju').html(res['market_arr']['price_junjia']*1);
+			$('.transac_dq_max').html(res['market_arr']['price_max']*1);
+			$('.transac_day_chengjiao').html(res['market_arr']['day_chengjiao']*1);
+			$('.transac_chengjiao').html(res['market_arr']['chengjiao']*1);
+			$('.transac_title2').html(res['market_arr']['name']);
+			$('.transac_zhangdie').html(res['market_arr']['zhangdie']);
+		});
+		console.log('----222-----');
+}
+function xuanzedq(market){
+	bizhong_mas(market);
+	$('.dq_bizhong').val(market);
+	$('.bui-mask').click();
+	$('.tran-box').hide();
+	uiList_mr.empty(true);
+	uiList_mr.destroy();
+	
+		$('.bui-scroll-foot').html('');
+        $('.bui-scroll-head').html('');
+	$('.transa_xz1').attr('href','pages/transaction1.html?market='+market);
+	$('.transa_xz2').attr('href','pages/transaction2.html?market='+market);
+	$('.transa_fabu').attr('href','pages/transaction/fabu?market='+market);
+	$('.transa_dingdan').attr('href','pages/transaction/advertising?market='+market);
+	var lx=$('.dangqian_lx').val();
+	if(lx==1){
+		console.log('----333-----');
+		uiList_mr.empty(true);
+		uiList_mr.destroy();
+		$('.bui-scroll-foot').html('');
+        $('.bui-scroll-head').html('');
+		transaction_mr(market);
+	}else{
+		console.log('----444-----');
+		uiList_mr.empty(true);
+		uiList_mr.destroy();
+		$('.bui-scroll-foot').html('');
+        $('.bui-scroll-head').html('');
+		uiList_mc.empty(true);
+		uiList_mc.destroy();
+		$('.bui-scroll-foot').html('');
+        $('.bui-scroll-head').html('');
+		transaction_mr(market);
+		transaction_mc(market);
+	}
+}
+
+function sort(field,desc){
+
+	var market = $('.dq_bizhong').val();
+	bizhong_mas(market);
+	
+	$('.dq_bizhong').val(market);
+	$('.bui-mask').click();
+	$('.tran-box').hide();
+	uiList_mr.empty(true);
+	uiList_mr.destroy();
+		$('.bui-scroll-foot').html('');
+        $('.bui-scroll-head').html('');
+	$('.transa_xz1').attr('href','pages/transaction1.html?market='+market);
+	$('.transa_xz2').attr('href','pages/transaction2.html?market='+market);
+	$('.transa_fabu').attr('href','pages/transaction/fabu?market='+market);
+	$('.transa_dingdan').attr('href','pages/transaction/advertising?market='+market);
+	var lx=$('.dangqian_lx').val();
+	if(lx==1){
+		console.log('----555-----');
+		uiList_mr.empty(true);
+		uiList_mr.destroy();
+		$('.bui-scroll-foot').html('');
+        $('.bui-scroll-head').html('');
+		transaction_mr(market,field,desc);
+	}else{
+		console.log('----666-----');
+		uiList_mr.empty(true);
+		uiList_mr.destroy();
+		$('.bui-scroll-foot').html('');
+        $('.bui-scroll-head').html('');
+		uiList_mc.empty(true);
+		uiList_mc.destroy();
+		$('.bui-scroll-foot').html('');
+        $('.bui-scroll-head').html('');
+		transaction_mr(market,field,desc);
+		transaction_mc(market,field,desc);
+	}
+}
+
+//市场分区
+function market_fenqu_list(){
+	bui.ajax({
+		url: "/Home/Entruy/fenqu_list",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['fenqu']){
+			var market_fenqu_list='';
+			var marcd=res['fenqu'].length;
+			for(var j=0;j<marcd;j++){
+				if(j==0){
+					market_fenqu_list+='<li onclick=fenqu_xuanze("'+res['fenqu'][j]+'",this) class="xianshi mt-tabpage-item tab-nav-item tab-active tab-active1" ><a href="javascript:;"><span>'+(res['fenqu'][j].toUpperCase())+'</span></a></li>';
+				}else{
+					market_fenqu_list+='<li onclick=fenqu_xuanze("'+res['fenqu'][j]+'",this) class="xianshi mt-tabpage-item tab-nav-item tab-active1" ><a href="javascript:;"><span>'+(res['fenqu'][j].toUpperCase())+'</span></a></li>';
+				}
+			}
+			$('.market_fenqu_list').html(market_fenqu_list);
+			var entcoins_list_11='';
+			var markcd=res['market_list'].length;
+			for(var k=0;k<markcd;k++){
+				entcoins_list_11+='<div onclick=xuanzedq("'+res['market_list'][k]['name']+'",this) class="list"><div>'+res['market_list'][k]['coin_1']+'/<i>'+res['market_list'][k]['coin_2']+'</i></div><div class="fie ">'+res['market_list'][k]['price']+'</div></div>';
+			}
+			$('.entcoins_list_11').html(entcoins_list_11);
+		}
+	});
+}
+market_fenqu_list();
+
+function fenqu_xuanze(fenqu,zj){
+	$('.tab-nav li').attr('class','xianshi mt-tabpage-item tab-nav-item  tab-active1');
+	$(zj).attr('class','xianshi mt-tabpage-item tab-nav-item tab-active tab-active1');
+	bui.ajax({
+		url: "/Home/Entruy/fenqu_list2",
+		data: {fenqu:fenqu},
+		async:false
+	}).then(function(res){
+		var entcoins_list_11='';
+		var markcd=res['market_list'].length;
+		for(var k=0;k<markcd;k++){
+			entcoins_list_11+='<div onclick=xuanzedq("'+res['market_list'][k]['name']+'") class="list"><div>'+res['market_list'][k]['coin_1']+'/<i>'+res['market_list'][k]['coin_2']+'</i></div><div class="fie ">'+res['market_list'][k]['price']+'</div></div>';
+		}
+		$('.entcoins_list_11').html(entcoins_list_11);
+	});
+}
+
+
+function nu(obj){
+	obj.value = obj.value.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
+	obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+	obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
+	obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+	obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d\d\d).*$/,'$1$2.$3'); //只能输入两个小数  几个\d保留几位小数
+      
+}
+bui.ready(function(){
+	
+	$(".maichu_index_tj").on("click",function (argument) {
+		setTimeout(function(){
+			var data = $('.maichu_index').serialize();
+			$.ajax({
+				url: '/Home/Entruy/mctrade_ajax',
+				type: 'POST',
+				dataType: 'json',
+				data:data,
+				cache:false,
+				success:function(data){
+					bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+					if(data.status==1){
+						$('.bui-mask').click();
+						//clearInterval(time1);
+						uiList_mc.empty(true);
+						uiList_mc.destroy();
+		$('.bui-scroll-foot').html('');
+        $('.bui-scroll-head').html('');
+						transaction_mc(data['market']);
+						$('.popup-tan').hide();
+						//$('.anquan').hide();
+						//$('.anquan2').hide();
+						//bui.load({ url: "pages/advertising" });
+					}
+				}
+			})
+		},1000)	
+	});
+});
+
+function maichu_quan(num){
+	if(num==1){
+		$('.maichu_mas_money').val($('.maichu_mas_price_zong').html());
+	}else{
+		$('.maichu_mas_num').val($('.maichu_mas_num_zong').html());
+	}
+	maichu_ze(num);
+}
+function maichu_mas_xuanze(num){
+	$('.maichu_mas_money').val('');
+	$('.maichu_mas_num').val('');
+	$('.maichu_mas_num_jy').html(0);
+	$('.maichu_mas_money_jy').html(0);
+	$('.maichu_lx').val(num);
+}
+//卖出联动
+function maichu_ze(num){
+	if(num==1){
+		var zje=$('.maichu_mas_money').val();
+		var price=$('.maichu_mas_price').html();
+		if(zje && price){
+			$.ajax({
+				url: '/Home/Entruy/mas_liandong',
+				type: 'POST',
+				dataType: 'json',
+				data:{'type':1,'money':zje,price:price},
+				cache:false,
+				success:function(data){
+					if(data['status']==1){
+						$('.maichu_mas_num_jy').html(data['num']*1);
+						$('.maichu_mas_money_jy').html(data['money']*1);
+					}else{
+						$('.maichu_mas_num_jy').html(0);
+						$('.maichu_mas_money_jy').html(0);
+					}
+				}
+			});
+		}else{
+			$('.maichu_mas_num_jy').html(0);
+			$('.maichu_mas_money_jy').html(0);
+		}
+	}else{
+		var zje=$('.maichu_mas_num').val();
+		var price=$('.maichu_mas_price').html();
+		if(zje && price){
+			$.ajax({
+				url: '/Home/Entruy/mas_liandong',
+				type: 'POST',
+				dataType: 'json',
+				data:{'type':2,'num':zje,price:price},
+				cache:false,
+				success:function(data){
+					if(data['status']==1){
+						$('.maichu_mas_num_jy').html(data['num']*1);
+						$('.maichu_mas_money_jy').html(data['money']*1);
+					}else{
+						$('.maichu_mas_num_jy').html(0);
+						$('.maichu_mas_money_jy').html(0);
+					}
+				}
+			});
+		}else{
+			$('.maichu_mas_num_jy').html(0);
+			$('.maichu_mas_money_jy').html(0);
+		}
+	}
+}
+//卖出弹框
+function want_sell(id){
+	$.ajax({
+		type:'post',
+		url:"/Home/Entruy/advdetail_sell",
+		data:{id:id,type:2},
+		cache:false,
+		dataType:'json',
+		success:function(data){
+			if(data.status==1){
+				if(data['msg']['fenqu']=='cny'){
+					$('.fukuan_fashi_2').show();
+				}else{
+					$('.fukuan_fashi_2').hide();
+				}
+				$('.maichu_xiane').html((data['msg']['num_min']*1)+' '+data['msg']['coin_1']);
+				$('.maichu_tid').val(id);
+				$('.maichu_market').html(data['msg']['market_mas']);
+				$('.maichu_mas_price').html(data['msg']['price']*1);
+				$('.maichu_mas_coin_1').html(data['msg']['coin_1']);
+				$('.maichu_mas_coin_2').html(data['msg']['coin_2']);
+				$('.maichu_mas_price_zong').html(data['msg']['money']*1);
+				$('.maichu_mas_num_zong').html(data['msg']['num']*1);
+				$('.maichu_pay_'+data['pay_mas']['dqxb']).val(1);
+				if(data['pay_mas']['dqxb']==1){
+					$('.maichu_moren_img').attr('src','/Public/images/card.png');
+					$('.maichu_moren_name').html('银行卡');
+					$('.maichu_moren_card').html(data['pay_mas']['pay_1_mas']['bankcard']);
+				}else if(data['pay_mas']['dqxb']==2){
+					$('.maichu_moren_img').attr('src','/Public/images/zfb.png');
+					$('.maichu_moren_name').html('支付宝');
+					$('.maichu_moren_card').html(data['pay_mas']['pay_2_mas']['card']);
+				}else if(data['pay_mas']['dqxb']==3){
+					$('.maichu_moren_img').attr('src','/Public/images/wx-wx.png');
+					$('.maichu_moren_name').html('微信');
+					$('.maichu_moren_card').html(data['pay_mas']['pay_3_mas']['card']);
+				}
+				if(data['pay_mas']['pay_1']==1){
+					$('.maichu_xin_1').show();
+					$('.maichu_xin_1_card').html(data['pay_mas']['pay_1_mas']['bankcard']);
+				}
+				if(data['pay_mas']['pay_2']==1){
+					$('.maichu_xin_2').show();
+					$('.maichu_xin_2_card').html(data['pay_mas']['pay_2_mas']['card']);
+				}
+				if(data['pay_mas']['pay_3']==1){
+					$('.maichu_xin_3').show();
+					$('.maichu_xin_3_card').html(data['pay_mas']['pay_3_mas']['card']);
+				}
+				$('.anquan2').show();
+			}
+		}
+	});
+}
+
+function mairu_xz(num){
+	$('.mairu_pay_1').val(0);
+	$('.mairu_pay_2').val(0);
+	$('.mairu_pay_3').val(0);
+	$('.mairu_pay_'+num).val(1);
+}
+//购买提交
+bui.ready(function(){
+
+	$(".mairu_index_tj").on("click",function (argument) {
+		setTimeout(function(){
+				var data = $('.mairu_index').serialize();
+				$.ajax({
+					url: '/Home/Entruy/trade_ajax',
+					type: 'POST',
+					dataType: 'json',
+					data:data,
+					cache:false,
+					success:function(data){
+						bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+						if(data.status==1){
+							$('.bui-mask').click();
+							//clearInterval(time1);
+							uiList_mr.empty(true);
+							uiList_mr.destroy();
+		$('.bui-scroll-foot').html('');
+        $('.bui-scroll-head').html('');
+							transaction_mr(data['market']);
+							$('.popup-tan').hide();
+							//$('.anquan').hide();
+							//$('.anquan2').hide();
+							//bui.load({ url: "pages/advertising" });
+						}
+					}
+				})
+		},1000)
+	
+	});
+});
+//买入全部
+function mairu_quan(num){
+	if(num==1){
+		$('.mairu_mas_money').val($('.mairu_mas_price_zong').html());
+	}else{
+		$('.mairu_mas_num').val($('.mairu_mas_num_zong').html());
+	}
+	mairu_ze(num);
+}
+function mairu_mas_xuanze(num){
+	$('.mairu_mas_money').val('');
+	$('.mairu_mas_num').val('');
+	$('.mairu_mas_num_jy').html(0);
+	$('.mairu_mas_money_jy').html(0);
+	$('.mairu_lx').val(num);
+}
+//卖出联动
+function mairu_ze(num){
+	if(num==1){
+		var zje=$('.mairu_mas_money').val();
+		var price=$('.mairu_mas_price').html();
+		if(zje && price){
+			$.ajax({
+				url: '/Home/Entruy/mas_liandong',
+				type: 'POST',
+				dataType: 'json',
+				data:{'type':1,'money':zje,price:price},
+				cache:false,
+				success:function(data){
+					if(data['status']==1){
+						$('.mairu_mas_num_jy').html(data['num']*1);
+						$('.mairu_mas_money_jy').html(data['money']*1);
+					}else{
+						$('.mairu_mas_num_jy').html(0);
+						$('.mairu_mas_money_jy').html(0);
+					}
+				}
+			});
+		}else{
+			$('.mairu_mas_num_jy').html(0);
+			$('.mairu_mas_money_jy').html(0);
+		}
+	}else{
+		var zje=$('.mairu_mas_num').val();
+		var price=$('.mairu_mas_price').html();
+		if(zje && price){
+			$.ajax({
+				url: '/Home/Entruy/mas_liandong',
+				type: 'POST',
+				dataType: 'json',
+				data:{'type':2,'num':zje,price:price},
+				cache:false,
+				success:function(data){
+					if(data['status']==1){
+						$('.mairu_mas_num_jy').html(data['num']*1);
+						$('.mairu_mas_money_jy').html(data['money']*1);
+					}else{
+						$('.mairu_mas_num_jy').html(0);
+						$('.mairu_mas_money_jy').html(0);
+					}
+				}
+			});
+		}else{
+			$('.mairu_mas_num_jy').html(0);
+			$('.mairu_mas_money_jy').html(0);
+		}
+	}
+}
+//购买弹框
+function want_buy(id){
+	$.ajax({
+		type:'post',
+		url:"/Home/Entruy/advdetail",
+		data:{id:id,type:1},
+		cache:false,
+		dataType:'json',  
+		success:function(data){
+			if(data.status==1){
+				if(data['msg']['fenqu']=='cny'){
+					$('.fukuan_fashi_1').show();
+				}else{
+					$('.fukuan_fashi_1').hide();
+				}
+				$('.mairu_xiane').html((data['msg']['num_min']*1)+' '+data['msg']['coin_1']);
+				$('.mairu_tid').val(id);
+				$('.mairu_market').html(data['msg']['market_mas']);
+				$('.mairu_mas_price').html(data['msg']['price']*1);
+				$('.mairu_mas_coin_1').html(data['msg']['coin_1']);
+				$('.mairu_mas_coin_2').html(data['msg']['coin_2']);
+				$('.mairu_mas_price_zong').html(data['msg']['money']*1);
+				$('.mairu_mas_num_zong').html(data['msg']['num']*1);
+				$('.mairu_pay_'+data['msg']['pay_method']).val(1);
+				if(data['msg']['pay_method_mas']){
+					$('.mairu_xuanze_fangshi').html(data['msg']['pay_method_mas']);
+				}
+				$('.anquan').show();
+			}
+		}
+	});
+}
+
+
+$('.transaction-x').click(function(){
+	$('.tran-box').show();
+})
+$('.guanbi').click(function(){
+	$('.tran-box').hide();
+})
+$('.popup-k-d3 span').click(function () {
+	$('.popup-k-d3 span').attr("class","");
+	$(this).attr("class","active");
+	if( $(this).attr("data-num") === "1"){
+		$('.popup-k-d4-j').show();
+		$('.popup-k-d4-s').hide();
+	}else{
+		$('.popup-k-d4-j').hide();
+		$('.popup-k-d4-s').show();
+	}
+})
+$('.popup-k-d6 span').click(function () {
+	$('.popup-k-d6 span').attr("class","");
+	$(this).attr("class","active");
+})
+$('.popup-k-d6-s').click(function () {
+	$('.anquan3').show()
+	$('.anquan2').hide();
+})
+$('.popup-cha2').click(function(){
+	$('.anquan2').show();
+	$('.anquan3').hide();
+})
+$('.popup-k-d6-s').click(function  () {
+	$('.popup-k-d6-s').children('img.popup-k-z1').show();
+	$('.popup-k-d6-s').children('img.popup-k-z2').hide();
+	$(this).children('img.popup-k-z1').toggle();
+	$(this).children('img.popup-k-z2').toggle();
+})
+
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1000);
+	return false;
+});
+</script>

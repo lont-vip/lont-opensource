@@ -1,0 +1,189 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<style>
+	.mibuy-hd-span{
+		    position: absolute;
+    right: 0rem;
+    font-size: .26rem;
+    color: #fe4643;
+    padding: .2rem .2rem;
+    top: .8rem;
+        font-weight: 600;
+    background-color: #fff5f5;
+	}
+</style>
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="head-ban">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="mill_buy_tz()"></div>
+			<div class="head-main">购买矿机</div>
+			<div class="head-right"></div>
+		</div>
+		<div class="mibuy-main">
+			<div class="mibuy-hd row" style="position:relative;">
+				<div class="mibuy-hd-d">
+					<div class="mibuy-hd-d1 row">
+						<span>送经验值:<font class="mill_zs_jyzhi"></font></span><div class="mill_name"></div>
+					</div>
+				</div>
+				<img class="mibuy-hd-img mill_img" src="/Public/images/mill_shop.png" />
+				<span class="mibuy-hd-span">送直推矿力:<font class="mill_zs_kl"></font></span>
+			</div>
+			<form class="mill_buy_index">
+				<div class="mibuy-xx">
+					<div class="mill-shop-bd">
+						<span class="mill-shop-span" style="width: 3.4rem;">
+							<img src="/Public/images/home_rotate.png" />
+							预计产量
+							<span><font class="mill_chanliang"></font> LONT</span>
+						</span>
+						<span class="mill-shop-span" style="width: 2.9rem;">
+							<img src="/Public/images/calendar.png" />
+							运行天数
+							<span><font class="mill_gq_day"></font><span>天</span></span>
+						</span>
+					</div>
+					<div class="mill-shop-bd">
+						<span class="mill-shop-span" style="width: 3.4rem;">
+							<img class="mill_img2" src="" />
+							购买消耗
+							<span><font class="mill_price"></font> <font class="mill_coin"></font></span>
+						</span>
+						<span class="mill-shop-span" style="width: 2.9rem;">
+							<img src="/Public/images/time.png" />
+							收益时长
+							<span><font class="mill_h_num"></font><span>小时/天</span></span>
+						</span>
+					</div>
+				</div>
+				<input type="hidden" class="kj_id" value="0" name="kj_id" />
+				<div class="mibuy-mn" >
+					<div class="mibuy-mn-d">
+						<div>购买数量</div>
+						<input type="tel" name="num" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="输入购买数量" />
+						<span class="mibuy-mn-dr">台</span>
+					</div>
+					<div class="mibuy-mn-d  mibuy-mn-dy">
+						<span>可用<font class="mill_coin"></font>：<font class="mill_keyong"></font></span>
+					</div>
+					<div class="mibuy-mn-d">
+						<div>交易密码</div>
+						<input type="password" name="paypassword" maxlength="18" placeholder="输入交易密码" />
+					</div>
+				</div>
+				<div class="mibuy-btn"><button type="button" class="loadToSuccess mill_buy_index_tj">购买矿机</button></div>
+			</form>
+		</div>
+	</main>
+</div>
+<script>
+
+bui.ready(function(){
+	$(".mill_buy_index_tj").on("click",function (argument) {
+		var data = $('.mill_buy_index').serialize();
+		$.ajax({
+			url: '/Home/Mining/buy_ajax',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+						console.log(0)
+					
+					router.back({
+						index:-2,
+				        callback: function(mod) {
+				            loader.require(["pages/mill"], function(main) {
+				            	console.log(1)
+				            	uiList.empty();
+								 mill_sx();
+							})
+				        }
+			    	})
+				}
+			}
+		})
+	});
+});
+
+function mill_buy_sx(){
+	var getParams = bui.getPageParams();
+	getParams.done(function(result){
+		bui.ajax({
+			url: "/Home/Mining/mill_buy_mas",
+			data: {id:result['id']},
+			async:false
+		}).then(function(res){
+			if(res['status']==1){
+				$('.kj_id').val(result['id']);
+				$('.mill_img2').attr('src',res['data']['coin_img']);
+				$('.mill_img').attr('src','/Upload/mining/'+res['data']['img']);
+				$('.mill_name').html(res['data']['name']);
+				$('.mill_zs_jyzhi').html(res['data']['zs_jyzhi']*1);
+				$('.mill_zs_kl').html(res['data']['zs_kli']*1);
+				$('.mill_chanliang').html(res['data']['chanliang']*1);
+				$('.mill_gq_day').html(res['data']['yx_day']*1);
+				$('.mill_coin').html(res['data']['coin']);
+				$('.mill_price').html(res['data']['price']*1);
+				$('.mill_h_num').html(res['data']['h_num']*1);
+				$('.mill_keyong').html(res['user']['keyong']*1);
+				
+			}
+		});
+	});
+}
+mill_buy_sx();
+
+function mill_buy_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/mill/mill_shop"], function(main) {
+				uiList.empty();
+				$('.bui-scroll-foot').html('');
+				$('.bui-scroll-head').html('');
+				mill_shop_sx();
+			})
+		}
+	})
+}
+
+$('.tran-kind').click(function(){
+	$('.tran-kind-tan').show();
+});
+$('.tran-kind-off').click(function(){
+	$('.tran-kind-tan').hide();
+});
+$('.tran-kind-z').click(function(){
+	$('.tran-kind-coin').html($(this).html());
+	$('.tran-kind-tan').hide();
+})
+
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1000);
+	return false;
+});
+</script>

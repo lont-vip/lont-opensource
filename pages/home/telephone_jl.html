@@ -1,0 +1,82 @@
+<div class="bui-page"  style="background: #fbfbfb;">
+	<main  style="background: #fbfbfb;">
+		<div class="bui-scroll telephone_jl_scrollList">
+        	<div class="bui-scroll-head"></div>
+        	<div class="bui-scroll-main" style="background: none;">
+	            <div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png" onclick="telephone_jl_tz()"></div>
+					<div class="head-main">充值记录</div>
+					<div class="head-right"></div>
+				</div>
+				<ul class="bui-list bui-list-thumbnail"></ul>
+			</div>
+			<div class="bui-scroll-foot"></div>
+		</div>
+	</main>
+</div>
+<script>
+function telephone_jl_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/home/telephone"], function(main) {
+				telephone_sx();
+			})
+		}
+	})
+}
+function telephone_jl_sx(){
+	listHeight = $(window).height() -  $(".tran-height").height();
+	var uiList = bui.list({
+		id: ".telephone_jl_scrollList",
+		url: "/Home/Chong/huafei_log",
+		pageSize: 6,
+		refresh:false,
+		height: listHeight,
+		data: {},
+		field: {
+			page: "page",
+			size: "pageSize",
+			data: "data"
+		},
+		callback: function(e) {
+			console.log($(e.target).closest(".bui-btn").attr("class"))
+		},
+		template: function(data,info,status) {
+			if(info.status==1){
+				var html = "";
+				data.forEach(function(el, index) {
+					html += `<div class="tele-list row">
+							<div class="row">
+	    						<img class="pari-img-l" src="/Public/images/telephone.png">
+								<div class="bizh-min fl"><p class="ip">话费充值</p><span class="wait">${el.money} <i>元</i></span></div>
+								<div class="fate fr"><p style="${el.color}">${el.sta_mas}</p></div>
+							</div>
+							<div class="tele-list-uti">
+								<span><img src="/Public/images/home_rotate.png"/>-${el.mum} UTI</span>
+								<span class="tele-list-uti-r"><img src="/Public/images/time2.png"/>${el.time_add}</span>
+							</div>
+	                	</div>`;
+			});
+			return html;
+		}
+	},
+	onBeforeRefresh : function () {
+		console.log("brefore refresh")
+	},
+	onBeforeLoad : function () {
+		console.log("brefore load")
+	},
+	onRefresh: function() {
+		console.log("refreshed")
+	},
+	onLoad: function() {
+		console.log("loaded")
+	}
+})
+}
+telephone_jl_sx();
+$('.tele-ul').on('click','li',function  () {
+	$('.tele-ul li').attr('class','');
+	$(this).attr('class','active');
+})
+</script>

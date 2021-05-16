@@ -1,0 +1,102 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="tab-home-news">
+    <div id="uiScroll" class="bui-scroll mill_my2_scrollList">
+        <div class="bui-scroll-head"></div>
+        <div class="bui-scroll-main" style="background: none;">
+        	<ul class="bui-list bui-list-thumbnail"></ul>
+        </div>
+        <div class="bui-scroll-foot"></div>
+    </div>
+</div>
+<script>
+function mill_my2_sx(id){
+	listHeight = $(window).height() -  $(".mill-height").height();
+	var uiList = bui.list({
+		id: ".mill_my2_scrollList",
+		url: "/Home/Mining/mill_my2",
+		pageSize: 6,
+		refresh:false,
+		height: listHeight,
+		data: {id:id},
+		field: {
+			page: "page",
+			size: "pageSize",
+			data: "data"
+		},
+		callback: function(e) {
+			console.log($(e.target).closest(".bui-btn").attr("class"))
+		},
+		template: function(data,info,status) {
+			if(info.status==1){
+				var html = "";
+				data.forEach(function(el, index) {
+					html += `<div class="mill-my-list bui-btn">
+							<div class="mill-my-list-hd">
+								<span class="mill-my-list-hdl">${el.name}</span>
+								<span class="mill-my-list-hdc">每日运行${el.kj_h}小时</span>
+								<span class="mill-my-list-hdr">已运行${el.num_zx}天</span>
+							</div>
+							<button class="mill-my-list-btn" style="background: #bcbcbc;">矿机时间到期</button>
+							<div class="mill-my-list-b">
+								<div class="mill-my-list-bd">
+									<img src="/Public/images/home_rotate.png" />累计产出:<span  class="mill-my-list-uti">${el.num_uti} LONT</span>
+								</div>
+								<div class="mill-my-list-bd">
+									<span class="mill-my-list-dl"></span>购买时间:<span class="mill-my-list-time">${el.time_add}</span>
+								</div>
+								<div class="mill-my-list-bd">
+									<span class="mill-my-list-dl" style="background: #ea2b66;"></span>到期时间:<span class="mill-my-list-time">${el.time_dq}</span>
+								</div>
+							</div>
+						</div>`;
+			});
+			return html;
+		}
+	},
+	onBeforeRefresh : function () {
+		console.log("brefore refresh")
+	},
+	onBeforeLoad : function () {
+		console.log("brefore load")
+	},
+	onRefresh: function() {
+		console.log("refreshed")
+	},
+	onLoad: function() {
+		console.log("loaded")
+	}
+})
+}
+
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	if(result['id']=='' || result['id']==undefined){
+		mill_my2_sx('s');
+	}else{
+		mill_my2_sx(result['id']);
+	}
+});
+$('.team-activate div').click(function  () {
+	$('.team-activate div').attr('class','');
+	$(this).attr('class','active');
+	console.log( $(this).attr('data-liv'))
+	if ( $(this).attr('data-liv') === "1" ) {
+		console.log(5)
+		$('.friend-team1').show();
+		$('.friend-team2').hide();
+	}else{
+		$('.friend-team1').hide();
+		$('.friend-team2').show();
+	};
+})
+</script>

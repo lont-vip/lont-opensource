@@ -1,0 +1,92 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="tab-home-news">
+    <!-- 列表刷新 -->
+    <div id="uiScroll" class="bui-scroll team1_scrollList">
+        <div class="bui-scroll-head"></div>
+        <div class="bui-scroll-main" style="background: none;">
+            <div class="friend-team friend-team1">
+            	<div class="friend-team-td row">
+            		<div class="friend-team-td1">头像/实名</div>
+            		<div class="friend-team-td2">ID/手机号</div>
+            		<div class="friend-team-td4">会员等级</div>
+            		<div class="friend-team-td3">直推人数</div>
+            	</div>
+            	<ul class="bui-list bui-list-thumbnail"></ul>
+            </div>
+        </div>
+        <div class="bui-scroll-foot"></div>
+    </div>
+</div>
+<script>
+var uiList;
+function team1_sx(mas){
+		listHeight = $(window).height()   - $(".team-height").height();
+	uiList = bui.list({
+		id: ".team1_scrollList",
+		url: "/Home/User/team_1",
+		pageSize: 6,
+		height: listHeight,
+		refresh:false,
+		data: {mas:mas},
+		field: {
+			page: "page",
+			size: "pageSize",
+			data: "data"
+		},
+		callback: function(e) {
+			console.log($(e.target).closest(".bui-btn").attr("class"))
+		},
+		template: function(data) {
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="friend-list row">
+							<div class="friend-list-l">
+								<div class="friend-list-d1"><img class="friend-list-img" src="${el.headimg2}">${el.sta_mas}</div>
+								<div class="friend-list-div"><div>${el.id}</div><span>${el.mobile}</span></div>
+							</div>
+							<span class="friend-list-r"><img src="/Public/images/class.png"/>${el.user_name}</span>
+							<div class="friend-list-c">${el.r_nums}</div>
+						</div>`
+                });
+                return html;
+        },
+        onBeforeRefresh : function () {
+          console.log("brefore refresh")
+        },
+        onBeforeLoad : function () {
+          console.log("brefore load")
+        },
+        onRefresh: function() {
+            console.log("refreshed")
+        },
+        onLoad: function() {
+            console.log("loaded")
+        }
+    });
+}
+team1_sx('.');
+
+$('.team-activate div').click(function  () {
+	$('.team-activate div').attr('class','');
+	$(this).attr('class','active');
+	console.log( $(this).attr('data-liv'))
+	if ( $(this).attr('data-liv') === "1" ) {
+		console.log(5)
+		$('.friend-team1').show();
+		$('.friend-team2').hide();
+	}else{
+		$('.friend-team1').hide();
+		$('.friend-team2').show();
+	};
+})
+</script>

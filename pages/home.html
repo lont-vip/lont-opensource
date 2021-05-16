@@ -1,0 +1,360 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+	<style>
+			.loader2 {
+	position:fixed;
+	left:10%;
+	top:50%;
+	margin:-0.2em 0 0 -0.2em;
+	text-indent:-9999em;
+	border-top:0.3em solid rgba(0,0,0,0.1);
+	border-right:0.3em solid rgba(0,0,0,0.1);
+	border-bottom:0.3em solid rgba(0,0,0,0.1);
+	border-left:0.3em solid #555;
+	-moz-transform:translateZ(0);
+	-webkit-transform:translateZ(0);
+	transform:translateZ(0);
+	-moz-animation:loader 300ms infinite linear;
+	-webkit-animation:loader 300ms infinite linear;
+	animation:loader 300ms infinite linear;
+	-moz-transition:all 500ms ease;
+	-o-transition:all 500ms ease;
+	-webkit-transition:all 500ms ease;
+	transition:all 500ms ease;
+}
+.loader2,.loader2:after {
+	border-radius:50%;
+	width:2em;
+	height:2em;
+}
+.curtain {
+	position:fixed;
+	width:25%;
+	height:100%;
+	top:0;
+	left:0;
+	-moz-transition:all 600ms ease;
+	-o-transition:all 600ms ease;
+	-webkit-transition:all 600ms ease;
+	transition:all 600ms ease;
+	filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+	opacity:0;
+	z-index:0;
+	overflow:hidden;
+}
+@-webkit-keyframes loader {
+	0% {
+	-webkit-transform:rotate(0deg);
+	transform:rotate(0deg);
+}
+100% {
+	-webkit-transform:rotate(360deg);
+	transform:rotate(360deg);
+}
+}@-moz-keyframes loader {
+	0% {
+	-moz-transform:rotate(0deg);
+	transform:rotate(0deg);
+}
+100% {
+	-moz-transform:rotate(360deg);
+	transform:rotate(360deg);
+}
+}@keyframes loader {
+	0% {
+	-webkit-transform:rotate(0deg);
+	transform:rotate(0deg);
+}
+100% {
+	-webkit-transform:rotate(360deg);
+	transform:rotate(360deg);
+}
+}.is-loading {
+	overflow:hidden;
+	display: none;
+}
+.is-loading .curtain {
+	filter:progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+	opacity:1;
+	z-index:99;
+}
+.is-loading .loader {
+	filter:progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+	opacity:1;
+}
+.loader2{
+	 font-size: .3rem;
+}
+	</style>
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="is-loading">
+		    <div class="curtain">
+		        <div class="loader2">
+		        </div>
+		    </div>
+		</div>
+		<div class="home-head">
+			<img class="home-head-l" src="/Public/images/home_rotate.png" />
+			<span class="home-head-z home_web_title" style="display:none;"></span>
+			<img style="width: 1.0rem; margin-bottom: .1.2rem;" src="/Public/images/LONT_b.png" />
+		</div>
+		<div style="background:#fff;padding:.01rem 0;">
+			<div class="home-ban2" style="display:none;">
+				<img src="/Public/images/home_ban1.png" />
+			</div>  
+			
+			
+			<div class="home-ul">
+				<ul class="row">
+					<li class="bui-btn" href="pages/mill/mill_shop">
+						<img src="/Public/images/home_15.png">
+						<div>矿机商城</div>
+					</li>
+					<li class="bui-btn zhuanru"> 
+						<img src="/Public/images/home_02.png">
+						<div>转入</div>
+					</li>
+					<li class="bui-btn"  onclick="cz3()">
+						<img src="/Public/images/home_03.png">
+						<div>转出</div>
+					</li>
+					<li class="bui-btn" href="pages/home/financial">
+						<img src="/Public/images/home_04.png">
+						<div>财务明细</div>
+					</li>
+				</ul>
+			</div>
+			<div class="home-notice">
+				<img class="home-not-img bui-btn" href="pages/news/news" src="/Public/images/home_notice.png" />
+				<div class="home-not-new">
+					<div class="swiper-container swiper-banner2">
+						<div class="swiper-wrapper index_gonggao home_xiaoxi"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		 <div class="swiper-container home-ban">
+			<div class="swiper-wrapper banner_list home_banner"></div>
+			<div class="swiper-pagination"></div>
+		</div>
+		
+		<div class="home-mn">
+			<div class="home-luse">
+				<span class="home-luse-l"></span>
+				<span>快捷应用</span>
+			</div>
+			<div class="home-shortcut">
+				<ul class="row">
+					<li class="bui-btn home_huafei_ok" style="display:none;" href="pages/mine/invite">
+						<img src="/Public/images/home_05.png" />
+						<div>邀请奖励</div>
+					</li>
+					<li class="bui-btn home_huafei_no" style="display:none;" href="pages/mine/invite">
+						<img src="/Public/images/home_05.png" />
+						<div>邀请奖励</div>
+					</li>
+					<li>
+						<a href="#">
+							
+							<img src="/Public/images/home_06.png" />
+							<div>新零售商城</div>
+						
+						</a>
+					</li>
+		
+					<li>
+						<a href="/#pages/mine/feelback">
+						
+							<img src="/Public/images/home_07.png" />
+							<div>联系客服</div>
+							
+						</a>	
+					</li>
+		
+				</ul>
+			</div>
+		</div>	
+		<div class="home-mn">	
+			<div class="home-luse"><span class="home-luse-l"></span><span>价格行情</span></div>	
+			<div class="home-coin home_hangqing"></div>
+		</div>
+		<div class="home-box home_tishi_xs" style="display:none;">
+			<div class="home-box-b">
+				<input type="hidden" value="0" class="home_tixing" />
+				<img class="home-box-off" src="/Public/images/off2.png" />
+				<div class="home-box-t">温馨提示</div>
+				<div class="home-box-mn home_tishi"></div>
+			</div>
+		</div> 
+	</main>
+</div>
+<script>
+function cz2(){
+	$('.is-loading').show();
+	var coin=$('.par_coin').val();
+	bui.load({ url: "pages/property/gathering?yemian=home"});
+	setTimeout(function  () {
+		$('.is-loading').hide();    
+	},1000)
+}
+function cz3(){
+	$('.is-loading').show();
+	var coin=$('.par_coin').val();
+	bui.load({ url: "pages/property/transfer?yemian=home"});
+	setTimeout(function  () {
+		$('.is-loading').hide();    
+	},1000)
+}
+/*
+function tishi(){
+	bui.hint({content:'暂未开放', position:"center" , effect:"fadeInDown"});return false;
+}
+*/
+/*
+function tishi2(){
+	bui.hint({content:'即将上线', position:"center" , effect:"fadeInDown"});return false;
+}
+*/
+
+function chongzhi_sx(){
+	bui.ajax({
+		url: "/Home/Index/home_chongzhi",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['sta_huafei']==1){
+			$('.home_huafei_ok').show();
+			$('.home_huafei_no').hide();
+		}else{
+			$('.home_huafei_ok').hide();
+			$('.home_huafei_no').show();
+		}
+	});
+}
+chongzhi_sx();
+function home_hangqing_sx(){
+	bui.ajax({
+		url: "/Home/Index/home_hangqing",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['data']){
+			var home_hangqing='';
+			var hangqing_cd=res['data'].length;
+			for(var k=0;k<hangqing_cd;k++){
+				home_hangqing+='<div class="home-coin-main"><img class="home-coin-img" src="/Upload/coin/'+res['data'][k]['img']+'" /><span>'+res['data'][k]['js_yw']+'</span>'+res['data'][k]['zhangdie']+'<span class="home-coin-right">￥'+res['data'][k]['price']+'</span></div>';
+			}
+			$('.home_hangqing').html(home_hangqing);
+		}
+	});
+}
+home_hangqing_sx();
+
+function home_web_sx(){
+	bui.ajax({
+		url: "/Home/Login/cfg_name",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			$(".home_web_title").html(res.msg);
+			$(".zhuanru").attr('href','pages/property/particulars?coin='+res.xnb);
+		}
+	});
+}
+home_web_sx();
+
+function home_banner_sx(){
+	bui.ajax({
+		url: "/Home/News/home_banner",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['data']){
+			var new_mas='';
+			var new_cd=res['data'].length;
+			for(j=0;j<new_cd;j++) {
+				if(res['data'][j]['url']){
+					new_mas+='<div class="swiper-slide blue-slide"><a href="'+res['data'][j]['url_http']+'://'+res['data'][j]['url']+'"><img src="/Upload/ad/'+res['data'][j]['img']+'" /></a></div>';
+				}else{
+					new_mas+='<div class="swiper-slide blue-slide"><img src="/Upload/ad/'+res['data'][j]['img']+'" /></div>';
+				}
+			}
+			$('.home_banner').html(new_mas);
+		}
+	});
+}
+home_banner_sx();
+
+function home_tishi_sx(){
+	bui.ajax({
+		url: "/Home/News/home_tishi",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			$('.home_tishi_xs').show();
+			$('.home_tixing').val(res['data']['id']);
+			$('.home_tishi').html(res['data']['content']);
+		}
+	});
+}
+home_tishi_sx();
+
+
+function home_xiaoxi(){
+	bui.ajax({
+		url: "/Home/News/home_xiaoxi",
+		data: {},
+		async:false,
+	}).then(function(res){
+		if(res['data']){
+			var new_mas='';
+			var new_cd=res['data'].length;
+			for(j=0;j<new_cd;j++) {
+				new_mas+='<div class="swiper-slide bui-btn" href="pages/news/news_mas?id='+res['data'][j]['id']+'&yemian=home">'+res['data'][j]['title']+'</div>';
+			}
+			$('.home_xiaoxi').html(new_mas);
+		}
+	});
+}
+home_xiaoxi();
+
+var mySwiper = new Swiper('.home-ban',{	
+	autoplay: 3000,//可选选项，自动滑动
+	pagination: {
+		el: '.swiper-pagination',
+	}
+});
+var swiper = new Swiper('.swiper-banner2', {
+	speed: 500,
+	loop: true,
+	autoplay: {
+		disableOnInteraction: false,
+		delay: 2500,
+	},
+	direction: 'vertical',
+});
+$('.home-box-off').click(function  () {
+	var article_id=$('.home_tixing').val();
+	bui.ajax({
+		url: "/Home/News/home_tishi_no",
+		data: {article_id:article_id},
+		async:false
+	}).then(function(res){
+		
+	});
+	$('.home-box').hide();
+})
+</script> 

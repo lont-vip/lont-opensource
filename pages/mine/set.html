@@ -1,0 +1,178 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main>
+		<div class="head-ban" style="background: none;">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="set_tz()"></div>
+			<div class="head-main">账号设置</div>
+			<div class="head-right loadToSuccess set_index_tj" style="color: #ffae00;">保存信息</div>
+		</div>
+		<div class="mess-mn">
+			<form class="set_index">
+				<div class="mess-mn-hd">
+					<img class="set_img up_img_idimg1" src="/Public/images/photo.png">
+					<div onclick="getElementById('file_idimg1').click()">点击修改头像</div>
+					<input type="text" class="headimg" id="idimg1" value="" name="headimg"/>
+					<input type="file" id="file_idimg1" accept="image/gif, image/jpeg, image/jpg, image/png" value=""/>
+				</div>
+				<div class="mess-mn-tx">
+					<div class="mess-mn-txd">
+						<img src="/Public/images/name.png">
+						<span class="mess-mn-l">ID</span>
+						<input class="mess-mn-rinp set_username" type="text" readonly="readonly" maxlength="16" value="">
+					</div>
+					<div class="mess-mn-txd">
+						<img src="/Public/images/tel.png">
+						<span class="mess-mn-l">手机号</span>
+						<span class="mess-mn-r set_mobile"></span>
+					</div>
+					<div class="mess-mn-txd">
+						<img src="/Public/images/time2.png">
+						<span class="mess-mn-l">注册时间</span>
+						<span class="mess-mn-r set_addtime"></span>
+					</div>
+					<div class="mess-mn-txd">
+						<img src="/Public/images/class2.png">
+						<span class="mess-mn-l">会员等级</span>
+						<span class="mess-mn-r set_user"></span>
+					</div>
+					<div class="mess-mn-txd">
+						<img src="/Public/images/team.png">
+						<span class="mess-mn-l">团队等级</span>
+						<span class="mess-mn-r set_tuandui" ></span>
+					</div>
+				</div>
+			</form>
+		</div>
+	</main>
+	<footer>
+		<div class="addres-btn phont-btn">
+    		<button style="height:0.96rem;border-radius:0.44rem;" type="button" onclick="tuichu()">退出登录</button>
+    	</div>
+	</footer>
+</div>
+<script>
+function set_sx(){
+	bui.ajax({
+		url: "/Home/User/mine_mas",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			$('.set_addtime').html(res['user']['addtime']);
+			$('.set_username').val(res['user']['id']);
+			$('.set_mobile').html(res['user']['mobile']);
+			$('.headimg').val(res['user']['headimg2']);
+			$('.set_img').attr('src',res['user']['headimg']);
+			$('.set_user').html(res['user']['level_user_name']);
+			$('.set_tuandui').html(res['user']['level_tuandui_name']);
+		}
+	});
+}
+set_sx();
+function set_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				mine_sx();
+			})
+		}
+	})
+}
+bui.ready(function(){
+	$(".set_index_tj").on("click",function (argument) {
+		var data = $('.set_index').serialize();
+		$.ajax({
+			url: '/Home/User/set_ajax',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+              	bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					router.back({
+				        callback: function(mod) {
+				            loader.require(["main"], function(main) {
+								 mine_sx();
+							})
+				        }
+			    	})
+				}
+			}
+		})
+	});
+});
+function tuichu(){
+	bui.ajax({
+		url: "/Home/Login/loginout",
+		data: {}
+	}).then(function(res){
+		bui.hint({content:'退出成功', position:"center" , effect:"fadeInDown"});
+		bui.load({ url: "pages/login", replace:true });
+	});
+}
+
+$(document).ready(function () {
+	//响应文件添加成功事件
+	$("#file_idimg1").change(function () {
+		//创建FormData对象
+		var data = new FormData();
+		//为FormData对象添加数据
+		$.each($('#file_idimg1')[0].files, function (i, file) {
+			data.append('upload_file' + i, file);
+		});
+
+		//发送数据
+		$.ajax({
+			url: '/Home/User/headimg_img',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			cache: false,
+			contentType: false, //不可缺参数
+			processData: false, //不可缺参数
+			success: function (data) {
+				if (data['status']==1) {
+					$('.up_img_idimg1').attr("src", '/Upload/headimg/' + $.trim(data['info']));
+					$('#idimg1').val($.trim(data['info']));
+					$('#up_img_idimg1').show();
+				}else{
+					bui.hint({content:'上传出错'+data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			},
+			error: function () {
+				bui.hint({content:'上传出错', position:"center" , effect:"fadeInDown"});
+				$(".loading").hide(); //加载失败移除加载图片
+			}
+		});
+
+	});
+});		
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1000);
+	return false;
+});
+</script>

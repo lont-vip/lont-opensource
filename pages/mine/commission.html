@@ -1,0 +1,220 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<style type="text/css" media="all">
+		.comm-dv{
+			width: 93%;
+			margin: .2rem auto;
+		}
+		.comm-dv-le{
+			float: left;
+			width: 48%;
+			margin-right: 4%;
+			background: #029efa;
+			color: #fff;
+			font-size: .24rem;
+			height: .75rem;
+			line-height: .75rem;
+			border-radius: .05rem;
+			text-align: center;
+		}
+		.comm-dv-le img{
+			width: .25rem;
+			margin-bottom: .05rem;
+    margin-right: .1rem;
+		}
+		.commiss-list-hd-l{
+			float: right;
+			color: #2e2e2e;
+		}
+		.comm-fy{
+			text-align: center;
+			color: #a5a5a5;
+			margin: .2rem auto;
+			font-size: .24rem;
+		}
+		.comm-fy span{
+				color: #2e2e2e;
+		}
+	</style>
+	<main>
+		<div class="bui-scroll item_record commission_scrollList">
+            <div class="bui-scroll-head"></div>
+            <div class="bui-scroll-main" style="background: none;">
+				<div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png" onclick="commission_tz()" /></div>
+					<div class="head-main" >推荐返佣</div>
+					<div class="head-right"></div>
+				</div>
+				<div class="comm-dv row">
+					<form class="fanyong_index">
+						<div class="loadToSuccess fanyong_kaiqi_tj comm-dv-le">
+							<img src="/Public/images/ks.png" alt="" />开启返佣
+						</div>
+						<div class="comm-dv-le loadToSuccess fanyong_index_tj" style="margin-right:0;background:#517ffd;">
+							<img src="/Public/images/lq.png" alt="" />领取返佣
+						</div>
+					</form>
+				</div>
+				<div class="comm-fy">
+					可领取返佣<span><font class="mill_wlqu_num">0</font> LONT</span>
+				</div>
+				<ul class="bui-list bui-list-thumbnail row"></ul>
+			 </div>
+            <div class="bui-scroll-foot"></div>
+        </div>	
+</main>
+<script>
+
+var uiList;
+function commission_sx(){
+	uiList = bui.list({
+	id: ".commission_scrollList",
+	url: "/Home/User/commission_list",
+	pageSize: 6,
+	refresh:false,
+	data: {},
+	field: {
+		page: "page",
+		size: "pageSize",
+		data: "data"
+	},
+	callback: function(e) {
+		console.log($(e.target).closest(".bui-btn").attr("class"))
+	},
+	template: function(data) {
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="commiss-list">
+					 		<div class="commiss-list-hd"><img src="/Public/images/time.png" alt="" />奖励时间:<span>${el.time_add}</span><span class="commiss-list-hd-l">${el.sta_mas}</span></div>
+					 		<div class="commiss-list-b row">
+					 			<div class="commiss-list-bl">
+					 				<div class="commiss-list-bl1">返佣数量</div>
+					 				<div class="commiss-list-bl2">${el.num_zong}<span> LONT</span></div>
+					 				<div class="commiss-list-bl3">每日释放: ${el.num_day} LONT</div>
+					 			</div>
+					 			<div class="commiss-list-br">
+					 				<span class="bui-btn" href="pages/mine/release?id=${el.id}">释放记录</span>
+					 				<div>释放周期:${el.num_zx_zong} 天</div>
+					 			</div>
+					 		</div>
+					 	</div>`
+                });
+                return html;
+        },
+        onBeforeRefresh : function () {
+          console.log("brefore refresh")
+        },
+        onBeforeLoad : function () {
+          console.log("brefore load")
+        },
+        onRefresh: function() {
+            console.log("refreshed")
+        },
+        onLoad: function() {
+            console.log("loaded")
+        }
+    });
+}
+commission_sx();
+
+function mill_sx2(){
+	bui.ajax({
+		url: "/Home/Mining/mill_mysx_fanyong",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			$('.mill_wlqu_num').html(res['user']['wlqu']*1);
+		}
+	});
+}
+mill_sx2();
+time_mail = setInterval(function  () {
+	mill_sx2();
+},5000);
+
+
+var time_mail;
+function commission_tz(){
+	clearInterval(time_mail);
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				uiList.empty();
+		        $('.bui-scroll-foot').html('');
+		        $('.bui-scroll-head').html('');
+			})
+		}
+	})
+}
+
+
+bui.ready(function(){
+	$(".fanyong_kaiqi_tj").on("click",function (argument) {
+		var data = $('.fanyong_index').serialize();
+		$.ajax({
+			url: '/Home/Mining/mill_start_rifanyong',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data['status']==1){
+					uiList.empty();
+			        commission_sx();
+				}
+			}
+		})
+	});
+}); 
+
+
+bui.ready(function(){
+	$(".fanyong_index_tj").on("click",function (argument) {
+		var data = $('.fanyong_index').serialize();
+		$.ajax({
+			url: '/Home/Mining/mill_lingqu_rifanyong',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data['status']==1){
+					uiList.empty();
+			        commission_sx();
+				}
+			}
+		})
+	});
+}); 
+
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1e3);
+	return false;
+});
+</script>

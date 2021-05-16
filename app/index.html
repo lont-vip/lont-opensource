@@ -1,0 +1,123 @@
+<html lang="zh" style="font-size: 342.5%;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<script src="./js/jquery-1.9.1.min.js"></script>
+<script src="./js/jquery-qrcode.min.js"></script>
+<link rel="stylesheet" href="./css/main.css">
+<title>App下载</title>
+</head>
+<body style="padding-top: 0px;" class="">
+<div class="template-2 template-wrap">
+    <div class="t-bg-2"></div>
+    <div class="container">
+        <div class="content">
+            <div class="template-common">
+                <div class="t-icon">
+                    <img src="./images/logo.png" class="img-responsive">
+                </div>
+                <div class="t-name">
+                    <div class="tit">evo</div>
+                    <div class="name-info pc-pwd">
+                        <span>版本 1.1.0</span>
+                        <span>更新时间<script src="./js/time.js"></script></span>   
+                    </div>
+                </div>
+
+                <div class="template-btn-wrap">
+                    <a href=""  type="ios" class="ms-btn template-btn clearfix pc-pwd down_load">
+                        <span class="icon-36 iconfont fl"></span>
+                        <span class="fl">
+                        下载安装
+                    </span>
+                    </a>
+                </div>
+                <div class="t-apply pc-pwd shuoming">
+                    请使用手机扫码下载
+                </div>
+
+                
+                <div class="t-code pc-pwd qcode">
+                    
+                </div>
+                <div class="code-text" style="text-align: center;">扫描二维码下载</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="weixin_ios" style="display:none;">
+    <div class="click_opacity"></div>
+    <div class="to_btn">
+        <span class="span1">
+            <img src="./images/click_btn.png">
+        </span>
+        <span class="span2">
+            <em>1</em> 点击右上角
+            <img src="./images/menu.png">
+            打开菜单
+        </span>
+        <span class="span2">
+            <em>2</em> 选择
+            <img src="./images/safari.png">
+            用Safari打开下载
+        </span>
+    </div>
+</div>
+<div id="weixin_android" style="display: none;">
+    <div class="click_opacity"></div>
+    <div class="to_btn"><span class="span1">
+            <img src="./images/click_btn.png">
+        </span>
+        <span class="span2">
+            <em>1</em> 点击右上角
+            <img src="./images/menu_android.png">
+            打开菜单
+        </span>
+        <span class="span2 android_open">
+            <em>2</em> 选择
+            <img src="./images/android.png">
+        </span>
+    </div>
+</div>
+<script>
+        var ua = navigator.userAgent.toLowerCase();
+        var Sys = {};
+        var s;
+        (s = ua.match(/version\/([\d.]+).*safari/)) ? Sys.safari = s[1] : 0;
+
+        if (/(iPhone|iPad|iPod|iOS)/i.test(ua)) {  
+            
+            $(".shuoming").html('适用于苹果手机');
+            if (Sys.safari) {
+                $(".down_load").attr("href",'./evo.mobileconfig');
+                $(".down_load").click(function(event) {
+                    setTimeout(function(){
+                        if( confirm){
+                            location.href = "./js/app.mobileprovision";
+                        }
+                    },4000)
+                });
+            }else{
+                $("#weixin_ios").show();
+            }
+        }else{
+            $(".shuoming").html('适用于安卓手机');
+            if(ua.indexOf(' qq')>-1 && ua.indexOf('mqqbrowser') <0){
+                $(".down_load").attr("href",'###');
+                $("#weixin_android").show();
+            }
+            else if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                $(".down_load").attr("href",'###');
+                $("#weixin_android").show();
+            }
+            else{   
+                $(".down_load").attr("href",'./EVO.apk');
+            }
+        }       
+</script>
+<script type="text/javascript" src="./js/qrcode.js"></script>
+</body>
+</html>

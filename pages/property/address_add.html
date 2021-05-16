@@ -1,0 +1,216 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+var img = null;
+var blist = [];
+function scaned(t, r, f){
+  	var coin=$('.rollout_xx').val();
+	var d = new Date();
+	var h=d.getHours(),m=d.getMinutes(),s=d.getSeconds(),ms=d.getMilliseconds();
+	if(h < 10){ h='0'+h; }
+	if(m < 10){ m='0'+m; }
+	if(s < 10){ s='0'+s; }
+	if(ms < 10){ ms='00'+ms; }
+	else if(ms < 100){ ms='0'+ms; }
+	var ts = '['+h+':'+m+':'+s+'.'+ms+']';
+	var li=null,hl = document.getElementById('history');
+	if(blist.length > 0){
+		li = document.createElement('li');
+		li.className = 'ditem';
+		hl.insertBefore(li, hl.childNodes[0]);
+	} else{
+		li = document.getElementById('nohistory');
+	}
+	li.id = blist.length;
+	if(r){
+		$('.rollout_address').val(r);
+	}else{
+		var html = '['+h+':'+m+':'+s+'.'+ms+']'+'　　'+t+'码<div class="hdata">';
+		html += r;
+		html += '</div>';
+		li.innerHTML = html;
+		li.setAttribute('onclick', 'selected(id)');
+		blist[blist.length] = {type:t,result:r,file:f};
+		update(t, r, f);
+	}
+}
+function selected(id){
+	var h = blist[id];
+	update( h.type, h.result, h.file );
+	if(h.result.indexOf('http://')==0  || h.result.indexOf('https://')==0){
+		plus.nativeUI.confirm(h.result, function(i){
+			if(i.index == 0){
+				plus.runtime.openURL(h.result);
+			}
+		}, '', ['打开', '取消']);
+	} else{
+		plus.nativeUI.alert(h.result);
+	}
+}
+function update(t, r, f){
+	outSet('扫描成功：');
+	outLine(t);
+	outLine(r);
+	outLine('\n图片地址：'+f);
+}
+function onempty(){
+	if(window.plus){
+		plus.nativeUI.alert('无扫描记录');
+	} else {
+		alert('无扫描记录');
+	}
+}
+function cleanHistroy(){
+	if(blist.length > 0){
+		var hl = document.getElementById('history');
+		hl.innerHTML = '<li id="nohistory" class="ditem" onclick="onempty();">无历史记录	</li>';
+	}
+	plus.io.resolveLocalFileSystemURL('_doc/barcode/', function(entry){
+		entry.removeRecursively(function(){
+			// Success
+		}, function(e){
+		});
+	});
+}
+</script>
+<div class="bui-page" >
+	<main>
+		<div class="head-ban">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="address_add_tz()" /></div>
+			<div class="head-main" >钱包地址</div>
+			<div class="head-right"></div>
+		</div>
+		<ul id="history" class="dlist" style="text-align:left;display:none;">
+			<li id="nohistory" class="ditem"></li>
+		</ul>
+		<input type="hidden" name="qianbao_suiji" class="qianbao_suiji" value="" />
+		<input type="hidden" class="qianbao_fh" value="" />
+		<form class="qianbaoaddress_add_index">
+			<div class="addres-add">
+				<div class="addres-add-sel">
+					<img class="address_img" src="" /> 
+					<select name="coin" onchange="chg(this)" class="coin_list"></select>
+				</div>
+				<div class="addres-add-dz">
+					<div>钱包地址</div>
+					<input type="text" name="address" class="rollout_address" maxlength="50"  onblur="this.placeholder='输入地址，长按可粘贴'" onfocus="this.placeholder=''" onkeyup="value=value.replace(/[\W]/g,'')" style="padding-right: .8rem;" placeholder="输入地址，长按可粘贴" />
+					<img  src="/Public/images/sys.png" onclick="clicked('pages/barcode_scan.html',true,true)" />
+				</div>
+				<div class="addres-add-dz">
+					<div>钱包备注</div>
+					<input type="text"  name="name" id="" placeholder="输入地址备注名称" value="" />
+				</div>
+				<div class="addres-add-dz dizhi" style="font-size: 0.23rem;">
+					每个会员最多添加<font class="add_num"></font>个地址，如需删除或编辑请联系客服处理
+				</div>
+			</div>
+		</form>
+	</main>
+	<footer>
+    	<div class="addres-btn loadToSuccess qianbaoaddress_add_index_tj">
+    		<button type="button">添加钱包地址</button>
+    	</div>
+    </footer>
+</div>
+<script>
+bui.ajax({
+	url: "/Home/Finance/address_coin",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==1){
+		$('.qianbao_suiji').val(res['suiji']);
+		var coin_list='';
+		if(res['coin']){
+			var cd=res['coin'].length;
+			for(var i=0;i<cd;i++){
+				if(i==0){
+					$('.address_img').attr('src','/Upload/coin/'+res['coin'][i]['img']);
+				}
+				coin_list+='<option data-img="'+res['coin'][i]['img']+'" value="'+res['coin'][i]['name']+'">'+res['coin'][i]['js_yw']+'</option>';
+			} 
+		}
+		$('.coin_list').html(coin_list);
+		$('.add_num').html(res['cfg']['add_num']);
+		if(res['cfg']['add_num']<=0){
+			$('.dizhi').hide();
+		}
+	}
+})
+bui.ready(function(){
+	$(".qianbaoaddress_add_index_tj").on("click",function (argument) {
+		var data = $('.qianbaoaddress_add_index').serialize();
+		var coin=$('.qianbao_fh').val();
+		$.ajax({
+			url: '/Home/Finance/qianbaoaddress_add',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data.info, position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					router.back({
+				        callback: function(mod) {
+				            loader.require(["pages/property/wallet_address"], function(main) {
+								uiList.reload();
+				            })
+				        }
+			    	})
+				}
+			}
+		})
+	});
+});
+function address_add_tz(){
+	var coin=$('.qianbao_fh').val();
+	if(coin=='' || coin==undefined){
+		router.back({
+	        callback: function(mod) {
+	            loader.require(["pages/property/wallet_address"], function(main) {
+					uiList.reload();
+	            })
+	        }
+    	})
+	}else{
+		router.back({
+	        callback: function(mod) {
+	            loader.require(["pages/property/wallet_address?coin="+coin], function(main) {
+					uiList.reload();
+	            })
+	        }
+    	})
+	}
+}
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	$('.qianbao_fh').val(result['coin']);
+});
+function chg(obj){
+	$('.address_img').attr('src','/Upload/coin/'+$(".coin_list option:selected").attr('data-img'));
+}
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1e3);
+	return false;
+});
+</script>

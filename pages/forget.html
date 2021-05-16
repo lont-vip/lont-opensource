@@ -1,0 +1,301 @@
+<script>
+
+bui.ajax({
+
+	url: "/Home/Home/sfdl",
+
+	data: {},
+
+	async:false
+
+}).then(function(res){
+
+	if(res['status']==1){
+
+		bui.load({ url: "pages/login", replace:true });
+
+	}
+
+});
+
+</script>
+
+<style>
+
+	.disabled { pointer-events: none; }
+
+</style>
+
+<div class="bui-page" style="background: #fbfbfb;">
+
+	<main style="background: #fbfbfb;">
+
+		<div class="head-ban">
+
+			<div class="head-left"><img src="/Public/images/left.png" onclick="forget_tz()" /></div>
+
+			<div class="head-main" >忘记密码</div>
+
+			<div class="head-right"></div>
+
+		</div>
+
+		<div class="regis-main">
+
+			<form class="forget_index">
+
+				<div class="regis-main-te">
+
+					<div class="regis-main-tx">
+
+						<span class="regis-main-th">手机号码</span>
+
+						<input type="tel" class="for_mobile" name="mobile" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="输入手机号" />
+
+					</div>
+
+				</div>
+
+				<div class="regis-main-te">
+
+					<div class="regis-main-tx">
+
+						<span class="regis-main-th">图形验证</span>
+
+						<input type="tel" class="for_yzm" name="verify_code" maxlength="4" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="输入图形验证码" />
+
+						<img class="regis-main-yzm" src="/Home/Login/code" id="verifyImg" onclick="this.src=this.src+'?t='+Math.random()" />
+
+					</div>
+
+				</div>
+
+				<div class="regis-main-te">
+
+					<div class="regis-main-tx">
+
+						<span class="regis-main-th">短信验证</span>
+
+						<input type="tel" name="mobile_code"  maxlength="6" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="输入短信验证码" />
+
+						<span class="regis-main-hq forget_mobile_Btn" onclick="SendCode_mobile()">获取验证码</span>
+
+					</div>
+
+				</div>
+
+		   		<div class="regis-main-te">
+
+					<div class="regis-main-tx">
+
+						<span class="regis-main-th">登录密码</span>
+
+						<input type="password" name="mobile_password" maxlength="18" placeholder="输入登录密码" />
+
+					</div>
+
+				</div>
+
+				<div class="regis-main-te">
+
+					<div class="regis-main-tx">
+
+						<span class="regis-main-th">确认密码</span>
+
+						<input type="password" name="mobile_password2" maxlength="18" placeholder="确认登录密码" />
+
+					</div>
+
+				</div>
+
+				<div class="poi">
+
+		   			<img src="/Public/images/gth.png">密码支持8-18位数字大小写字母特殊符号
+
+		   		</div>
+
+	   			<button class="regis-main-btn bui-btn loadToSuccess forget_index_tj" style="margin-top: .5rem;">修改密码</button>
+
+	   		</form>
+
+	   </div>
+
+	</main>
+
+</div>
+
+<script>
+
+ bui.ready(function(){
+
+	$(".forget_index_tj").on("click",function (argument) {
+
+		var data = $('.forget_index').serialize();
+
+		$.ajax({
+
+			url: '/Home/login/forget',
+
+			type: 'POST',
+
+			dataType: 'json',
+
+			data:data,
+
+			cache:false,
+
+			success:function(data){
+
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+
+				if(data.status==1){
+
+					bui.load({ url: "pages/login", replace:true });
+
+				}else{
+
+					refreshVerify();
+
+				}
+
+			}
+
+		})
+
+	});
+
+}); 
+
+function SendCode_mobile(){
+
+	var mobile = $(".for_mobile").val();
+
+	var verify = $(".for_yzm").val();
+
+  	var intnum=86;
+
+	if (mobile==""||mobile==null) {
+
+		bui.hint({content:'请输入手机号码', position:"center" , effect:"fadeInDown"});	
+
+		return false;
+
+	}
+
+	if (verify==""||verify==null) {
+
+		bui.hint({content:'请输入图片验证码', position:"center" , effect:"fadeInDown"});	
+
+		return false;
+
+	}
+
+	$.post("/Home/login/forget_mobile",{mobile:mobile,intnum:intnum,verify:verify},function(data){
+
+		// refreshVerify();
+
+      	bui.hint({content:data.info, position:"center" , effect:"fadeInDown"});
+
+		if(data.status==1){
+
+			$('.forget_mobile_Btn').addClass('disabled');
+
+			var obj=$('.forget_mobile_Btn');
+
+			var wait=120;
+
+			var interval=setInterval(function(){
+
+				$('.forget_mobile_Btn').text(wait + '秒重发');
+
+				wait--;
+
+				if(wait<0){
+
+					clearInterval(interval);
+
+					$('.forget_mobile_Btn').text('获取验证码');
+
+					$('.forget_mobile_Btn').removeClass('disabled');
+
+				}
+
+			},1000);
+
+		}
+
+	},"json");
+
+}
+
+function refreshVerify() {
+
+    var ts = Date.parse(new Date())/1000;
+
+    var img = document.getElementById('verifyImg');
+
+    img.src = "/Home/login/code?id="+ts;
+
+}
+
+function forget_tz(){
+
+	router.back({
+
+		callback: function(mod) {
+
+			loader.require(["pages/login"], function(main) {
+
+				
+
+			})
+
+		}
+
+	})
+
+}
+
+
+
+$('input').blur(function () {
+
+	window.scroll(0,0);
+
+})
+
+$(document).on("click", ".loadToSuccess", function(e) {
+
+	var opts = {
+
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+
+	};
+
+	var target = document.createElement("div");
+
+	target.className = "cz";
+
+	document.body.appendChild(target);
+
+	var spinner = new Spinner(opts).spin(target);
+
+	var overlay = iosOverlay({
+
+		spinner: spinner
+
+	});
+
+	window.setTimeout(function() {
+
+		overlay.hide();
+
+		document.querySelector(".cz").remove();
+
+	}, 1e3);
+
+	return false;
+
+});
+
+</script>

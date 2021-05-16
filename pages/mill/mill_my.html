@@ -1,0 +1,42 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="head-ban mill-height">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="mill_my_tz()"></div>
+			<div class="head-main">
+				<div class="bui-navbar bui-box-align-middle inte-nav">
+	                <div class="span1" id="uiSlideNavbar3">
+	                    <ul id="uiNewsTabNav3" class="bui-nav row">
+	                        <li class="bui-btn" href="pages/mill/mill_my1.html"><span>运行矿机</span></li>
+	                        <li class="bui-btn" href="pages/mill/mill_my2.html"><span>过期矿机</span></li>
+	                    </ul>
+	                </div>
+	           </div> 
+			</div>
+			<div class="head-right"></div>
+		</div>
+		<div id="uiNewsTab3" class="bui-tab"><div class="bui-tab-main"><ul><li></li><li></li></ul></div></div>
+	</main>
+</div>
+<script>
+
+function mill_my_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				mill_sx();
+			})
+		}
+	})
+}
+</script>

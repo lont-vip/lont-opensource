@@ -1,0 +1,97 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main>
+		<div class="bui-scroll mill_earnings_scrollList">
+			<div class="bui-scroll-head"></div>
+			<div class="bui-scroll-main" style="background: none;">
+				<div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png" onclick="mill_earnings_tz()"></div>
+					<div class="head-main">我的收益</div><div class="head-right"></div>
+				</div>
+				<div class="mill-list-hd">
+					<span><font class="mill_lj_sy"></font><span>  LONT</span></span>
+					<div>累计收益</div>
+				</div>
+				<div class="mill-list-mn">
+					<div class="mill-list-dh">收益记录</div>
+					<ul class="bui-list bui-list-thumbnail"></ul>
+				</div>
+			</div>
+			<div class="bui-scroll-foot"></div>
+		</div>
+	</main>
+</div>
+<script>
+function mill_earnings_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				mill_sx();
+			})
+		}
+	})
+}
+var uiList;
+function mill_earnings_sx(){
+	
+	bui.ajax({
+		url: "/Home/Mining/mill_sy",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			$('.mill_lj_sy').html(res['kj_sy']);
+		}
+	});
+	uiList = bui.list({
+		id: ".mill_earnings_scrollList",
+		url: "/Home/Mining/mill_earnings",
+		pageSize: 6,
+		refresh:false,
+		data: {},
+		field: {
+			page: "page",
+			size: "pageSize",
+			data: "data"
+		},
+		callback: function(e) {
+			console.log($(e.target).closest(".bui-btn").attr("class"))
+		},
+		template: function(data,info,status) {
+			if(info.status==1){
+				var html = "";
+				data.forEach(function(el, index) {
+					html += `<div class="mill-listre row">
+							<div class="mill-listre-l"><div>${el.remark}</div><span>${el.addtime}</span></div>
+							<div class="mill-listre-r">+${el.fee} <img src="/Public/images/home_rotate.png"/></div>
+						</div>`;
+			});
+			return html;
+		}
+	},
+	onBeforeRefresh : function () {
+		console.log("brefore refresh")
+	},
+	onBeforeLoad : function () {
+		console.log("brefore load")
+	},
+	onRefresh: function() {
+		console.log("refreshed")
+	},
+	onLoad: function() {
+		console.log("loaded")
+	}
+})
+}
+mill_earnings_sx();
+</script>

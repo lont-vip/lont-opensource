@@ -1,0 +1,277 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main>
+		<div class="head-ban">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="autonym2_tz()"></div>
+			<div class="head-main">实名认证</div>
+			<div class="head-right"></div>
+		</div>
+		<div class="renzheng auth_zhuangtai" style="display:none;"></div>
+		<form style="display:none;" class="autonym2_index authentication_wait">
+			<div class="renzheng" style="margin-top:.1rem;">
+				<div>
+					<ul style="border-bottom: 1px solid #f5f5f5;">
+						<span>真实姓名</span>
+						 <input type="text" name="truename" class="fuz_truename" placeholder="输入真实姓名">
+					</ul>
+					<ul>
+						<span>身份证号</span>
+						<input type="text" oninput="value=value.replace(/[^\a-\z\A-\Z0-9]/g,'')" class="fuz_idcard" name="idcard" placeholder="输入身份证号">
+					</ul>
+				</div>
+			</div>
+			<div class="ren-img">
+				<div class="c-s-img">上传认证图</div>
+				<div class="i-upload">
+					<div id="preview">
+						<img id="imghead" onclick="getElementById('file_idimg1').click()" class="portrait up_img_idimg1" src="/Public/images/idcard1.png">	
+						<input type="hidden" id="idimg1" class="idcard_a" name="idcard_a" value="">
+						<input class="shangc" type="file" id="file_idimg1" accept="image/gif, image/jpeg, image/jpg, image/png" value="">
+					</div>
+					<div class="zm-text">请上传身份证正面</div>
+				</div>
+				<div class="i-upload">
+					<div id="preview1">
+						<img id="imghead1" onclick="getElementById('file_idimg2').click()" class="portrait up_img_idimg2" src="/Public/images/idcard2.png">	
+						<input type="hidden" id="idimg2" class="idcard_b" name="idcard_b" value="">
+						<input class="shangc" type="file" id="file_idimg2" accept="image/gif, image/jpeg, image/jpg, image/png" value="">
+					</div>
+					<div class="zm-text">请上传身份证反面</div>
+				</div>
+				<div class="c-s-img">手持身份证照片</div>
+				<div class="i-upload">
+					<div id="preview1">
+						<img id="imghead1" onclick="getElementById('file_idimg3').click()" class="portrait up_img_idimg3" src="/Public/images/idcard3.png">	
+						<input type="hidden" id="idimg3" class="idcard_c" name="idcard_c" value="">
+						<input class="shangc" type="file" id="file_idimg3" accept="image/gif, image/jpeg, image/jpg, image/png" value="">
+					</div>
+					<div class="zm-text">请上传手持身份证照片</div>
+				</div>
+			</div>
+			<div class="safet-hint" style="font-size: .24rem;">
+				<img src="/Public/images/gth.png">证件必须是清晰彩色原件，支持JPG/PNG/JPEG格式。
+			</div>
+			<div class="ord tijiaorz loadToSuccess autonym2_index_tj"><button type="button">提交认证</button></div>
+		</form>
+		<div class="renzheng authentication_ok" style="display:none;">
+			<div class="rzxx" style="background: none;padding: 0;">认证信息</div>
+			<div class="name-q" style="background-color: #fcfcfc;box-shadow: none; padding-top: .1rem;">
+				<p><span>姓名</span><span class="neme-renz authentication_truename">张召忠</span></p>
+				<p class="li-gt"><span class="ficates">身份证号</span><span class="neme-renz authentication_idcard">12**********89</span></p>
+			</div>
+		</div>
+		<div class="ren-img authentication_ok" style="display:none;">
+			<div class="c-s-img">认证图</div>
+			<div class="i-upload">
+				<div id="preview">
+					<img id="imghead" class="portrait authentication_idcard_a" src="/Public/images/idcard1.png">
+				</div>
+				<div class="zm-text">身份证正面</div>
+			</div>
+			<div class="i-upload">
+				<div id="preview1">
+					<img id="imghead1" class="portrait authentication_idcard_b" src="/Public/images/idcard2.png">	
+				</div>
+				<div class="zm-text">身份证反面</div>
+			</div>
+			<div class="i-upload">
+				<div id="preview1">
+					<img id="imghead1" class="portrait authentication_idcard_c" src="/Public/images/idcard3.png">
+				</div>
+				<div class="zm-text">手持身份证照片</div>
+			</div>
+		</div>
+	</main>
+</div>
+<script>
+function autonym2_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				mine_sx();
+			})
+		}
+	})
+}
+bui.ready(function(){
+	$(".autonym2_index_tj").on("click",function (argument) {
+		var data = $('.autonym2_index').serialize();
+		$.ajax({
+			url: '/Home/User/auth_ajax2',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					autonym2_tz();
+				}
+			}
+		})
+	});
+});
+function realname_sx(){
+	bui.ajax({
+		url: "/Home/User/user_mas2",
+		data: {}
+	}).then(function(res){
+		if(res['status']==1){
+			if(res['shiming']==1){
+				if(res['user']['idstate']==1){
+					$('.auth_zhuangtai').show();
+					$('.auth_zhuangtai').html('待审核');
+					$('.authentication_wait').hide();
+					$('.authentication_ok').show();
+				}else if(res['user']['idstate']==2){
+					$('.auth_zhuangtai').show();
+					$('.auth_zhuangtai').html('已通过审核');
+					$('.authentication_wait').hide();
+					$('.authentication_ok').show();
+				}else if(res['user']['idstate']==8){
+					$('.auth_zhuangtai').show();
+					$('.auth_zhuangtai').html('驳回原因：'+res['user']['idcardinfo']);
+					$('.fuz_truename').val(res['user']['truename']);
+					$('.fuz_idcard').val(res['user']['idcard2']);
+					$('.idcard_a').val(res['user']['idcard_a']);
+					$('.idcard_b').val(res['user']['idcard_b']);
+					$('.idcard_c').val(res['user']['idcard_c']);
+					$('.up_img_idimg1').attr('src','/Upload/idcard/'+res['user']['idcard_a']);
+					$('.up_img_idimg2').attr('src','/Upload/idcard/'+res['user']['idcard_b']);
+					$('.up_img_idimg3').attr('src','/Upload/idcard/'+res['user']['idcard_c']);
+					$('.authentication_wait').show();
+					$('.authentication_ok').hide();
+				}
+				$('.authentication_truename').html(res['user']['truename']);
+				$('.authentication_idcard').html(res['user']['idcard']);
+				$('.authentication_idcard_a').attr('src','/Upload/idcard/'+res['user']['idcard_a']);
+				$('.authentication_idcard_b').attr('src','/Upload/idcard/'+res['user']['idcard_b']);
+				$('.authentication_idcard_c').attr('src','/Upload/idcard/'+res['user']['idcard_c']);
+			}else{
+				$('.authentication_wait').show();
+				$('.authentication_ok').hide();
+			}
+		}
+	});
+}
+realname_sx();
+
+$(document).ready(function () {
+	//响应文件添加成功事件
+	$("#file_idimg1").change(function () {
+		//创建FormData对象
+		var data = new FormData();
+		//为FormData对象添加数据
+		$.each($('#file_idimg1')[0].files, function (i, file) {
+			data.append('upload_file' + i, file);
+		});
+
+		//发送数据
+		$.ajax({
+			url: '/Home/User/idcard_img',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			cache: false,
+			contentType: false, //不可缺参数
+			processData: false, //不可缺参数
+			success: function (data) {
+				if (data['status']==1) {
+					$('.up_img_idimg1').attr("src", '/Upload/idcard/' + $.trim(data['info']));
+					$('#idimg1').val($.trim(data['info']));
+					$('#up_img_idimg1').show();
+				}else{
+					bui.hint({content:'上传出错'+data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			},
+			error: function () {
+				bui.hint({content:'上传出错', position:"center" , effect:"fadeInDown"});
+				$(".loading").hide(); //加载失败移除加载图片
+			}
+		});
+
+	});
+});			
+$(document).ready(function () {
+	//响应文件添加成功事件
+	$("#file_idimg2").change(function () {
+		//创建FormData对象
+		var data = new FormData();
+		//为FormData对象添加数据
+		$.each($('#file_idimg2')[0].files, function (i, file) {
+			data.append('upload_file' + i, file);
+		});
+
+		//发送数据
+		$.ajax({
+			url: '/Home/User/idcard_img',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			cache: false,
+			contentType: false, //不可缺参数
+			processData: false, //不可缺参数
+			success: function (data) {
+				if (data['status']==1) {
+					$('.up_img_idimg2').attr("src", '/Upload/idcard/' + $.trim(data['info']));
+					$('#idimg2').val($.trim(data['info']));
+					$('#up_img_idimg2').show();
+				}else{
+					bui.hint({content:'上传出错'+data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			},
+			error: function () {
+				bui.hint({content:'上传出错', position:"center" , effect:"fadeInDown"});
+				$(".loading").hide(); //加载失败移除加载图片
+			}
+		});
+
+	});
+});
+$(document).ready(function () {
+	//响应文件添加成功事件
+	$("#file_idimg3").change(function () {
+		//创建FormData对象
+		var data = new FormData();
+		//为FormData对象添加数据
+		$.each($('#file_idimg3')[0].files, function (i, file) {
+			data.append('upload_file' + i, file);
+		});
+
+		//发送数据
+		$.ajax({
+			url: '/Home/User/idcard_img',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			cache: false,
+			contentType: false, //不可缺参数
+			processData: false, //不可缺参数
+			success: function (data) {
+				if (data['status']==1) {
+					$('.up_img_idimg3').attr("src", '/Upload/idcard/' + $.trim(data['info']));
+					$('#idimg3').val($.trim(data['info']));
+					$('#up_img_idimg3').show();
+				}else{
+					bui.hint({content:'上传出错'+data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			},
+			error: function () {
+				bui.hint({content:'上传出错', position:"center" , effect:"fadeInDown"});
+				$(".loading").hide(); //加载失败移除加载图片
+			}
+		});
+
+	});
+});
+</script>

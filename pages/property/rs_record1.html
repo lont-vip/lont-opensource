@@ -1,0 +1,118 @@
+<div class="tab-home-news">
+    <div id="uiScroll" class="bui-scroll zr_record_scrollList">
+        <div class="bui-scroll-head"></div>
+        <div class="bui-scroll-main" style="background: none;">
+            <ul class="bui-list news-list trade_bot3"></ul>
+        </div>
+        <div class="bui-scroll-foot"></div>
+    </div>
+</div>
+<script>
+
+var uiList;
+function rs_record1_sx(coin){
+	uiList = bui.list({
+		id: ".zr_record_scrollList",
+	    url: "/Home/property/financing_zr_log",
+	    pageSize: 6,
+	      refresh:false,
+	    data: {coin:coin},
+	    field: {
+	        page: "page",
+	        size: "pageSize",
+	        data: "data"
+	    },
+	    callback: function(e) {
+	        //console.log($(e.target).closest(".bui-btn").attr("class"))
+	    },
+	    template: function(data) {
+	            var html = "";
+	            data.forEach(function(el, index) {
+	                html += `<div class="into bui-btn" href="pages/property/transfer_details_r?coin=${el.coinname}&id=${el.id}">
+    						<img class="pari-img-l" src="/Public/images/r.png" />
+							<div class="bizh-min fl"><span class="wait">${el.num}<i>${el.coin}</i></span><p class="ip">${el.addtime}</p></div>
+							<img class="pari-img" src="/Public/images/right_b.png">
+							<div class="fate fr"><p>${el.status_mas}</p></div>
+						</div>`
+	                });
+	            	//console.log(html);    
+	                return html;
+	             
+	        },
+	        onBeforeRefresh : function () {
+	          console.log("brefore refresh")
+	        },
+	        onBeforeLoad : function () {
+	        	
+	          console.log("brefore load")
+	        },
+	        onRefresh: function() {
+	            console.log("refreshed")
+	        },
+	        onLoad: function() {
+	            console.log("loaded")
+	        }
+	    });
+	    
+	 $('.bui-loading-cell').remove();
+	 $('.bui-loading-text').text('') ;
+}
+
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	
+	if(result['coin']!='' && result['coin']!=undefined){
+		rs_record1_sx(result['coin']);
+	}else{
+		rs_record1_sx('cny');
+	}
+});
+
+function rs_record1_sx2(coin){
+	uiList = bui.list({
+		id: ".zr_record_scrollList",
+	    url: "/Home/property/financing_zr_log",
+	    pageSize: 6,
+	      refresh:false,
+	    data: {coin:coin},
+	    field: {
+	        page: "page",
+	        size: "pageSize",
+	        data: "data"
+	    },
+	    callback: function(e) {
+	        //console.log($(e.target).closest(".bui-btn").attr("class"))
+	    },
+	    template: function(data) {
+	            var html = "";
+	            data.forEach(function(el, index) {
+	                html += `<div class="into bui-btn" href="pages/property/transfer_details_r?coin=${el.coinname}&id=${el.id}">
+    						<img class="pari-img-l" src="/Public/images/r.png" />
+							<div class="bizh-min fl"><span class="wait">${el.num}<i>${el.coin}</i></span><p class="ip">${el.addtime}</p></div>
+							<img class="pari-img" src="/Public/images/right_b.png">
+							<div class="fate fr"><p>${el.status_mas}</p></div>
+						</div>`
+	                });
+	            	//console.log(html);    
+	                return html;
+	             
+	        },
+	        onBeforeRefresh : function () {
+	          console.log("brefore refresh")
+	        },
+	        onBeforeLoad : function () {
+	        	
+	          console.log("brefore load")
+	        },
+	        onRefresh: function() {
+	            console.log("refreshed")
+	        },
+	        onLoad: function() {
+	            console.log("loaded")
+	        }
+	    });
+	    
+	 $('.bui-loading-cell').remove();
+	 $('.bui-loading-text').text('') ;
+}
+</script>

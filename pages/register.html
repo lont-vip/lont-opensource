@@ -1,0 +1,148 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==1){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<style>
+	.disabled { pointer-events: none; }
+</style>
+<div class="bui-page">
+	<main style="background: url(/Public/images/login_bg.png) no-repeat;background-size:100% 100%;">
+		<div class="login-head">
+			<img style="margin: 0;" class="login-head-lo" src="/Public/images/logo_login_new.png">
+		</div>
+		<div class="regis-main">
+			<form class="register1_index">
+				<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">手机号码</span>
+						<input type="tel" placeholder="输入手机号"  maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" class="zc_mobile" name="mobile" />
+					</div>
+				</div>
+				<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">图形验证</span>
+						<input type="tel" name="yzm" placeholder="输入图形验证码" maxlength="4" class="zc_yzm" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+						<img class="regis-main-yzm" src="/Home/login/code" id="verifyImg" onclick="this.src=this.src+'?t='+Math.random()" />
+					</div>
+				</div>
+				<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">短信验证</span>
+						<input type="tel" name="code" placeholder="输入短信验证码"  maxlength="6" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+						<span class="regis-main-hq register_mobile_regBtn" onclick="SendCode_mobile()">获取验证码</span>
+					</div>
+				</div>
+				<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">邀&nbsp;请&nbsp;&nbsp;码</span>
+						<input type="text" name="invit" class="invit" placeholder="输入邀请码">
+						<input type="hidden" class="yaoqing" value="0" />
+					</div>
+				</div>
+				<button class="regis-main-btn loadToSuccess register1_index_tj">下一步</button>
+				<div class="regis-main-for bui-btn" href="pages/main/main">已有账号，<span>去登录</span></div>
+			</form>
+	   </div>
+	</main>
+</div>
+<script>
+bui.ready(function(){
+	$(".register1_index_tj").on("click",function (argument) {
+		var data = $('.register1_index').serialize();
+		var yaoqing=$('.yaoqing').val();
+		$.ajax({
+			url: '/Home/login/register_index',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				if(data.status==1){
+					bui.load({ url: "pages/register2?invit="+data['invit']+"&username="+data['username']+"&mobile="+data['mobile']+"&yaoqing="+yaoqing});
+				}else{
+					refreshVerify();
+					bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			}
+		})
+	});
+});
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	bui.ajax({
+		url: "/Home/Login/index_invite",
+		data: {id:result['invit']},
+		async:false
+	}).then(function(res){
+		console.log(res);
+		if(res['status']==1){
+			$('.yaoqing').val(1);
+			$(".invit").val(res['msg']['invit']);
+			$('.invit').attr('readonly','readonly');
+		}
+	});
+});
+function SendCode_mobile(){
+	var mobile = $(".zc_mobile").val();
+	var verify = $(".zc_yzm").val();
+  	var intnum=86;
+	if (mobile==""||mobile==null) {
+		// refreshVerify();
+		bui.hint({content:'请输入手机号', position:"center" , effect:"fadeInDown"});	
+		return false;
+	}
+	if (verify==""||verify==null) {
+		// refreshVerify();
+		bui.hint({content:'请输入图片验证码', position:"center" , effect:"fadeInDown"});	
+		return false;
+	}
+	$.post("/Home/login/regss",{mobile:mobile,intnum:intnum,verify:verify},function(data){
+		// refreshVerify();
+      	bui.hint({content:data.info, position:"center" , effect:"fadeInDown"});
+		if(data.status==1){
+			var obj=$('.register_mobile_regBtn');
+			$('.register_mobile_regBtn').addClass('disabled');
+			var wait=60;
+			var interval=setInterval(function(){
+				$('.register_mobile_regBtn').text(wait + '秒重发');
+				wait--;
+				if(wait<0){
+					clearInterval(interval);
+					$('.register_mobile_regBtn').text('获取验证码');
+					$('.register_mobile_regBtn').removeClass('disabled');
+				}
+			},1000);
+		}
+	},"json");
+}
+function refreshVerify() {
+    var ts = Date.parse(new Date())/1000;
+    var img = document.getElementById('verifyImg');
+    img.src = "/Home/login/code?id="+ts;
+}
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1e3);
+	return false;
+});
+
+</script>

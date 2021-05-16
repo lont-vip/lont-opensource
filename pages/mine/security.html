@@ -1,0 +1,49 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main >
+		<div class="head-ban" style="background: none;">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="safety_tz()" /></div>
+			<div class="head-main" ></div>
+			<div class="head-right"></div>
+		</div>
+		<div class="add-mn">
+			<div class="add-mn-t">安全中心</div>
+		</div>
+		<div>
+			<div class="safe-main-t">密码管理</div>
+			<div class="safe-main">
+	         	<div class="bui-btn safe-main-d" href="pages/mine/password">
+	         		<img class="safe-main-dimg" src="/Public/images/passd.png">
+	         		<span>修改登录密码</span>
+	         		<p class="safe-main-dr">修改<img src="/Public/images/right.png"></p>
+	         	</div>
+	         	<div class="bui-btn safe-main-d" href="pages/mine/paypassword" style="border: none;">
+	         		<img class="safe-main-dimg" src="/Public/images/passz.png">
+	         		<span>修改交易密码</span>
+	         		<p class="safe-main-dr">修改<img src="/Public/images/right.png"></p>
+	         	</div>
+	         </div>
+		</div>
+	</main>
+</div>
+<script>
+function safety_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				mine_sx();
+			})
+		}
+	})
+}
+</script>

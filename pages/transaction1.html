@@ -1,0 +1,113 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="tab-home-news">
+	<input type="hidden" class="xianshi_coin_1" value="" />
+    <!-- 列表刷新 -->
+    <div id="uiScroll" class="bui-scroll transaction1_scrollList">
+        <div class="bui-scroll-head"></div>
+        <div class="bui-scroll-main" style="background: none;">
+            <!-- 列表 -->
+            <ul class="bui-list news-list trade_bot2"></ul>
+        </div>
+        <div class="bui-scroll-foot"></div>
+    </div>
+</div>
+<script>
+
+var uiList_mr;
+function transaction_mr(market,field,desc){
+	$('.xianshi_coin_1').val(market);
+	console.log("XXXXXXXXX"+market+"XXXXXXXX");
+	
+	var market2=$('.xianshi_coin_1').val();
+	console.log("XXXXX888XXXX"+market2+"XXXXXX888XX");
+	
+	listHeight = $(window).height()  - $(".tran-height").height() - $("#tabDynamicNav").height();
+	uiList_mr = bui.list({
+		id: ".transaction1_scrollList",
+		url: "/Home/Entruy/transaction1",
+		pageSize: 6,
+		refresh:false,
+		height: listHeight,
+		data: {market:market2,field:field,desc:desc},
+		field: {
+			page: "page",
+			size: "pageSize",
+			data: "data"
+		},
+		callback: function(e) {
+			console.log($(e.target).closest(".bui-btn").attr("class"))
+		},
+		template: function(data,info,status) {
+			console.log("----XXXXXXXXX"+market+"XXXXXXXX----")
+			if(info.status==1){
+				var html = "";
+				data.forEach(function(el, index) {
+					html += `<div class="trade_botz">
+	                <div class="left fl">
+                      	<p class="p1"><img src="${el.avatar}">${el.enname}</p>
+                      	<p class="p2">数量 : <span>${el.num} ${el.coin_1}</span></p>
+                      	<p class="p2">最小限额: <span>${el.num_min} ${el.coin_1}</span></p>
+                        <p class="p4">${el.fkimg}</p>
+	                </div>
+	                 <div class="right fr">
+	                    <p class="p1">单价</p><p class="p-jia">${el.price}<i style="font-size:0.24rem">${el.coin_3}</i></p>
+	          			<button type="button" onclick="want_buy(${el.id})" class="trade-buy2">购买</button>
+	                </div>
+	           </div>`;
+			});
+			return html;
+		}
+	},
+	onBeforeRefresh : function () {
+		console.log("brefore refresh")
+	},
+	onBeforeLoad : function () {
+		console.log("brefore load")
+	},
+	onRefresh: function() {
+		console.log("refreshed")
+	},
+	onLoad: function() {
+		console.log("loaded")
+	}
+})
+
+}
+	// time1 = setInterval(function  () {
+	// 	uiList_mr.refresh();
+	// },1000);
+	setTimeout(function(){
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	console.log("------------222--");
+	if(result['market']=='' || result['market']==undefined){
+		bui.ajax({
+			url: "/Home/Entruy/market_moren",
+			data: {},
+			async:false
+		}).then(function(res){
+			transaction_mr(res['market']);
+		});
+	}else{
+		transaction_mr(result['market']);
+	}
+});
+},500);
+
+$('.trade-buy2').click(function  () {
+	$('.anquan').show();
+})
+$('.popup-cha').click(function(){
+	$('.anquan').hide();
+})
+</script>

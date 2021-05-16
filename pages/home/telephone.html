@@ -1,0 +1,142 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main>
+		<div class="head-ban">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="telephone_tz()"></div>
+			<div class="head-main">话费充值</div>
+			<div class="head-right"></div>
+		</div>
+		<form class="telephone_index">
+			<div class="tele-tel">
+				<input type="tel" name="mobile" class="telephone_mobile" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="输入充值手机号码" />
+				<img src="/Public/images/telephone.png" />
+			</div>
+			<div class="tele-cz">
+				<div class="tele-cz-d1">充值金额</div>
+				<div class="tele-cz-d2">可用URN:<font class="telephone_uti"></font></div>
+			</div>
+			<input type="hidden" class="telephone_num" name="num" value="0" />
+			<div class="tele-ul">
+				<ul class="row telephone_money_list"></ul>
+			</div>
+			<div class="tele-uti">
+				<span>需支付：<span><font class="telephone_zhifu">0</font> URN</span></span>
+				<span class="tele-uti-r">手续费：<span><font class="telephone_fee">0</font> URN</span></span>
+			</div>
+			<div class="gath-gth" style="margin-top:.6rem;">
+			<div>等级享折扣</div>
+				<span>Lv 1 : 10折<br/> LV2 : 9.5折<br/> LV3 : 9.5折<br/>LV4 : 9折<br/> LV5 : 8.5折</span>
+			</div>
+		</form>
+	</main>
+	<footer>
+    	<div class="addres-btn phont-btn">
+    		<button type="button" class="loadToSuccess telephone_index_tj">确认充值</button>
+    		<div class="tele-jl bui-btn" href="pages/home/telephone_jl">充值记录</div>
+    	</div>
+    </footer>
+</div>
+<script>
+function telephone_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/total"], function(main) {
+				
+			})
+		}
+	})
+}
+
+bui.ready(function(){
+	$(".telephone_index_tj").on("click",function (argument) {
+		var data = $('.telephone_index').serialize();
+		$.ajax({
+			url: '/Home/Chong/huafei_ajax',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					bui.load({ url: "pages/home/telephone_jl" });
+				}
+			}
+		})
+	});
+});
+
+function xuanze(num){
+	$('.telephone_num').val(num);
+	bui.ajax({
+		url: "/Home/Chong/huafei_num",
+		data: {num:num},
+		async:false
+	}).then(function(res){
+		$('.telephone_zhifu').html(res['mum']);
+		$('.telephone_fee').html(res['fee']);
+	});
+}
+function telephone_sx(){
+	bui.ajax({
+		url: "/Home/Chong/huafei_mas",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			if(res['huafei']['sta_mobile']==0){
+				$('.telephone_mobile').val(res['huafei']['mobile']);
+				$('.telephone_mobile').attr('readonly','readonly');
+			}
+			$('.telephone_uti').html(res['uti']);
+			if(res['huafei']['money']){
+				$('.telephone_zhifu').html(res['huafei']['mum']);
+				$('.telephone_fee').html(res['huafei']['fee']);
+				var telephone_money_list='';
+				var money_cd=res['huafei']['money'].length;
+				for(var i=0;i<money_cd;i++){
+					if(i==0){
+						$('.telephone_num').val(res['huafei']['money'][i]);
+						telephone_money_list+='<li onclick="xuanze('+res['huafei']['money'][i]+')" class="active"><span>'+res['huafei']['money'][i]+' 元</span></li>';
+					}else{
+						telephone_money_list+='<li onclick="xuanze('+res['huafei']['money'][i]+')"><span>'+res['huafei']['money'][i]+' 元</span></li>';
+					}
+				}
+				$('.telephone_money_list').html(telephone_money_list);
+			}
+		}
+	});
+}
+telephone_sx();
+$('.tele-ul').on('click','li',function  () {
+	$('.tele-ul li').attr('class','');
+	$(this).attr('class','active');
+})
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1000);
+	return false;
+});
+</script>

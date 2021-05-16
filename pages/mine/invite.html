@@ -1,0 +1,79 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main style="background:#fff url(/Public/images/inv20210407.png) 0% 0% / 100% no-repeat; height: 617px;">
+		<div class="box-sad">
+			<img src="/Public/images/left.png" style="width: .4rem;margin: .3rem;" onclick="invite_tz()">
+		</div>
+		<div class="ivrep row">
+			<div data-clipboard-text="" class="rec_fu invit-fz invit_invit_fuzhi">
+				邀请码 : <i class="invit_invit_fuzhi2" style="margin-top:.1rem;"></i> <span>复制</span>
+			</div>
+			<div class="inv-mine">
+				<img class="inv-mine-img invit_invit_txiang" src="/Public/images/photo.png">
+				<div class="wenzi">
+					<p>我是LONT会员<span class="invit_invit_username"></span></p>
+					<p>长按识别二维码加入LONT</p>
+				</div>
+			</div>
+			<div class="ivtia-code">
+				<saon class="codeaa" style=""></saon>
+			</div>	   		
+		</div>
+		<span class="prompt_box" style="display: none;font-size: .3rem;">复制成功</span>	   		
+	</main>	
+	<footer>
+		<div data-clipboard-text="" class="rec_fu invit_url_fuzhi invi-lj">复制邀请链接</div>
+	</footer>		
+<script type="text/javascript" src="/Public/js/jquery.qrcode.min.js"></script>
+<span class="invit_script_fuzhi"></span>
+</div>
+<script type="text/javascript">
+
+function invite_tz() {
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				mine_sx();
+			})
+		}
+	})
+}
+
+bui.ajax({
+	url: "/Home/User/invite",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==1){
+		$('.invit_invit_txiang').attr('src',res['user']['touxiang']);
+		$('.invit_invit_username').html(res['user']['truename']);
+		$('.invit_invit_fuzhi').attr('data-clipboard-text',res['user']['invit']);
+		$('.invit_invit_fuzhi2').html(res['user']['invit']);
+		$('.invit_url_fuzhi').attr('data-clipboard-text',res['user']['yaoqing']);
+		$('.invit_script_fuzhi').html(res['user']['script']);
+	}
+});
+
+var btn = document.getElementsByClassName('rec_fu');
+var clipboard = new Clipboard(btn); 
+//复制成功执行的回调，可选
+clipboard.on('success', function(e) {
+	document.querySelector(".prompt_box").style.display = "block";
+	setTimeout(function() {
+		document.querySelector(".prompt_box").style.display = "none";
+	}, 2000);
+}); //复制失败执行的回调，可选
+clipboard.on('error', function(e) {
+	console.log(e);
+});
+</script>

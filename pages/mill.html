@@ -1,0 +1,143 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="mill-head">
+			<span>我的矿机</span>
+			<span class="mill-head-r bui-btn" href="pages/mill/mill_shop">
+				<img src="/Public/images/shop.png"/>
+				矿机商城
+			</span>
+		</div>
+		<div class="mill-main">
+			<div class="mill-main-d row">
+				<div class="mill-main-dl">
+					<div>累计收益</div><span><font class="mill_leiji">0</font> <span> LONT</span></span>
+				</div>
+				<div class="mill-main-drc bui-btn" href="pages/mill/mill_earnings">收益记录 <img src="/Public/images/right_w.png"/></div>
+			</div>
+			<div class="mill-main-d mill-main-d2 row">
+				<div class="mill-main-dl">
+					<div>未领取</div>
+					<span style="font-size: .32rem;"><font class="mill_wlqu">0</font> <span style="font-size: .29rem;"> LONT</span></span>
+				</div>
+				<form class="mill_index">
+				<div class="mill-main-dr row">
+					<span class="loadToSuccess mill_index_tj"><img src="/Public/images/home_rotate.png"/> 领取收益</span>
+					<div></div>
+					<span class="loadToSuccess mill_kaiqi_tj"><img src="/Public/images/home_rotate.png"/> 开启矿机</span>
+				</div>
+				</form>
+			</div>
+		</div>
+		<div class="home-luse" style="width: 93%;">
+    		<span class="home-luse-l"></span><span>我的矿机</span>
+    	</div>	
+    	<div class="mill-syz mill_list"></div>
+	</main>
+</div>
+<script>
+
+
+bui.ready(function(){
+	$(".mill_kaiqi_tj").on("click",function (argument) {
+		var data = $('.mill_index').serialize();
+		$.ajax({
+			url: '/Home/Mining/mill_start',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data['status']==1){
+					mill_sx();
+				}
+			}
+		})
+	});
+}); 
+
+function mill_sx2(){
+	bui.ajax({
+		url: "/Home/Mining/mill_mysx",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			$('.mill_leiji').html(res['user']['kj_sy']*1);
+			$('.mill_wlqu').html(res['user']['wlqu']*1);
+		}
+	});
+}
+
+function mill_sx(){
+	bui.ajax({
+		url: "/Home/Mining/mill_my",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			$('.mill_leiji').html(res['user']['kj_sy']*1);
+			$('.mill_wlqu').html(res['user']['wlqu']*1);
+			if(res['mining_list']){
+				var mill_list='';
+				var millcd=res['mining_list'].length;
+				for(var j=0;j<millcd;j++){
+					mill_list+='<div class="mill-list row bui-btn" href="pages/mill/mill_my?id='+res['mining_list'][j]['id']+'"><img src="/Upload/mining/'+res['mining_list'][j]['img']+'"><div class="mill-list-d"><div class="mill-list-d1">'+res['mining_list'][j]['name']+' <span>x'+res['mining_list'][j]['num']+'</span></div><div class="mill-list-d2"><ul class="row"><li><div>每日运行</div><span><span>'+res['mining_list'][j]['h_num']+'</span>小时</span></li><li><div>每日挖矿</div><span><span>'+res['mining_list'][j]['jiang']+'</span> LONT</span></li></ul></div></div></div>';
+				}
+				$('.mill_list').html(mill_list);
+			}else{
+				$('.mill_list').html('<img src="/Public/images/no.png" /><br />暂无记录');
+			}
+		}
+	});
+}
+mill_sx();
+
+
+bui.ready(function(){
+	$(".mill_index_tj").on("click",function (argument) {
+		var data = $('.mill_index').serialize();
+		$.ajax({
+			url: '/Home/Mining/mill_lingqu',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data['status']==1){
+					mill_sx();
+				}
+			}
+		})
+	});
+}); 
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1e3);
+	return false;
+});
+</script>

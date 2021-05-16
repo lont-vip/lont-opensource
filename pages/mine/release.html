@@ -1,0 +1,65 @@
+<div class="bui-page" style="background:#fafafa;">
+	<main style="background:#fafafa;">
+		<div class="bui-scroll item_record release_scrollList">
+            <div class="bui-scroll-head"></div>
+            <div class="bui-scroll-main" style="background: none;">
+				<div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png"  onclick="release_tz()"  /></div>
+					<div class="head-main" >释放记录</div>
+					<div class="head-right"></div>
+				</div>
+				<ul class="bui-list bui-list-thumbnail row"></ul>
+			 </div>
+            <div class="bui-scroll-foot"></div>
+        </div>	
+</div>
+<script>
+
+function release_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				mine_sx();
+			})
+		}
+	})
+}
+
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+var uiList = bui.list({
+	id: ".release_scrollList",
+	url: "/Home/User/commission_shifang_list",
+	pageSize: 6,
+	refresh:false,
+	data: {id:result['id']},
+	field: {
+		page: "page",
+		size: "pageSize",
+		data: "data"
+	},
+	callback: function(e) {
+		console.log($(e.target).closest(".bui-btn").attr("class"))
+	},
+	template: function(data) {
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="release-list"><img src="/Public/images/home_rotate.png" alt="" />释放 ${el.fee} UTI<span>${el.addtime}</span></div>`
+                });
+                return html;
+        },
+        onBeforeRefresh : function () {
+          console.log("brefore refresh")
+        },
+        onBeforeLoad : function () {
+          console.log("brefore load")
+        },
+        onRefresh: function() {
+            console.log("refreshed")
+        },
+        onLoad: function() {
+            console.log("loaded")
+        }
+    });
+});
+</script>

@@ -1,0 +1,112 @@
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="head-ban" style="background: none;">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="transfer_details_c()"></div>
+			<div class="head-main particulars_title">转出详情</div>
+			<div class="head-right"></div>
+		</div>
+		<input type="hidden" class="par_coin" value="">
+		<div class="DetailsOfTransfer">
+			<div class="content">
+				<div class="part-hd ">
+					<img class="part-hd-img particulars_img" src="" />
+					<span class="particulars_title"></span>
+				</div>
+				<div class="deta-text">
+					<div class="deta-text-d row">
+						<span class="deta-text-dl">转出数量</span>
+						<span class="deta-text-dr particulars_num"></span>
+					</div>
+					<div class="deta-text-d row">
+						<span class="deta-text-dl">扣经验值</span>
+						<span class="deta-text-dr particulars_jyz"></span>
+					</div>
+					<div class="deta-text-d row">
+						<span class="deta-text-dl">手续费</span>
+						<span class="deta-text-dr particulars_fee"></span>
+					</div>
+					<div class="deta-text-d row">
+						<span class="deta-text-dl">实际到账</span>
+						<span class="deta-text-dr particulars_mum" style="color: #eaa64e;"></span>
+					</div>
+					<div class="deta-text-d row">
+						<span class="deta-text-dl">状态</span>
+						<span class="deta-text-dr sta_mas"></span>
+					</div>
+				</div>
+				<div class="deta-text2">
+					<div class="deta-text-d row">
+						<span class="deta-text-dl">地址</span>
+						<span class="deta-text-dr particulars_fauser"></span>
+					</div>
+					<div class="deta-text-d row">
+						<span class="deta-text-dl">Txid</span>
+						<span class="deta-text-dr particulars_txid"></span>
+					</div>
+					<div class="deta-text-d row">
+						<span class="deta-text-dl">日期</span>
+						<span class="deta-text-dr particulars_addtime"></span>
+					</div>
+				</div>
+				<div class="deta-btn">
+					<button class="rec_fu particulars_txid2" data-clipboard-text="">复制Txid</button>
+				</div>
+			</div>
+		</div>
+		 <span class="prompt_box invit_fuzcg" style="display: none;">复制成功</span>
+	</main>
+</div>
+<script>
+function transfer_details_c(yemian){
+	var par_coin=$('.par_coin').val();
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/property/rs_record"], function(main) {
+				if(par_coin==''){
+					
+				}else{
+					uiList.reload();
+				}
+			})
+		}
+	})
+}
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	$('.par_coin').val(result['coin']);
+	bui.ajax({
+		url: "/Home/Finance/wallet_zcmas",
+		data: {id:result['id']},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			$('.particulars_coin').html(res['user']['coin_name']);
+			$('.particulars_title').html(res['user']['coin_title']);
+			$('.particulars_img').attr('src',res['user']['img']);
+			$('.sta_mas').html(res['user']['sta_mas']);
+			$('.coinname').html(res['user']['coin_name']);
+			$('.particulars_num').html(res['user']['num']);
+			$('.particulars_fee').html(res['user']['fee']);
+			$('.particulars_jyz').html(res['user']['jyz']);
+			$('.particulars_mum').html(res['user']['mum']);
+			$('.particulars_addtime').html(res['user']['addtime']);
+			$('.particulars_txid').html(res['user']['txid']);
+			$('.particulars_fauser').html(res['user']['username']);
+			$('.particulars_txid2').attr('data-clipboard-text',res['user']['txid']);
+		}
+	});
+});
+
+var btn = document.getElementsByClassName('rec_fu');
+var clipboard = new Clipboard(btn); 
+//复制成功执行的回调，可选
+clipboard.on('success', function(e) {
+	document.querySelector(".prompt_box").style.display = "block";
+	setTimeout(function() {
+		document.querySelector(".prompt_box").style.display = "none";
+	}, 2000);
+}); //复制失败执行的回调，可选
+clipboard.on('error', function(e) {
+	console.log(e);
+});
+</script>

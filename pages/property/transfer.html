@@ -1,0 +1,571 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+var img = null;
+var blist = [];
+function scaned(t, r, f){
+  	var coin=$('.rollout_xx').val();
+	var d = new Date();
+	var h=d.getHours(),m=d.getMinutes(),s=d.getSeconds(),ms=d.getMilliseconds();
+	if(h < 10){ h='0'+h; }
+	if(m < 10){ m='0'+m; }
+	if(s < 10){ s='0'+s; }
+	if(ms < 10){ ms='00'+ms; }
+	else if(ms < 100){ ms='0'+ms; }
+	var ts = '['+h+':'+m+':'+s+'.'+ms+']';
+	var li=null,hl = document.getElementById('history');
+	if(blist.length > 0){
+		li = document.createElement('li');
+		li.className = 'ditem';
+		hl.insertBefore(li, hl.childNodes[0]);
+	} else{
+		li = document.getElementById('nohistory');
+	}
+	li.id = blist.length;
+	if(r){
+		$('.rollout_address').val(r);
+	}else{
+		var html = '['+h+':'+m+':'+s+'.'+ms+']'+'　　'+t+'码<div class="hdata">';
+		html += r;
+		html += '</div>';
+		li.innerHTML = html;
+		li.setAttribute('onclick', 'selected(id)');
+		blist[blist.length] = {type:t,result:r,file:f};
+		update(t, r, f);
+	}
+}
+function selected(id){
+	var h = blist[id];
+	update( h.type, h.result, h.file );
+	if(h.result.indexOf('http://')==0  || h.result.indexOf('https://')==0){
+		plus.nativeUI.confirm(h.result, function(i){
+			if(i.index == 0){
+				plus.runtime.openURL(h.result);
+			}
+		}, '', ['打开', '取消']);
+	} else{
+		plus.nativeUI.alert(h.result);
+	}
+}
+function update(t, r, f){
+	outSet('扫描成功：');
+	outLine(t);
+	outLine(r);
+	outLine('\n图片地址：'+f);
+}
+function onempty(){
+	if(window.plus){
+		plus.nativeUI.alert('无扫描记录');
+	} else {
+		alert('无扫描记录');
+	}
+}
+function cleanHistroy(){
+	if(blist.length > 0){
+		var hl = document.getElementById('history');
+		hl.innerHTML = '<li id="nohistory" class="ditem" onclick="onempty();">无历史记录	</li>';
+	}
+	plus.io.resolveLocalFileSystemURL('_doc/barcode/', function(entry){
+		entry.removeRecursively(function(){
+			// Success
+		}, function(e){
+		});
+	});
+}
+</script>
+	<style>
+			.loader2 {
+	position:fixed;
+	left:50%;
+	top:50%;
+	margin:-0.2em 0 0 -0.2em;
+	text-indent:-9999em;
+	border-top:0.3em solid rgba(0,0,0,0.1);
+	border-right:0.3em solid rgba(0,0,0,0.1);
+	border-bottom:0.3em solid rgba(0,0,0,0.1);
+	border-left:0.3em solid #555;
+	-moz-transform:translateZ(0);
+	-webkit-transform:translateZ(0);
+	transform:translateZ(0);
+	-moz-animation:loader 300ms infinite linear;
+	-webkit-animation:loader 300ms infinite linear;
+	animation:loader 300ms infinite linear;
+	-moz-transition:all 500ms ease;
+	-o-transition:all 500ms ease;
+	-webkit-transition:all 500ms ease;
+	transition:all 500ms ease;
+}
+.loader2,.loader2:after {
+	border-radius:50%;
+	width:2em;
+	height:2em;
+}
+.curtain {
+	position:fixed;
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;
+	-moz-transition:all 600ms ease;
+	-o-transition:all 600ms ease;
+	-webkit-transition:all 600ms ease;
+	transition:all 600ms ease;
+	filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+	opacity:0;
+	z-index:0;
+	overflow:hidden;
+}
+@-webkit-keyframes loader {
+	0% {
+	-webkit-transform:rotate(0deg);
+	transform:rotate(0deg);
+}
+100% {
+	-webkit-transform:rotate(360deg);
+	transform:rotate(360deg);
+}
+}@-moz-keyframes loader {
+	0% {
+	-moz-transform:rotate(0deg);
+	transform:rotate(0deg);
+}
+100% {
+	-moz-transform:rotate(360deg);
+	transform:rotate(360deg);
+}
+}@keyframes loader {
+	0% {
+	-webkit-transform:rotate(0deg);
+	transform:rotate(0deg);
+}
+100% {
+	-webkit-transform:rotate(360deg);
+	transform:rotate(360deg);
+}
+}.is-loading {
+	overflow:hidden;
+	display: none;
+}
+.is-loading .curtain {
+	filter:progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+	opacity:1;
+	z-index:999999;
+}
+.is-loading .loader {
+	filter:progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+	opacity:1;
+}
+.loader2{
+	 font-size: .3rem;
+}
+	</style>
+<div class="bui-page">
+	<main>
+		<div class="is-loading">
+		    <div class="curtain">
+		        <div class="loader2">
+		        </div>
+		    </div>
+		</div>
+		<div class="head-ban">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="transfer_tz()" /></div>
+			<div class="head-main">转出</div>
+			<div class="head-right bui-btn" onclick="transfer_tz2()" style="text-align: center;line-height: 1rem;"><img src="/Public/images/lj.png"/></div>
+		</div>
+		<ul id="history" class="dlist" style="text-align:left;display:none;">
+			<li id="nohistory" class="ditem"></li>
+		</ul>
+		<div class="tran-kind">
+			<span class="tran-kind-coin">
+				<img class="rollout_img" src=""> <span class="rollout_name"></span>
+			</span>
+			<span class="tran-kind-right" >选择币种 <img src="/Public/images/right.png"></span>
+		</div>
+		<div class="gath-zw">
+			<div class="gath-zw-h">选择主网</div>
+			<div class="gath-zw-d"><span class="active" >ERC20</span></div>
+		</div>
+		<form class="rollout_index">
+			<input type="hidden" class="rollout_fee_bl" value="" />
+			<input type="hidden" class="qianbao_yemian" value="" />
+			<input type="hidden" class="qianbao_fh" name="coin" value="" />
+			<div class="transfer">
+				<div>
+					<div><label>转出地址</label></div>
+					<input type="text" class="rollout_address" onblur="this.placeholder='请点击右侧选择或扫描地址'" onfocus="this.placeholder='请点击右侧选择或扫描地址'" name="addr" placeholder="请点击右侧选择或扫描地址" maxlength="50" onkeyup="value=value.replace(/[\W]/g,'')" readonly="readonly">
+					<img onclick="clicked('pages/barcode_scan.html',true,true)" style="right: .7rem;display:none;" src="/Public/images/sys.png">
+					<img class="bui-btn qianbao_dizhi" href="pages/property/wallet_address.html"  src="/Public/images/site.png">
+				</div>
+				<div class="d2">
+					<div id=""><label>转出数量</label></div>
+					<input type="text" placeholder="输入数量" maxlength="20" onkeyup="nu(this)" oninput="fee_num()" class="rollout_sr_num" name="num">
+					<span class="turn"><span class="roll-bz rollout_name">USDT</span><span class="roll-qb" onclick="quanbu()">全部</span></span>
+				</div>
+				<input type="hidden" name="code" class="m_code" value="" />
+				<input type="hidden" name="paypassword" class="m_paypassword" value="" />
+				<div class="tran-kx">
+					<span style="color: #aaaaaa;">可用 <span class="rollout_num"></span> <font class="rollout_name"></font></span>
+				</div>
+				<div class="tran-kx">
+					<span>扣经验值 <span class="num_jyz">0</span></span>
+					<span class="tran-kx-r">手续费  <span class="num_fee">0</span> <font class="rollout_name"></font></span>
+				</div>
+			</div>
+			<div class="gath-gth" style="width:90%;margin-top:.6rem;">
+				<div>温馨提示：</div>
+				<span>1.由于区块链特性,转账需要几十秒到几分钟同步区块数据到全球节点。</br>
+						2.由于区块链特性，转出后无法撤销，请确认地址准确。  </span>
+			</div>
+		
+		</form>
+	</main>
+		<div class="tran-tan">
+				<div class="tran-k">
+					<div class="tran-hd">
+						<img class="tran-hd-off" src="/Public/images/off2.png" />
+						<div>安全验证</div>
+						<span>需要进行安全验证</span>
+					</div>
+					<div class="tran-mm tran-mm1">
+						<div class="tran-mm-h">资产密码</div>
+						<div class="tran-mm-inp">
+							<input type="password" class="paypassword" placeholder="请输入资产密码" />
+						</div>
+					</div>
+					<div class="tran-k-btn tran-k-btn2 rollout_index_tj">
+						<button type="button">确定</button>
+					</div>
+				</div>
+			</div>
+			
+	<div class="tran-kind-tan">
+		<div class="tran-kind-k">
+			<div class="tran-kind-head">
+				<span>转账币种</span><img class="tran-kind-off" src="/Public/images/off2.png">
+			</div>
+			<div class="transfer_list"></div>
+		</div>
+	</div>
+	<footer>
+    	<div class="tran-btn">
+    		<div class="tran-ft">
+    			<span class="tran-ft-d">到账数量</span>
+    			<span class="tran-ft-num num_shiji"><span>0</span><font class="rollout_name"></font></span>
+    		</div>
+    		<button type="button">转出</button>
+    	</div>
+    </footer>
+</div>
+<script>
+bui.ready(function(){
+	$(".rollout_index_tj").on("click",function (argument) {
+		$('.is-loading').show();
+		$('.m_code').val($('.code_code').val());
+		$('.m_paypassword').val($('.paypassword').val());
+		var data = $('.rollout_index').serialize();
+		var coin=$('.qianbao_fh').val();
+		$.ajax({
+			url: '/Home/Finance/upmyzc',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data.info, position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					$('.tran-tan').hide();
+					$('.is-loading').hide(); 
+					$('.rollout_sr_num').val('');
+					$('.rollout_address').val('');
+					bui.load({ url: "pages/property/rs_record?type=2&coin="+coin});
+				}else{
+					$('.is-loading').show();
+						setTimeout(function  () {
+							$('.is-loading').hide();    
+					},2000)
+				}
+			}
+		})
+	});
+});
+function SendCode_mobile(){
+	$.post("/Home/property/transfer_mobile_paypassword",{mobile:1},function(data){
+      	bui.hint({content:data.info, position:"center" , effect:"fadeInDown"});
+		if(data.status==1){
+			$('.transfer_mobile_regBtn').addClass('disabled');
+			var obj=$('.transfer_mobile_regBtn');
+			var wait=120;
+			var interval=setInterval(function(){
+				$('.transfer_mobile_regBtn').text(wait + '秒重发');
+				wait--;
+				if(wait<0){
+					clearInterval(interval);
+					$('.transfer_mobile_regBtn').text('获取验证码');
+					$('.transfer_mobile_regBtn').removeClass('disabled');
+				}
+			},1000);
+		}
+	},"json");
+}
+function yanzheng2(){
+	var paypassword=$('.paypassword').val();
+	if(paypassword==''){
+		bui.hint({content:'请输入资产密码', position:"center" , effect:"fadeInDown"});return false;
+	}
+	$.ajax({
+		url: '/Home/Finance/upmyzc_pass',
+		type: 'POST',
+		dataType: 'json',
+		data:{paypassword:paypassword},
+		cache:false,
+		success:function(data){
+			if(data.status==1){
+				$('.tran-k-btn2').show();
+				$('.tran-mm2').show();
+				$('.tran-k-btn1').hide();
+				$('.tran-mm1').hide();
+			}else{
+				bui.hint({content:data.info, position:"center" , effect:"fadeInDown"});
+			}
+		}
+	})
+}
+function yanzheng(){
+	var address=$('.rollout_address').val();
+	if(address==''){
+		bui.hint({content:'请输入钱包地址', position:"center" , effect:"fadeInDown"});return false;
+	}
+	if(!/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(address)){
+		bui.hint({content:'钱包地址格式错误', position:"center" , effect:"fadeInDown"});return false;
+	}
+	if(address.length<31){
+		//bui.hint({content:'请输入正确的钱包地址', position:"center" , effect:"fadeInDown"});return false;
+	}
+	if(address.length>45){
+		//bui.hint({content:'请输入正确的钱包地址', position:"center" , effect:"fadeInDown"});return false;
+	}
+	var num=$('.rollout_sr_num').val();
+	if(num==''){
+		bui.hint({content:'请输入提现数量', position:"center" , effect:"fadeInDown"});return false;
+	}
+	if(num<0){
+		bui.hint({content:'请输入正确的提现数量', position:"center" , effect:"fadeInDown"});return false;
+	}
+	var rollout_num=$('.rollout_num').html();
+	if(parseFloat(num)>parseFloat(rollout_num)){
+		bui.hint({content:'可用余额不足', position:"center" , effect:"fadeInDown"});return false;
+	}
+	$('.tran-tan').show();
+}
+function fee_num(){
+	var num=$('.rollout_sr_num').val();
+	if(num>0){
+		var coin=$('.qianbao_fh').val();
+		$.ajax({
+			url: '/Home/Finance/fee_num',
+			type: 'POST',
+			dataType: 'json',
+			data:{num:num,coin:coin},
+			cache:false,
+			success:function(data){
+				$('.num_jyz').html(data['jyz']);
+				$('.num_fee').html(data['fee']);
+				$('.num_shiji').html(data['shiji']);
+			}
+		})
+	}else{
+		$('.num_jyz').html(0);
+		$('.num_fee').html(0);
+		$('.num_shiji').html(num);
+	}
+}
+function nu(obj){
+	obj.value = obj.value.replace(/[^\d.]/g,""); //清除"数字"和"."以外的字符
+	obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+	obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
+	obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+	obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d\d\d).*$/,'$1$2.$3'); //只能输入两个小数  几个\d保留几位小数
+     
+}
+function nu55(obj){
+	obj.value = obj.value.replace(/[^\d]/g,""); //清除"数字"和"."以外的字符
+	obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+	obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
+	obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+	obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d\d\d).*$/,'$1$2.$3'); //只能输入两个小数  几个\d保留几位小数
+      
+    $('.m_code').val(obj.value);
+}
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 5000);
+	return false;
+});
+function transfer_tz2(){
+	$('.rollout_sr_num').val('');
+	$('.rollout_address').val('');
+	$('.tran-tan').hide();
+	var coin=$('.qianbao_fh').val();
+	bui.load({ url: "pages/property/rs_record?type=2&coin="+coin });
+}
+function transfer_tz(){
+	var coin=$('.qianbao_fh').val();
+	var yemian=$('.qianbao_yemian').val();
+	if(coin!='' && coin!=undefined){
+		if(yemian=='home'){
+			router.back({
+				callback: function(mod) {
+					loader.require(["main"], function(main) {
+						
+					})
+				}
+			})
+		}else if(yemian=='property'){
+			router.back({
+				callback: function(mod) {
+					loader.require(["pages/property/particulars"], function(main) {
+						
+					})
+				}
+			})
+		}else{
+			router.back({
+				callback: function(mod) {
+					loader.require(["pages/property/particulars"], function(main) {
+						particulars_sx(coin);
+					})
+				}
+			})
+		}
+	}else{
+		router.back({
+			callback: function(mod) {
+				loader.require(["pages/total"], function(main) {
+					
+				})
+			}
+		})
+	}
+}
+function tranx(coin_name){
+	var getParams = bui.getPageParams();
+	getParams.done(function(result){
+		//查询默认币种
+		if(coin_name=='b'){
+			if(result['coin']=='' || result['coin']==undefined){
+				bui.ajax({
+					url: "/Home/property/moren_coin",
+					data: {},
+					async:false
+				}).then(function(res){
+					if(res['status']==1){
+						$('.qianbao_fh').val(res['coin']);
+						result['coin']=res['coin'];
+					}
+				});
+			}else{
+				$('.rollout_xx').val(result['coin']);
+				$('.qianbao_fh').val(result['coin']);
+			}
+		}else{
+			result['coin']=coin_name;
+			$('.rollout_xx').val(result['coin']);
+			$('.qianbao_fh').val(result['coin']);
+		}
+		
+		$('.qianbao_dizhi').attr('href','pages/property/wallet_address.html?coin='+result['coin']);
+		
+		
+		$('.qianbao_yemian').val(result['yemian']);
+		$('.rollout_address').val(result['address']);
+		bui.ajax({
+			url: "/Home/property/rollout_mas",
+			data: {coin:result['coin']}
+		}).then(function(res){
+			$('.rollout_fee_bl').val(res['coin']['zc_fee2']);
+			$('.rollout_name').html(res['coin']['name_d']);
+			$('.rollout_num').html(res['usercoin']*1);
+			//$('.num_fee').html(res['coin']['zc_fee']);
+			$('.rollout_img').attr('src','/Upload/coin/'+res['coin']['img']);
+			if(res['coin']['coinlist']){
+				var cd=res['coin']['coinlist'].length;
+				var transfer_list='';
+				for(var j=0;j<cd;j++){
+					transfer_list+='<div class="tran-kind-z" onclick=xuanze_bi("'+res['coin']['coinlist'][j]['name']+'")><img src="/Upload/coin/'+res['coin']['coinlist'][j]['img']+'"> <span>'+res['coin']['coinlist'][j]['js_yw']+'</span></div>';
+				}
+				$('.transfer_list').html(transfer_list);
+			}
+		});
+	});
+}
+tranx('b');
+function xuanze_bi(coin){
+		bui.ajax({
+			url: "/Home/property/rollout_mas",
+			data: {coin:coin}
+		}).then(function(res){
+			$('.qianbao_fh').val(coin);
+			$('.rollout_fee_bl').val(res['coin']['zc_fee2']);
+			$('.rollout_name').html(res['coin']['name_d']);
+			$('.rollout_num').html(res['usercoin']*1);
+			$('.rollout_img').attr('src','/Upload/coin/'+res['coin']['img']);
+			if(res['coin']['coinlist']){
+				var cd=res['coin']['coinlist'].length;
+				var transfer_list='';
+				for(var j=0;j<cd;j++){
+					transfer_list+='<div class="tran-kind-z" onclick=xuanze_bi("'+res['coin']['coinlist'][j]['name']+'")><img src="/Upload/coin/'+res['coin']['coinlist'][j]['img']+'"> <span>'+res['coin']['coinlist'][j]['js_yw']+'</span></div>';
+				}
+				$('.transfer_list').html(transfer_list);
+			}
+		});
+		$('.tran-kind-tan').hide();
+}
+
+function quanbu(){
+	var num=$('.rollout_num').html();
+	$('.rollout_sr_num').val(num);
+	fee_num();
+}
+
+$('.tran-btn button').click(function  () {
+	$('.tran-tan').show();
+})
+$('.tran-hd-off').click(function  () {
+	$('.tran-tan').hide();
+})
+$('.tran-k-btn1').click(function  () {
+	$('.tran-k-btn2').show();
+	$('.tran-mm2').show();
+	$('.tran-k-btn1').hide();
+	$('.tran-mm1').hide();
+})
+$('.tran-kind').click(function(){
+	$('.tran-kind-tan').show();
+});
+$('.tran-kind-off').click(function(){
+	$('.tran-kind-tan').hide();
+});
+$('.tran-kind-z').click(function(){
+	$('.tran-kind-coin').html($(this).html());
+	$('.tran-kind-tan').hide();
+})
+</script>

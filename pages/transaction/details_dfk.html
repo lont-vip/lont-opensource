@@ -1,0 +1,106 @@
+<div class="bui-page" style="background:#fafafa;">
+       <main style="background:#fafafa;">
+	       	<div class="head-ban" style="background: none;">
+				<div class="head-left"><img src="images/left.png" onclick="bui.back()" /></div>
+				<div class="head-main" ></div>
+				<div class="head-right"></div>
+			</div>
+	       <div class="top-fukuan">
+				<div class="part-head-l">
+					<span class="status_zt">请付款  <span>14:39</span></span>
+					<div class="zt_type">您已成功下单，请及时付款</div>
+				</div>
+				<a href="sms:13764567708" class="lianxi">
+					<div class="part-head-r">
+						<img src="images/lxdf.png" />
+						<div class="liax">联系对方</div>
+					</div>
+				</a>
+			</div>
+			
+			<div class="part-center-b  buy_info" >
+					<div class="part-jy">
+						<span class="part-jy-s1">交易金额</span>
+						<span class="part-jy-s2">99900.00 <span>CNY</span></span>
+					</div>
+					<div class="part-center-bd  botmm">
+						<span class="part-center-bdl part-center-bdl2"><img src="images/photo.png" style="width: .4rem;margin-bottom: .05rem;"/> Yonghu</span>
+						<span class="part-center-bdr bank_namesm"><img src="images/xtel.png" style="width: .4rem;margin-top: .1rem;" /></span>
+					</div>
+					<div class="part-center-bd  botmm">
+						<span class="part-center-bdl">交易单价</span>
+						<span class="part-center-bdr bank_namesm">￥7.00</span>
+					</div>
+					<div class="part-center-bd botmm part-center-yhk">
+						<span class="part-center-bdl pay_name_class">交易数量</span>
+						<span class="part-center-bdr bank_zhi">999.000000 LVLC</span>
+					</div>
+					<div class="part-center-bd botmm part-center-yhk">
+						<span class="part-center-bdl pay_name_class">下单时间</span>
+						<span class="part-center-bdr bank_zhi">2020.01.17 12:12:12</span>
+					</div>
+					
+					<div class="part-center-bd botmm part-center-yhk">
+						<span class="part-center-bdl pay_hao_class">订单编号</span>
+						<span class="part-center-bdr">
+							<i class="bank_card">123152465465486</i>
+							<img src="images/cuto.png" data-clipboard-text="6230580000267213184" class="rec_fu funzhi1" style="margin-left: 0.2rem;margin-bottom: .15rem;width: .35rem;">
+						</span>
+					</div>
+				</div>
+				<div class="part-center-b  buy_info"  style="margin-bottom: 0;">
+					<div class="part-center-bd  botmm">
+						<span class="part-center-bdl">收款人</span>
+						<span class="part-center-bdr bank_namesm">周传雄</span>
+					</div>
+					<div class="part-center-bd botmm part-center-yhk">
+						<span class="part-center-bdl pay_hao_class">支付宝账号</span>
+						<span class="part-center-bdr">
+							<i class="bank_card">12345678901</i>
+							<img src="images/cuto.png" data-clipboard-text="6230580000267213184" class="rec_fu funzhi1" style="margin-left: 0.2rem;margin-bottom: .15rem;width: .35rem;">
+						</span>
+					</div>
+					<div class="part-center-bd botmm part-center-wx" >
+						<span class="part-center-bdl pay_name_class_wx">收款二维码</span>
+						<span class="part-center-bdr ">
+							<img src="images/erweima-x.png" class="rec_fu " style="margin-left: 0.2rem;margin-bottom: .15rem;width: .35rem;">
+						</span>
+					</div>
+					<div class="part-center-bd botmm weile aaa">
+						为了个人支付宝，微信账户安全，转账时请勿备注任何信息
+					</div>
+				</div>
+				<div class="part-center-s buy_info sss  bbbb" >如果你以向卖家转账付款，请务必点击下方“我已付款”按钮，否则有可能造成资金损失</div>
+				<div class="part-center-a row  ">
+		    		<div class="b_dfk2" >
+						<button class="part-center-al al-qx" style="margin-left: 0.3rem;">取消订单</button>
+						<button class="part-center-ar fukc bui-btn" href="pages/transaction/details_yfk.html">我已付款 <img src="images/sj_w.png"><span class="timeShow">剩余14分59秒</span> </button>
+					</div>
+				</div>
+				<div class="part-bottom tx1" style="margin-top: 0.21rem; padding-bottom: 0.2rem; padding-top: 0.2rem; margin-bottom: 0.2rem;">
+	    			<div class="part-bottom-t1">
+	    				<img src="images/warn.png">交易提醒
+	    			</div>
+	    			<div style="color: #a0a0a0;line-height: 0.4rem;" class="part-bottom-t2">1、您的汇款将直接进入卖方账户</div>
+	    			<div style="color: #a0a0a0;line-height: 0.4rem;" class="part-bottom-t2">2、请在规定时间内完成付款，并务必标记“我已付款”，卖方确认收款后，会将<n class="coin">BTC</n>划转到您的账户。</div>
+	    			
+	    		</div>
+				<span class="prompt_box" style="display: none;font-size: .3rem;">复制成功</span>
+        </main>
+        
+		<script>
+		var btn = document.getElementsByClassName('rec_fu');
+var clipboard = new Clipboard(btn); 
+
+//复制成功执行的回调，可选
+clipboard.on('success', function(e) {
+document.querySelector(".prompt_box").style.display = "block";
+setTimeout(function() {
+	document.querySelector(".prompt_box").style.display = "none";
+}, 2000);
+}); //复制失败执行的回调，可选
+clipboard.on('error', function(e) {
+console.log(e);
+});
+		</script>
+</div>

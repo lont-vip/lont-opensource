@@ -1,0 +1,156 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main >
+		<div class="head-ban"  style="background: none;">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="wechat_tz()" /></div>
+			<div class="head-main" ></div>
+			<div class="head-right"></div>
+		</div>
+		<div class="add-mn">
+			<form class="wechat_index">
+				<div class="add-mn-t wechat_mas"></div>
+				<div class="auto-in"> 
+					<div class="car-d1">真实姓名</div>
+					<div class="car-d2">
+		        		<input type="text" name="name" class="wechat_name" maxlength="40" placeholder="请填写收款姓名">
+		        	</div>
+		        	<div class="car-d1">账号</div>
+					<div class="car-d2">
+		        		<input type="text" name="card" class="wechat_card" maxlength="40" placeholder="请填写微信账号">
+		        	</div>
+				</div>
+			    <div class="ren-img row">
+			    	<div class="c-s-img" style="margin-top: .2rem;">收款二维码</div>
+			    	<div class="i-upload" style="text-align: left;">
+			    		<div id="preview">
+			    			<img id="imghead" style="width: 2rem;" onclick="getElementById('file_idimg1').click()" class="portrait up_img_idimg1 wechat_img" src="/Public/images/tu.png">
+			    			<input type="hidden" id="idimg1" class="idimg1" name="img" value="">
+			    			<input class="shangc" type="file" id="file_idimg1" accept="image/gif, image/jpeg, image/jpg, image/png" value="">
+			    		</div>
+			    	</div>
+			    </div>
+			 </form>
+		</div>
+	</main>
+	<footer>
+		<div class="addres-btn phont-btn">
+    		<button style="border-radius: .44rem;" type="button" class="loadToSuccess wechat_index_tj">保存信息</button>
+    	</div>
+	</footer>
+</div>
+<script>
+function wechat_tz() {
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/mine/financial"], function(main) {
+				$('.add-fangshi').hide();
+				financial_sx();
+			})
+		}
+	})
+}
+//发布提交
+bui.ready(function(){
+	$(".wechat_index_tj").on("click",function (argument) {
+		var data = $('.wechat_index').serialize();
+		$.ajax({
+			url: '/Home/User/wechat_mas',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					wechat_tz();
+				}
+			}
+		})
+	});
+});
+bui.ajax({
+	url: "/Home/User/wechat_mas",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==1){
+		if(res['user']){
+			$('.wechat_mas').html('修改微信');
+			$('.wechat_name').val(res['user']['name']);
+			$('.wechat_card').val(res['user']['card']);
+			$('.idimg1').val(res['user']['img']);
+			$('.wechat_img').attr('src','/Upload/wx/'+res['user']['img']);
+		}else{
+			$('.wechat_mas').html('添加微信');
+		}
+	}
+});
+$('.add-yh').click(function(){
+	$('.add-fangshi').show();
+})
+$('.qx').click(function(){
+	$('.add-fangshi').hide();
+})
+$(document).ready(function () {
+	//响应文件添加成功事件
+	$("#file_idimg1").change(function () {
+		//创建FormData对象
+		var data = new FormData();
+		//为FormData对象添加数据
+		$.each($('#file_idimg1')[0].files, function (i, file) {
+			data.append('upload_file' + i, file);
+		});
+		//发送数据
+		$.ajax({
+			url: '/Home/User/wx_img',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			cache: false,
+			contentType: false, //不可缺参数
+			processData: false, //不可缺参数
+			success: function (data) {
+				if (data['status']==1) {
+					$('.up_img_idimg1').attr("src", '/Upload/wx/' + $.trim(data['info']));
+					$('#idimg1').val($.trim(data['info']));
+					$('#up_img_idimg1').show();
+				}else{
+					bui.hint({content:'上传出错'+data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			},
+			error: function () {
+				bui.hint({content:'上传出错', position:"center" , effect:"fadeInDown"});
+				$(".loading").hide(); //加载失败移除加载图片
+			}
+		});
+
+	});
+});
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1000);
+	return false;
+});
+</script>

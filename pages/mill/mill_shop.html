@@ -1,0 +1,92 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="bui-scroll item_record mill_shop_scrollList"><!--传ajax数据 class放这里-->
+            <div class="bui-scroll-head"></div>
+            <div class="bui-scroll-main" style="background: none;">
+				<div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png" onclick="mill_shop_tz()"></div>
+					<div class="head-main">矿机商城</div>
+					<div class="head-right"></div>
+				</div>
+				<div class="bui-list bui-list-thumbnail row"></div>
+			</div>
+			<div class="bui-scroll-foot"></div>
+		</div>
+		
+	</main>
+</div>
+<script>
+function mill_shop_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				//mill_sx();
+			})
+		}
+	})
+}
+var uiList;
+function mill_shop_sx(){
+	uiList = bui.list({
+	id: ".mill_shop_scrollList",
+	url: "/Home/Mining/mill_shop",
+	pageSize: 6,
+	refresh:false,
+	data: {},
+	field: {
+		page: "page",
+		size: "pageSize",
+		data: "data"
+	},
+	callback: function(e) {
+		console.log($(e.target).closest(".bui-btn").attr("class"))
+	},
+	template: function(data) {
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="mill-shop row">
+						<div class="mill-shop-t">
+							<img class="mill-shop-img" src="/Upload/mining/${el.img}" /><span>${el.name}</span>
+							<button class="bui-btn" type="button" href="pages/mill/mill_buy?id=${el.id}">购买矿机</button>
+						</div>
+						<div class="mill-shop-b">
+							<div class="mill-shop-bd">
+								<span class="mill-shop-span"><img src="/Public/images/home_rotate.png" />预计产量<span>${el.chanliang} LONT</span></span>
+								<span class="mill-shop-span" style="width: 2.9rem;" ><img src="/Public/images/calendar.png" />运行天数<span>${el.yx_day}<span>天</span></span></span>
+							</div>
+							<div class="mill-shop-bd">
+								<span class="mill-shop-span"><img src="/Public/images/home_rotate.png" />购买消耗<span>${el.price} ${el.coin}</span></span>
+								<span class="mill-shop-span" style="width: 2.9rem;"><img src="/Public/images/time.png" />收益时长<span>${el.h_num}<span>小时/天</span></span></span>
+							</div>
+						</div>
+					</div>`
+                });
+                return html;
+        },
+        onBeforeRefresh : function () {
+          console.log("brefore refresh")
+        },
+        onBeforeLoad : function () {
+          console.log("brefore load")
+        },
+        onRefresh: function() {
+            console.log("refreshed")
+        },
+        onLoad: function() {
+            console.log("loaded")
+        }
+    });
+}
+mill_shop_sx();
+</script>

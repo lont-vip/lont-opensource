@@ -1,0 +1,713 @@
+@charset "utf-8";
+@charset "utf-8";
+/*防止用户自定义背景颜色对网页的影响，添加让用户可以自定义字体 */
+html{-webkit-text-size-adjust:100%; /*禁用Webkit内核浏览器的文字大小调整功能，默认是auto;*/
+    -ms-text-size-adjust:100%; /*禁用IE内核浏览器的文字大小调整功能，默认是auto;*/
+    font-family: sans-serif;
+    -webkit-font-smoothing: antialiased;
+    height: 100%;
+    touch-action: manipulation; /*取消移动端click300ms的延迟*/
+}
+body{font-family: "Helvetica", "Tahoma", "Arial", "PingFang SC", "Microsoft Yahei", "SimSun", "SimHei", "sans-serif"; color: #848484; background: #f1f1f194; font-size: 14px;}
+
+/*针对英文单词，强制让单词换行,break-word不拆分单词, break-all拆分单词*/
+*{word-wrap: break-word; /*word-break: break-all;*/}
+.break-all{word-break: break-all;}
+
+a, abbr, acronym, address, applet, article, aside, audio, b, big, body, button, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, html, hr, i, iframe, input, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, select, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, textarea, u, ul, var, video,.h1, .h2, .h3{margin: 0; padding: 0;}
+
+dt,label{font-weight:normal; font-size:100%;}/*此处增加dt,label针对bootstrap的加粗定义*/
+
+input,button,textarea,select,optgroup,option{font-size: 100%; font-weight: normal; outline: none;}
+input,button,textarea{-webkit-appearance: none;}/*去除ios按钮内阴影、圆角,对单选框、复选框有影响*/
+input[type=checkbox]{-webkit-appearance: checkbox;}
+input[type=radio]{-webkit-appearance: radio;}
+input::-webkit-input-safebox-button{display: none;}/*解决搜狗浏览器密码框自带安全键盘*/
+
+input:focus,textarea:focus{outline: none;}
+
+th,td,button,input,select,textarea{-webkit-font-smoothing: antialiased; -moz-font-smoothing: antialiased;}/*页面的字体抗锯齿,字体会更清晰圆滑*/
+textarea{resize: none; border: 1px solid #e5e5e5; padding: 5px; width: 100%; border-radius: 0;}
+
+address,caption,cite,code,dfn,th,var,/*em,*/i{font-style: normal; font-weight: normal;}
+sub,sup{vertical-align: baseline;}
+
+button{overflow: visible; vertical-align: middle; outline: none; height: auto;}
+
+/*去掉列表标签的默认样式*/
+ul,ol,li{list-style-type: none;}
+
+/*重置table样式*/
+table{border-collapse:collapse; border-spacing:0; /*table-layout: fixed;*/}/*table-layout: fixed; 表格布局尺寸固定(默认等分表格)，表格的宽度不再由单元格的内容多少而决定，可自定义宽度(给th,td不起作用)*/
+/*border-collapse: separate（独立边框）; border-spacing:20px 20px（边框单元格间距离）;*/
+/*btn基础样式*/
+.ms-btn{display: inline-block; padding: 6px 12px; border-radius: 0; text-align: center; white-space: nowrap; vertical-align: middle; cursor: pointer; background: none; border: 1px solid transparent;}
+/*a链接*/
+a{outline:none; text-decoration: none; color: #848484; cursor: pointer;}
+a:focus{outline: none; text-decoration: none; color: inherit;}
+a:hover{outline: none; color: #157df1; text-decoration: none;}
+div{line-height:.5rem;}
+@media (min-width: 1200px) {
+    .container{width: 1200px;}
+    .table-responsive{overflow-x: visible;}
+}
+/*----------分发落地页----------*/
+.template-common .form-control{height: 40px;}
+.passwords .template-common{padding: 0 320px;}
+.template-common{padding: 0 235px;}
+.template-common hr{border-top-color: #e5e5e5; margin-top: 25px; display: none;}
+.template-common .t-icon{background-color: #fff; width: 180px; height: 180px; border-radius: 25px; box-shadow: 0 0 10px rgba(0,0,0,.2); display: flex; align-items: center; margin: 0 auto;}
+.template-common .t-icon img{width: 120px; height: 120px; border-radius: 30px; border: 1px solid #e5e5e5; margin: 0 auto;}
+.template-common .template-btn-wrap{text-align: center;}
+.template-common .template-btn{color: #fff; background-color: #157df1; height: 50px; padding: 0 38px; line-height: 48px; font-size: 18px; margin: 35px auto 15px; display: inline-block;}
+.template-common .decoding{color: #fff; background-color: #157df1; height: 50px; padding: 0; width: 180px; text-align: center; line-height: 48px; font-size: 18px; margin: 30px auto 20px; display: block;}
+.template-common .template-btn span:last-of-type{line-height: 50px;}
+.template-common .template-btn .iconfont{font-size: 36px; margin-left: -5px;}
+.template-common .t-apply{color: #666; text-align: center;}
+.template-common .t-code{color: #666; width: 200px; overflow: hidden; margin: 35px auto 0; text-align: center;}
+.template-common .t-code img{border: 1px solid #e5e5e5; width: 150px; height: 150px; margin: 0 auto 5px;}
+
+.template-common .t-name{color: #333; text-align: center;}
+.template-common .t-name .name-info span{margin-right: 10px; color: #666;}
+.template-common .t-name .tit{font-size: 28px; margin-bottom: 10px; margin-top: 15px;}
+.template-common .t-introduce{color: #333;}
+.template-common .t-introduce .tit{font-size: 20px; margin-top: 25px;}
+.template-common .t-introduce p{margin-top: 15px;}
+.template-common .t-contact{color: #333; margin-top: 20px;}
+.template-common .t-contact .tit{font-size: 20px; margin-bottom: 15px;}
+.template-common .t-contact dl{margin-bottom: 5px;}
+.template-common .t-contact dl dt{margin-right: 10px;}
+
+.template-pwd{border: 1px solid #e5e5e5; border-radius: 3px; padding: 45px 35px; margin-top: 45px; /*margin-bottom: 50px;*/ display: none;}
+.template-pwd label{color: #3e4753; text-align: center; display: block;}
+.template-pwd .form-control{margin-top: 15px;}
+
+.passwords+.template-footer{margin-top: 50px;}
+.template-footer{margin-top: 30px;}
+.template-footer .methods-tutorial-full{background-color: #ff6666;}
+.template-footer .methods-tutorial-full a{color: #fff;}
+.template-footer .methods-tutorial-full a.fl{height: 50px; line-height: 50px;}
+.template-footer .methods-tutorial-full a.fl:hover{text-decoration: underline;}
+.template-footer .methods-tutorial-full a.fr{width: 22px; height: 22px; line-height: 22px; border: 1px solid #fff; border-radius: 50%; text-align: center; margin-top: 14px;}
+.template-footer .methods-tutorial-full a.fr .iconfont{color: #fff;}
+
+.template-footer .t-footer{text-align: center; margin-top: 30px; padding-bottom: 30px;}
+.template-footer .t-footer a{color: #157df1;}
+.template-footer .t-footer a:hover{text-decoration: underline;}
+
+/*应用截图*/
+.template-common .app-screen{margin-top: 20px;}
+.template-common .app-screen .tit{font-size: 20px; margin-bottom: 15px; color: #333;}
+.template-common .app-screen .s-responsive{overflow: hidden; height: 405px; width: 100%; overflow-x: auto;}
+/*.template-common .app-screen ul{height: 405px;}*/
+.template-common .app-screen ul li{float: left; margin-right: 20px;}
+.template-common .app-screen ul li img{width: auto; height: auto; max-width: 800px; max-height: 405px;}
+.template-common .app-screen ul li:last-of-type{margin-right: 0;}
+
+/*模板1*/
+.template-1 .t-bg-1{background: #157df1 url("../images/t-04.png") repeat-x center bottom; height: 175px;}
+.template-1 .content{margin-top: -125px; padding: 0 80px;}
+.template-1 .template-common{padding: 0;}
+.template-1 .template-common .t-icon{box-shadow: none; width: auto; height: auto; background-color: transparent;}
+.template-1.passwords .template-common .t-code{width: 125px; margin-top: 35px;}
+.template-1 .template-common .t-code{width: 200px; margin-top: 15px;}
+.template-1 .template-common .t-code img{width: 125px; height: 125px; margin: 0 auto;}
+.template-1 .template-common .t-name{text-align: left;}
+.template-1 .template-common .t-name .name-info span{color: #fff;}
+.template-1+.template-footer{margin-top: 140px;}
+.template-1 .template-common .template-btn{margin-top: 30px; margin-bottom: 15px; padding: 0 15px;}
+
+.template-1 .content .c-left{background: url("../images/t-05.png") no-repeat center; width: 308px; height: 608px; padding-top: 110px;}
+.template-1.passwords .content .c-left{padding-top: 140px;}
+.template-1.passwords .content .c-right{margin-left: 130px; width: auto;}
+.template-1 .content .c-right{margin-left: 100px; width: 630px;}
+.template-1 .content .c-right .t-name{color: #fff; margin-bottom: 100px;}
+.template-1 .template-common .t-name .tit{margin-top: 5px;}
+.template-1 .content .c-right .t-introduce{/*margin-top: 100px;*/ margin-bottom: 45px;}
+.template-1 .content .c-right .t-contact{margin-top: 0; margin-bottom: 45px;}
+
+.template-1 .template-pwd{width: 500px; height: 230px; background-color: #fafafa; margin-top: 90px; padding: 60px 30px 0; position: relative; border-radius: 5px; display: none; border: none;}
+.template-1 .template-pwd .form-group{text-align: center;}
+.template-1 .template-pwd .form-group label{color: #3e4753;}
+
+.template-1 .template-pwd .form-group .form-control{border-color: #e5e5e5; margin-top: 5px;}
+.template-1 .template-pwd .form-group .form-control:focus{border-color: #66afe9;}
+.template-1 .template-pwd .top-pwd{position: absolute; left: 50%; top: -20px; margin-left: -30px; width: 60px; height: 60px; border: 1px solid #157df1; border-radius: 50%; display: flex; justify-content: center; align-items: center; background-color: #fafafa;}
+.template-1 .template-pwd .top-pwd .iconfont{color: #157df1; font-size: 30px;}
+
+.template-1 .template-common .app-screen .s-responsive{width: 730px;}
+/*/模板1*/
+
+/*模板2*/
+.template-2 .t-bg-2{background: url("../images/t-06.jpg") center; height: 130px;}
+.template-2 .content{margin-top: -90px;}
+/*/模板2*/
+
+/*模板3*/
+.template-3 .t-bg-3{background: url("../images/t-07.jpg") center; height: 160px;}
+.template-3 .content{margin-top: 20px;}
+.template-3 .template-common .t-icon{width: 160px; height: 160px; border-radius: 50%;}
+.template-3 .template-common .t-icon img{width: 105px; height: 105px;}
+/*/模板3*/
+
+/*模板4*/
+.template-4 .t-bg-4{background: url("../images/t-09.png") no-repeat center; height: 485px;}
+.template-4 .t-left{width: 255px; margin-left: 265px; margin-top: 150px;}
+.template-4 .t-right{margin-left: 225px; margin-top: 45px;}
+.template-4 .content4 .template-common{padding: 0;}
+.template-4 .content4 .template-common .t-icon{width: auto; height: auto; background-color: transparent; box-shadow: none;}
+.template-4 .content4 .template-common .t-icon img{border: none;}
+.template-4 .content4 .template-common .t-name .tit{color: #fff; margin-top: 25px; margin-bottom: 20px;}
+.template-4 .content4 .template-common .t-name .name-info span{display: block; text-align: center; margin-right: 0; color: #fff; line-height: 24px;}
+.template-4 .template-common .template-btn{margin-bottom: 20px;}
+.template-4 .content>.template-common{padding: 80px 100px 0;}
+.template-4 .template-common .t-code{width: 200px;}
+.template-4 .template-common .t-code img{width: 120px; height: 120px; margin-left: auto; margin-right: auto;}
+.template-4 .template-common .decoding{width: 100%; margin-top: 30px;}
+
+.template-4 .template-pwd{border: none; padding: 0; width: 490px; margin: 0 auto;}
+
+.template-4+.template-footer{margin-top: 100px;}
+
+.template-4 .content>.template-common .app-screen{width: 730px;}
+/*/模板4*/
+
+/*模板5*/
+.template-5 .left-bg{position: absolute; left: 0; top: 0; background: url("../images/t11.png") no-repeat left top; width: 283px; height: 1012px;}
+.template-5 .right-bg{position: absolute; right: 0; top: 0; background: url("../images/t12.png") no-repeat right top; width: 283px; height: 1012px;}
+
+.template-5 .content{padding-top: 100px;}
+.template-5 .template-common{padding: 0 235px;}
+.template-5 .template-common .t-icon{border-radius: 50%; position: relative; margin-left: 180px;}
+.template-5 .template-common .t-icon .bg-shadow{position: absolute; left: -20px; top: 70px; border-radius: 90px; width: 360px; height: 180px; background-color: #eff2f2; z-index: -1; transform: rotate(45deg);}
+
+.template-5 .template-common .t-icon .code{position: absolute; top: 160px; right: -160px; transition: all 500ms;}
+.template-5 .template-common .t-icon .code img{border-radius: 0; border: none; width: 110px; height: 110px; transition: all 500ms;}
+.template-5 .template-common .t-icon .code:hover{width: 240px; height: 240px; right: -190px; top: 130px;}
+.template-5 .template-common .t-icon .code:hover img{width: 160px; height: 160px;}
+.template-5 .template-common .t-name-wrap{width: 350px; margin-left: auto; margin-right: auto;}
+.template-5 .template-common .t-name-wrap .t-name{text-align: left;}
+.template-5 .template-common .t-name-wrap .template-btn{margin: 45px 0 20px}
+.template-5 .template-common .t-name{margin-top: 200px;}
+.template-5 .template-common .t-name .tit{margin-bottom: 20px;}
+.template-5 .template-common .t-name .name-info{text-align: left; line-height: 24px;}
+.template-5 .template-common .t-apply{text-align: left; padding-left: 15px;}
+.template-5 .template-common .template-btn{padding: 0 53px;}
+
+.template-5 .template-common hr{margin-top: 50px;}
+.template-5 .template-common .t-introduce .tit{margin-top: 50px;}
+.template-5 .template-common .t-contact{margin-top: 25px;}
+
+.template-5.passwords+.template-footer{margin-top: 99px;}
+.template-5+.template-footer{margin-top: 40px;}
+
+.template-5 .template-pwd{width: 555px; height: 245px; margin: 80px auto 0; padding: 60px 30px 0; position: relative; border-radius: 5px;}
+
+.template-5 .template-pwd .top-pwd{position: absolute; left: 50%; top: -30px; margin-left: -30px; width: 60px; height: 60px; border: 1px solid #157df1; border-radius: 50%; display: flex; justify-content: center; align-items: center; background-color: #fafafa;}
+.template-5 .template-pwd .top-pwd .iconfont{color: #157df1; font-size: 30px;}
+
+.template-5 .template-pwd .decoding{width: 100%; margin-top: 30px; margin-bottom: 30px;}
+/*/模板5*/
+
+/*模板6*/
+.template-6 .t-bg-6{background-color: #f4f4f4; height: 80px; line-height: 80px;}
+.template-6 .t-top .tit{font-size: 30px; color: #333;}
+.template-6 .t-top .name-info{font-size: 18px; color: #666;}
+.template-6 .t-top .name-info span{margin-left: 10px;}
+
+.template-6 .content{margin-top: 55px;}
+.template-6 .template-common .template-btn{margin-bottom: 15px;}
+.template-6 .template-common .show-hr{display: block; margin-top: 40px;}
+.template-6 .template-common .t-code{margin-top: 40px;}
+/*/模板6*/
+
+/*密码显示控制*/
+.passwords .template-pwd{display: block;}
+.passwords .pc-pwd{display: none !important;}
+.passwords .template-pwd{display: block;}
+/*----------/分发落地页----------*/
+
+    /*----------/分发落地页----------*/
+    .passwords .template-common{padding: 0;}
+    .template-common{padding: 0;}
+    .template-common .form-control{height: 34px;}
+    .template-common hr{display: block;}
+    .template-common .t-icon{width: 2.5rem; height: 2.5rem; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,.1); border-radius: 25px; margin: 0 auto;}
+    /*
+    .template-common .t-icon{width: 1.8rem; height: 1.8rem; padding: .3rem; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,.1); border-radius: 20px; margin: 0 auto;}
+    */
+    .template-common .t-icon img{border-radius: 15px; width: 110px; height: 110px;}
+
+    .template-common .t-name .tit{text-align: center; font-size: .4rem; font-weight: 600; margin-top: .3rem; margin-bottom: 8px;}
+    .template-common .t-name .name-info{font-size: .28rem;}
+    .template-common .t-name .name-info span{color: #999;}
+    .template-common .t-name .name-info span:last-of-type{display: block;}
+    .template-common .t-apply{color: #999; font-size: .24rem;}
+    .template-common .t-code{color: #999; font-size: .24rem; margin-top: 25px; width: 200px;}
+    .template-common .t-code img{width: 130px; height: 130px;}
+    .template-common .t-introduce .tit{font-size: .3rem; font-weight: 600; margin-bottom: 5px;}
+    .template-common .t-introduce p{font-size: .24rem;}
+    .template-common .t-contact{margin-top: .4rem !important;}
+    .template-common .t-contact .tit{font-size: .3rem; font-weight: 600; margin-bottom: 5px;}
+    .template-common .t-contact p{font-size: .24rem;}
+    .template-common .t-contact dl{font-size: .24rem;}
+
+    .template-common .template-btn{padding: 0 50px; height: 40px; line-height: 38px; border-radius: 20px; text-align: center; font-size: .32rem; margin-top: .4rem; margin-bottom: .2rem;}
+    .template-common .template-btn span:last-of-type{line-height: .8rem;}
+    .template-common .decoding{padding: 0; height: 40px; line-height: 40px; border-radius: 20px; text-align: center; font-size: .32rem; margin-top: .4rem; margin-bottom: .2rem; width: 3.6rem;}
+    .template-common .template-btn .iconfont{font-size: 32px;}
+
+    .passwords+.template-footer{margin-top: 30px;}
+    .template-footer{margin-top: 15px;}
+    .template-footer .methods-tutorial-full{position: fixed; width: 100%; left: 0; bottom: 0;}
+    .template-footer .methods-tutorial-full a.fl{height: 30px; line-height: 30px; font-size: .24rem;}
+    .template-footer .methods-tutorial-full a.fr{margin-top: 4px;}
+
+    .template-footer .t-footer{margin-top: 0; margin-bottom: 40px; padding-bottom: .2rem; font-size: .24rem;}
+
+    .template-pwd{width: auto !important; margin: .4rem .7rem 0; background-color: #fff !important; box-shadow: 0 0 10px rgba(0,0,0,.2); padding: .4rem .3rem !important; height: auto !important;}
+    .template-pwd .form-group label{color: #666; font-size: .24rem;}
+    .template-pwd .form-control{margin-top: 10px;}
+
+    /*应用截图*/
+    .template-common .app-screen .tit{font-size: .3rem; font-weight: 600; margin-bottom: 5px;}
+    .template-common .app-screen .s-responsive{overflow: hidden; height: 350px; width: 100%; overflow-x: auto; /*-webkit-overflow-scrolling: touch;*/}
+    .template-common .app-screen ul li{float: left; margin-right: 10px;}
+    .template-common .app-screen ul li img{max-width: 600px; width: auto; height: auto; max-height: 350px;}
+
+
+    /*模板1*/
+    .template-1 .t-bg-1{background: #157df1 url("../img/t-04.png") repeat-x center bottom; height: 1.4rem;}
+    .template-1 .content{margin-top: 0; padding: 0;}
+    .template-1 .content .c-left{background-image: none; width: 100%; height: auto; float: none; padding-top: .4rem;}
+    .template-1.passwords .content .c-left{padding-top: 25px;}
+    .template-1 .template-common .t-name .tit{margin-bottom: 0; margin-top: 15px;}
+    /*.template-1 .template-common .t-icon{width: 3.2rem; height: 3.2rem; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,.1); border-radius: 25px; margin: 0 auto;}*/
+    /*设计稿 单独定义APP图标大小*/
+    .template-1 .template-common .t-icon{width: 1.8rem; height: 1.8rem; background-color: #fff; box-shadow: 0 0 10px rgba(0,0,0,.1); border-radius: 20px; margin: 0 auto;}
+    .template-1 .template-common .t-icon img{width: 60px; height: 60px;}
+    /*设计稿 单独定义APP图标大小*/
+
+    .template-1 .content .c-right{float: none; width: 100%; margin-left: 0 !important; padding-top: .5rem; border-top: 1px solid transparent; margin-top: 0; padding-top: 0;}
+    .template-1 .content .c-right .template-common{padding: 0;}
+
+    .template-1 .template-common .t-name .name-info{text-align: center; margin-top: 5px;}
+    .template-1 .template-common .t-name .name-info span{color: #999;}
+    .template-1 .template-common .template-btn{margin-top: 20px; padding: 0 36px; margin-bottom: 10px;}
+    .template-1 .content .c-right .t-introduce{margin-top: 0; margin-bottom: 20px;}
+    .template-1 .content .c-right .t-introduce p{margin-top: 0;}
+    .template-1 .content .c-right .t-contact{margin-bottom: 20px; margin-top: 0;}
+    .template-1 .template-common .t-code{margin-top: 25px;}
+    .template-1 .template-pwd{margin-top: .4rem;}
+    .template-1.passwords+.template-footer{margin-top: 40px;}
+    .template-1+.template-footer{margin-top: 40px;}
+
+    .template-1 .template-common .app-screen .s-responsive{width: 100%;}
+    /*/模板1*/
+
+    /*模板2*/
+    .template-2 .content{margin-top: -80px;}
+    /*/模板2*/
+
+    /*模板3*/
+    .template-3 .t-bg-3{background: url("../img/t-08.jpg") center; height: .7rem; background-size: cover;}
+    .template-3 .content{margin-top: 20px;}
+    .template-3 .template-common .t-icon{width: 100px; height: 100px; border-radius: 50%;}
+    .template-3 .template-common .t-icon img{width: 65px; height: 65px;}
+    .template-3 .template-common .t-name .tit{margin-top: 10px;}
+
+    .template-3.passwords+.template-footer{margin-top: 40px;}
+    /*/模板3*/
+
+    /*模板4*/
+    .template-4 .t-bg-4{background: none; height: auto;}
+    .template-4 .t-bg-4>.container{padding: 0;}
+    .template-4 .t-left{float: none; margin: 0; width: 100%; padding-top: 55px; background: url("../img/t-10.png") no-repeat center; height: 3.7rem; background-size: cover;}
+    .template-4 .t-right{float: none; margin: 25px auto 0; width: 100%;}
+    /*.template-4 .t-right{float: none; margin: 40px auto 0; width: 100%;}*/
+    .template-4 .content4 .template-common .t-icon{margin-left: -3px;}
+    .template-4 .content4 .template-common .t-icon img{width: 70px; height: 70px;}
+    .template-4 .content4 .template-common .t-name .tit{font-weight: normal; margin-top: 10px; font-size: .32rem;}
+
+    .template-4 .t-right .template-common .t-name .name-info span{color: #999; display: inline-block; line-height: 20px;}
+    .template-4 .t-right .template-common .t-name .name-info span:last-of-type{display: block;}
+
+    .template-4 .content>.template-common{padding: 0;}
+    .template-4 .template-common .template-btn{margin-bottom: 5px;}
+    .template-4 .template-common .decoding{width: 3.6rem; padding: 0; margin-top: .4rem;}
+    .template-4 .template-common .template-pwd{margin: 0 .7rem;}
+
+    .template-4.passwords+.template-footer{margin-top: 55px;}
+    .template-4+.template-footer{margin-top: 15px;}
+
+    .template-4 .content>.template-common .app-screen{width: 100%;}
+    /*/模板4*/
+
+    /*模板5*/
+    .template-5 .left-bg{position: absolute; left: 0; top: 0; background: url("../img/t11.png") no-repeat left top; width: 1.1rem; height: 3.93rem; background-size: cover;}
+    .template-5 .right-bg{position: absolute; right: 0; top: 0; background: url("../img/t12.png") no-repeat right top; width: 1.1rem; height: 3.93rem; background-size: cover;}
+
+    .template-5 .content{padding-top: 25px;}
+    .template-5.passwords .template-common{padding: 0 .7rem;}
+    .template-5 .template-common .t-icon{border-radius: 25px; margin-left: auto; margin-right: auto;}
+    .template-5 .template-common .t-name-wrap{width: auto; margin-left: 0;}
+    .template-5 .template-common .t-name{margin-top: 0;}
+    .template-5 .template-common .t-name .tit{margin-bottom: 10px;}
+    .template-5 .template-common .t-name .name-info{text-align: center; line-height: 20px;}
+    .template-5 .template-common .t-name-wrap .template-btn{padding: 0 38px; margin: 20px auto 10px;}
+    .template-5 .template-common .t-apply{padding-left: 0; text-align: center;}
+    .template-5 .template-common hr{margin-top: 25px;}
+    .template-5 .template-common .t-introduce .tit{margin-top: 25px;}
+    .template-5 .template-common .t-contact{margin-top: .4rem;}
+    .template-5.passwords+.template-footer{margin-top: 30px;}
+    .template-5+.template-footer{margin-top: 15px;}
+
+    .template-5 .template-pwd{margin-top: 15px;}
+    .template-5 .template-pwd .decoding{width: 3.6rem; margin-top: 0; margin-bottom: 25px;}
+
+    .template-5 .template-common{padding: 0;}
+    /*/模板5*/
+
+    /*模板6*/
+    .template-6 .t-bg-6{background-color: #f4f4f4; height: auto; line-height: normal; padding: 10px 0;}
+    .template-6 .t-top .tit{font-size: .4rem; color: #333; float: none; text-align: center;}
+    .template-6 .t-top .name-info{font-size: .28rem; color: #999; float: none; text-align: center; margin-top: 3px;}
+    .template-6 .t-top .name-info span{margin-left: 10px;}
+    .template-6 .t-top .name-info span:last-of-type{display: block;}
+
+    .template-6 .content{margin-top: 25px;}
+    .template-6 .template-common .template-btn{margin-bottom: 15px;}
+    .template-6 .template-common .show-hr{display: none;}
+    .template-6 .template-common .t-code{margin-top: 25px;}
+    /*/模板6*/
+
+    /*密码显示控制*/
+    .passwords .pc-pwd{display: none !important;}
+    .passwords .phone-pwd{display: none;}
+    /*----------/分发落地页----------*/
+    .xuanfutishi span {
+        float: left;
+        padding-left: 15px;
+    }
+
+    .xuanfutishi img {
+        float: right;
+        height: 15px;
+        margin: 12px 15px 0 0;
+        width: 15px;
+    }
+
+    .appicon {
+        border: 1px solid #ddd;
+        border-radius: 24px;
+        height: 120px;
+        width: 120px;
+    }
+
+    .appicon2 {
+        border: 1px solid #fff;
+        border-radius: 24px;
+        height: 140px;
+        width: 140px;
+    }
+
+    #codeico {
+        background-color: #efefef;
+        border: 2px solid #fff;
+        border-radius: 10px;
+        margin: 77px;
+        position: absolute;
+        z-index: 999;
+    }
+
+    .one-key-report {
+        background-color: #32b2a7;
+        color: #fff;
+        margin-top: -5px;
+        padding: 5px 10px;
+    }
+
+    .one-key-report-dialog {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        left: 50%;
+        margin-left: -225px;
+        margin-top: -275px;
+        padding: 20px;
+        position: fixed;
+        top: 50%;
+        width: 450px;
+        z-index: 99999;
+    }
+
+    .one-key-report-dialog .dialog-close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+    .one-key-report-dialog .dialog-close i.icon-close {
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .one-key-report-dialog .dialog-close i.icon-close:hover {
+        color: #333;
+    }
+
+    .one-key-report-dialog .dialog-close .icon-return {
+        color: #32b2a7;
+        display: none;
+    }
+
+    .one-key-report-dialog .custom-checkbox {
+        cursor: pointer;
+        display: inline-block;
+        line-height: 24px;
+        margin-right: 40px;
+        padding: 2px 2px 2px 25px;
+        position: relative;
+        text-align: left;
+    }
+
+    .one-key-report-dialog .custom-checkbox:last-child {
+        margin-right: 0;
+    }
+
+    .one-key-report-dialog .custom-checkbox::after, .one-key-report-dialog .custom-checkbox::before {
+        content: " ";
+        display: block;
+        position: absolute;
+    }
+
+    .one-key-report-dialog .custom-checkbox::after {
+        background-color: #1989fa;
+        border-radius: 10px;
+        display: none;
+        height: 10px;
+        left: 1px;
+        top: 7px;
+        width: 10px;
+    }
+
+    .one-key-report-dialog .custom-checkbox::before {
+        background-color: #fff;
+        border: 1px solid #1989fa;
+        border-radius: 12px;
+        height: 12px;
+        left: 0;
+        top: 6px;
+        width: 12px;
+    }
+
+    .one-key-report-dialog .custom-checkbox.active::after {
+        display: block;
+    }
+
+    .one-key-report-dialog .content-row {
+        display: table;
+        padding: 10px 10px 5px;
+        position: relative;
+        width: 100%;
+    }
+
+    .one-key-report-dialog .content-row input, .one-key-report-dialog .content-row label {
+        display: inline-block;
+        float: left;
+    }
+
+    .one-key-report-dialog .content-row label {
+        font-size: 18px;
+        line-height: 34px;
+        margin-right: 30px;
+    }
+
+    .one-key-report-dialog .content-row input {
+        border: 1px solid #a9b1b3;
+        border-radius: 5px;
+        height: 34px;
+        outline: 0 none;
+        padding: 5px 10px;
+        width: 240px;
+    }
+
+    .one-key-report-dialog .content-row .checkbox-list {
+        clear: both;
+        padding: 5px 0;
+        text-align: left;
+        width: 100%;
+    }
+
+    .one-key-report-dialog .content-row textarea {
+        border: 1px solid #a9b1b3;
+        border-radius: 10px;
+        color: #a9b1b3;
+        font-size: 16px;
+        height: 200px;
+        outline: 0 none;
+        padding: 10px;
+        resize: none;
+        width: 100%;
+    }
+
+    .one-key-report-dialog .content-row .btn-report {
+        background-color: #32b2a7;
+        border-radius: 15px;
+        color: #fff;
+        float: right;
+        margin-top: -5px;
+        padding: 5px 10px;
+    }
+
+    .one-key-report-dialog .report-feedback, .one-key-report-dialog .report-form {
+        height: 100%;
+        position: relative;
+        width: 100%;
+    }
+
+    .one-key-report-dialog .report-sending {
+        background-color: rgba(255, 255, 255, 0.5);
+        color: #000;
+        cursor: default;
+        display: none;
+        font-size: 20px;
+        height: 100%;
+        left: 0;
+        line-height: 450px;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+    }
+
+    .one-key-report-dialog .report-form {
+        display: block;
+    }
+
+    .one-key-report-dialog .report-feedback {
+        cursor: default;
+        display: none;
+    }
+
+    .one-key-report-dialog .report-feedback .feedback-thanks {
+        background-color: #efefef;
+        border-radius: 20px;
+        height: 160px;
+        margin: 50px auto 20px;
+        width: 160px;
+    }
+
+    .one-key-report-dialog .report-feedback .feedback-thanks .brace-content {
+        color: #000;
+        margin: 0 auto;
+        padding-top: 30px;
+        text-align: center;
+        width: 110px;
+    }
+
+    .one-key-report-dialog .report-feedback .feedback-thanks .thanks {
+        color: #000;
+        cursor: default;
+        font-family: "Roboto Slab", "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        margin: 15px 0 0;
+        min-height: 22px;
+        text-align: center;
+    }
+
+    .one-key-report-dialog .report-feedback .feedback-thanks .face, .one-key-report-dialog .report-feedback .feedback-thanks .icon-brace-left, .one-key-report-dialog .report-feedback .feedback-thanks .icon-brace-right {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .one-key-report-dialog .report-feedback .feedback-thanks .icon-brace-left, .one-key-report-dialog .report-feedback .feedback-thanks .icon-brace-right {
+        font-size: 80px;
+    }
+
+    .one-key-report-dialog .report-feedback .feedback-thanks .face .icon-comma-eye {
+        font-size: 22px;
+        margin: 0 4px;
+    }
+
+    .one-key-report-dialog .report-feedback .feedback-thanks .face .icon-comma-eye.right {
+        display: inline-block;
+        margin-left: 16px;
+        transform: scaleY(0.5);
+    }
+
+    .one-key-report-dialog .report-feedback .feedback-thanks .face .icon-mouth {
+        display: block;
+        margin-top: 15px;
+        transform: rotateZ(-19deg) translateX(2px);
+    }
+
+    .one-key-report-dialog .report-feedback .feedback-message {
+        color: #1989fa;
+        font-size: 30px;
+        text-align: center;
+    }
+
+    .one-key-report-dialog .report-feedback .feedback-content {
+        color: #858585;
+        font-size: 18px;
+        margin-top: 40px;
+    }
+
+    .one-key-report-dialog .report-error {
+        color: red;
+        cursor: default;
+        line-height: 34px;
+        padding: 0 10px;
+    }
+
+    .one-key-report-dialog .report-error > div {
+        display: none;
+    }
+
+    .ad_section {
+        position: fixed;
+        bottom: 0;
+        margin-bottom: 0;
+        left: 50%;
+        margin-left: -365px;
+    }
+
+    @media (max-width: 767px) {
+        .ad_section {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            margin: auto;
+        }
+    }
+
+    .floadAd {
+        position: absolute;
+        z-index: 999900;
+        display: none;
+    }
+
+    .floadAd .item {
+        display: block;
+    }
+
+    .floadAd .item img {
+        vertical-align: bottom;
+    }
+/*safari打开提示*/
+.click_opacity{ width:100%; height:100%; background:#000; opacity:0.6; position:fixed; z-index:10000; top:0px;}
+.to_btn{ position:fixed; top:10px; right:10px; text-align:right; z-index:10001; font-family:"微软雅黑";}
+.to_btn span{ display:block;}
+.to_btn img{ width:20%; height:auto; display:inline-block;}
+.to_btn .span1{ font-size:1.6rem; color:#fff; margin-top:5px;}
+.to_btn{ color:#fff;}
+.to_btn .span2{ display:inline-block; line-height:36px; width:80%; margin-bottom:12px; text-align:left; font-size:16px;}
+.to_btn .span2 em{ display:inline-block; width:16px; height:16px; background:#009dd9; color:#fff; font-size:12px; text-align:center; line-height:16px; border:1px solid #fff; border-radius:50%; margin-right:3px;}
+.to_btn .span2 img{ display:inline-block; width:30px; height:30px; margin:0px 5px;}
+.to_btn span{ display:block; float:right;}
+.to_btn .android_open img{ display:inline-block; width:150px; height:34px;}

@@ -1,0 +1,66 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+    <main>
+        <div id="tabDynamic" class="bui-tab">
+            <div class="bui-tab-main">
+                <ul>
+                    <li>
+                        <!-- 首页 -->
+                    </li>
+                    <li>
+                        <!-- 市场 -->
+                    </li>
+                    <li>
+                        <!-- 区块 -->
+                    </li>
+                    <li>
+                        <!-- 资产 -->
+                    </li>
+                    <li>
+                        <!-- 我的 -->
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <footer>
+		<ul  id="tabDynamicNav" class="bui-nav foot-ul">
+			<li class="bui-btn bui-box-vertical" href="pages/home.html">
+				<img src="/Public/images/home.png" class="img-block"  />
+				<img src="/Public/images/home2.png" class="img-none"  style="display: none;"/>
+				<div class="span1">首页</div>
+			</li>
+			<li class="bui-btn bui-box-vertical" href="pages/mill.html">
+				<img src="/Public/images/mill.png" class="img-block" />
+				<img src="/Public/images/mill2.png" class="img-none" style="display: none;" />
+				<div class="span1">矿机</div>
+			</li>
+			<li class="bui-btn bui-box-vertical" href="pages/transaction.html">
+				<img src="/Public/images/transaction.png" class="img-block" />
+				<img src="/Public/images/transaction2.png"  class="img-none"  style="display: none;"/>
+				<div class="span1">交易</div>
+			</li>
+			<li class="bui-btn bui-box-vertical"  href="pages/property.html">
+				<img src="/Public/images/property.png" class="img-block" />
+				<img src="/Public/images/property2.png"  class="img-none"  style="display: none;" />
+				<div class="span1">资产</div>
+			</li>
+			<li class="bui-btn bui-box-vertical" href="pages/mine.html">
+				<img src="/Public/images/mine.png"  class="img-block" />
+				<img src="/Public/images/mine2.png"  class="img-none"  style="display: none;" />
+				<div class="span1">我的</div>
+			</li>
+		</ul>
+    </footer>
+   
+</div>

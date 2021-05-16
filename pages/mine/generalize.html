@@ -1,0 +1,100 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page"  style="background: #fbfbfb;">
+	<main  style="background: #fbfbfb;">
+		<div class="bui-scroll generalize_scrollList"><!--传ajax数据 class放这里-->
+            <div class="bui-scroll-head"></div>
+            <div class="bui-scroll-main" style="background: none;">
+				<div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png" onclick="generalize_tz()"></div>
+					<div class="head-main">团队奖励</div>
+					<div class="head-right"></div>
+				</div>
+				<input type="hidden" class="yemian" value="" />
+				<!--<div class="reco-top">-->
+					 <ul class="bui-list bui-list-thumbnail row"></ul>
+				<!--</div>-->
+			 </div>
+            <div class="bui-scroll-foot"></div>
+        </div>
+	</main>
+</div>
+<script>
+
+function generalize_tz() {
+	var yemian=$('.yemian').val();
+	if(yemian=='home'){
+		router.back({
+			callback: function(mod) {
+				loader.require(["main"], function(main) {
+					
+				})
+			}
+		})
+	}else{
+		router.back({
+			callback: function(mod) {
+				loader.require(["main"], function(main) {
+					mine_sx();
+				})
+			}
+		})
+	}
+}
+
+function generalize_sx(){
+	var uiList = bui.list({
+		id: ".generalize_scrollList",
+		url: "/Home/User/generalize_list",
+		pageSize: 6,
+		refresh:false,
+		data: {},
+		field: {
+			page: "page",
+			size: "pageSize",
+			data: "data"
+		},
+		callback: function(e) {
+			console.log($(e.target).closest(".bui-btn").attr("class"))
+		},
+		template: function(data,info,status) {
+			if(info.status==1){
+				var html = "";
+				data.forEach(function(el, index) {
+					html += `<div class="into">
+    						<img class="pari-img-l" src="/Public/images/fh.png">
+							<div class="bizh-min fl">
+								<span class="wait" style="font-weight: 500;font-size: .28rem;">+${el.fee}</span><p class="ip">${el.addtime}</p>
+							</div>
+							<div class="fate fr"><p style="color: #292929;padding-right: .2rem;font-size: .32rem;font-weight: 600;">${el.level_tuandui}</p></div>
+						</div>`;
+			});
+			return html;
+		}
+	},
+	onBeforeRefresh : function () {
+		console.log("brefore refresh")
+	},
+	onBeforeLoad : function () {
+		console.log("brefore load")
+	},
+	onRefresh: function() {
+		console.log("refreshed")
+	},
+	onLoad: function() {
+		console.log("loaded")
+	}
+})
+}
+generalize_sx();
+
+</script>

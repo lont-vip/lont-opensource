@@ -1,0 +1,67 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main>
+		<div class="head-ban">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="news_mas()"></div>
+			<div class="head-main">公告详情</div>
+			<div class="head-right"></div>
+		</div>
+		<input type="hidden" value="" class="yemian" />
+		<div style="height: .15rem;background-color: #fafafa;"></div>	
+		<div class="new-xp">
+			<h2 class="new-xp-head news_title"></h2>
+			<div class="row">
+				<span class="new-tin-r news_time"></span>
+			</div>
+			<div class="new-xp-main news_content"></div>
+		</div>
+	</main>
+</div>
+<script>
+function news_mas(){
+	var yemian=$('.yemian').val();
+	if(yemian!='' && yemian!=undefined){
+		router.back({
+			callback: function(mod) {
+				loader.require(["pages/total"], function(main) {
+					
+				})
+			}
+		})
+	}else{
+		router.back({
+			callback: function(mod) {
+				loader.require(["pages/news/news"], function(main) {
+					uiList.reload();
+				})
+			}
+		})
+	}
+}
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	$('.yemian').val(result['yemian']);
+	bui.ajax({
+		url: "/Home/News/news_mas",
+		data: {id:result['id']}
+	}).then(function(res){
+		if(res['status']==1){
+			$('.news_title').html(res['msg']['title']);
+			$('.news_time').html(res['msg']['addtime']);
+			$('.news_content').html(res['msg']['content']);
+		}else{
+			bui.load({ url: "pages/news/news" });
+		}
+	});
+});
+</script>

@@ -1,0 +1,157 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="bui-scroll qianbaoaddress_log_scrollList"> <!--传ajax数据 class放这里-->
+			<div class="bui-scroll-main" style="background:none;"> 
+				<div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png" onclick="wallet_address_tz()" /></div>
+					<div class="head-main" >钱包地址</div>
+					<div class="head-right" style="text-align: center;"><img class="bui-btn" href="pages/property/address_add" src="/Public/images/wallet_add.png"  /></div>
+				</div>
+				<ul class="bui-list bui-list-thumbnail"></ul>
+			</div>
+			<div class="bui-scroll-foot"></div>
+		</div>
+		<input type="hidden" class="qianbao_fh" value="" />
+ 		<form class="wallet_del">
+			<div class="lock-tan">
+				<div class="lock-k">
+					<span class="lock-k-q">确定要删除？</span>
+					<input type="hidden" class="shanchu_id" name="id" value="0" />
+					<div class="lock-k-btn">
+						<button type="button" class="lock-btn-off">取消</button>
+						<button class="loadToSuccess wallet_del_tj" type="button" style="background: linear-gradient(to right,#2ab7a1,#3be3ad);color: #FFFFFF;margin-left: .15rem;">删除</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</main>
+</div>
+<script>
+function shanchu(id){
+	$('.shanchu_id').val(id);
+	$('.lock-tan').show();
+}
+$('.lock-btn-off').click(function  () {
+	$('.lock-tan').hide();
+})
+
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	$('.qianbao_fh').val(result['coin']);	
+});
+
+bui.ready(function(){
+	$(".wallet_del_tj").on("click",function (argument) {
+		var data = $('.wallet_del').serialize();
+		$.ajax({
+			url: '/Home/Finance/qianbaoaddress_del',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				$('.lock-tan').hide();
+				bui.hint({content:data.info, position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					uiList.reload();
+				}
+			}
+		})
+	});
+});
+function wallet_address_tz(){
+	var coin=$('.qianbao_fh').val();
+	if(coin=='' || coin==undefined){
+		router.back({
+	        callback: function(mod) {
+	            loader.require(["pages/mine"], function(main) {
+					// uiList.reload();
+				})
+	        }
+    	})
+	}else{
+		router.back({
+	        callback: function(mod) {
+	            loader.require(["pages/property/transfer"], function(main) {
+					tranx(coin);
+				})
+	        }
+    	})
+	}
+}
+function xuanzhong(coin,address){
+	router.back({
+		callback: function(mod) {
+			loader.require([ "pages/property/transfer"], function(main) {
+				$('.rollout_address').val(address);
+			})
+		}
+	})
+}
+bui.ajax({
+	url: "/Home/Finance/qianbaoaddress_num",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==1){
+		if(res['counum']<1){
+			var imgmas='<div style="text-align: center;margin-top: 1rem;"><img src="/Public/images/zanwujilu.png" style="margin-bottom: .1rem;width: 1rem;" /><br />暂无记录</div>';
+			$('.qianbaoaddress_log_scrollList').html(imgmas);
+		}
+	}
+});
+	var uiList = bui.list({
+		id: ".qianbaoaddress_log_scrollList",
+		url: "/Home/Finance/qianbaoaddress_log",
+		pageSize: 6,
+		data: {},
+		field: {
+			page: "page",
+			size: "pageSize",
+			data: "data"
+		},
+		callback: function(e) {
+			console.log($(e.target).closest(".bui-btn").attr("class"))
+		},
+		template: function(data) {
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="list-bloc cuiw row">
+			     		<div class="bizh-min">
+			     			<img src="/Upload/coin/${el.img}" onclick="xuanzhong('${el.coin}','${el.address2}')" >
+			     			<div class="biz">
+				     			<div>
+				     				<span class="beiz" onclick="xuanzhong('${el.coin}','${el.address2}')">${el.name}</span>
+				     			</div>
+				     			<p class="ip">${el.address}</p>
+			     			</div>
+			     		</div>
+			     	</div>`
+                });
+                return html;
+        },
+        onBeforeRefresh : function () {
+          console.log("brefore refresh")
+        },
+        onBeforeLoad : function () {
+          console.log("brefore load")
+        },
+        onRefresh: function() {
+            console.log("refreshed")
+        },
+        onLoad: function() {
+            console.log("loaded")
+        }
+    });
+</script>

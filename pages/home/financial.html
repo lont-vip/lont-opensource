@@ -1,0 +1,240 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page"  style="background: #fbfbfb;">
+	<style>
+		.paddle-time{
+		    width: 100%;
+    margin:0 auto .3rem;
+    height: 1rem;
+    line-height: 1rem;
+    background: #fff;
+    padding: 0 5%;
+	}
+	.paddle-time-s{
+		    color: #bababa;
+font-size: .25rem;
+	}
+	.paddle-time-t{
+		   background:#fafafa;
+margin-right: .1rem;
+margin-left: .1rem;
+line-height: .7rem;
+width: 2.1rem;
+text-align: center;
+height: .7rem;
+display: inline-block;
+	}
+	.paddle-time-t img{
+		    width: .35rem;
+margin-bottom: .08rem;
+margin-right: .1rem;
+	}
+	.paddle-time-t span{
+		    color: #111;
+font-size: .25rem;
+	}
+	</style>
+	<main  style="background: #fbfbfb;">
+		<div class="bui-scroll financial_scrollList">
+        	<div class="bui-scroll-head"></div>
+        	<div class="bui-scroll-main" style="background: none;">
+	            <div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png" onclick="financial_tz()"></div>
+					<div class="head-main">财务明细</div>
+					<div class="head-right">
+					</div>
+				</div>
+				<div class="paddle-time">
+	   				<span class="paddle-time-s">起 :</span>
+	   				<span class="paddle-time-t">
+	   					<img src="/Public/images/times.png"><span id="datepicker_input" class="paddle-time1"></span>
+	   				</span>
+	   				-
+	   				<span class="paddle-time-s" style="margin-left: .1rem">止 :</span>
+	   				<span class="paddle-time-t" style="margin-right: 0;">
+	   					<img src="/Public/images/times.png"><span id="datepicker_input2" class="paddle-time2"></span>
+	   				</span>
+	   				<input type="hidden" class="start" value="">
+	   				<input type="hidden" class="end" value="">
+	   				<img src="/Public/images/search.png" style="width:.7rem;margin-bottom:.1rem;margin-left: .1rem;" onclick="sou_class()">
+	   			</div>
+				<ul class="bui-list bui-list-thumbnail">
+					
+				</ul>
+			</div>
+			<div class="bui-scroll-foot"></div>
+		</div>
+	
+	</main>
+</div>
+<script>
+function financial_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				
+			})
+		}
+	})
+}
+var uiList3;
+function financial_sx(){
+	bui.ajax({
+		url: "/Home/news/financial_time",
+		data: {},
+		async:false
+	}).then(function(res){
+		$('.paddle-time1').html(res['start']);
+		$('.paddle-time2').html(res['end']);
+	});
+	var start=$('.paddle-time1').html();
+	var end=$('.paddle-time2').html();
+	uiList3 = bui.list({
+	    id: ".financial_scrollList",
+	    url: "/Home/news/financial_log",
+	    pageSize: 6,
+	    data: {start:start,end:end},
+	    field: {
+	        page: "page",
+	        size: "pageSize",
+	        data: "data"
+	    },
+	    callback: function(e) {
+	        console.log($(e.target).closest(".bui-btn").attr("class"))
+	    },
+	    template: function(data) {
+	    	var html = "";
+	    	data.forEach(function(el, index) {
+	    	html += `<div class="into bui-btn">
+							<div class="bizh-min fl"><span class="wait">${el.protypemas}</span><p class="ip">${el.addtime}</p></div>
+							<div class="fate fr" style="margin-right:.3rem;">${el.fee} ${el.coinname}</div>
+						</div>`
+	    		});
+	    		return html;
+	        },
+	        onBeforeRefresh : function () {
+	          console.log("brefore refresh")
+	        },
+	        onBeforeLoad : function () {
+	        	
+	          console.log("brefore load")
+	        },
+	        onRefresh: function() {
+	            console.log("refreshed")
+	        },
+	        onLoad: function() {
+	            console.log("loaded")
+	        }
+	    });
+	    
+	 $('.bui-loading-cell').remove()
+	 $('.bui-loading-text').text('') 
+}
+financial_sx();
+
+
+function sou_class(){
+	var start=$('.paddle-time1').html();
+	var end=$('.paddle-time2').html();
+	if(start==''){
+		bui.hint({content:'请选择开始时间', position:"center" , effect:"fadeInDown"});return false;
+	}
+	if(end==''){
+		bui.hint({content:'请选择结束时间', position:"center" , effect:"fadeInDown"});return false;
+	}
+	if(start>end){
+		$('.paddle-time1').html(end);
+		$('.paddle-time2').html(start);
+	}else{
+		$('.paddle-time1').html(start);
+		$('.paddle-time2').html(end);
+	}
+	uiList3.empty();
+	$('.bui-scroll-foot').html('');
+	$('.bui-scroll-head').html('');
+	financial_sx2(start,end);
+}
+
+function financial_sx2(start,end){
+	uiList3 = bui.list({
+	    id: ".financial_scrollList",
+	    url: "/Home/news/financial_log",
+	    pageSize: 6,
+	    data: {start:start,end:end},
+	    field: {
+	        page: "page",
+	        size: "pageSize",
+	        data: "data"
+	    },
+	    callback: function(e) {
+	        console.log($(e.target).closest(".bui-btn").attr("class"))
+	    },
+	    template: function(data) {
+	    	var html = "";
+	    	data.forEach(function(el, index) {
+	    	html += `<div class="into bui-btn">
+							<div class="bizh-min fl"><span class="wait">${el.protypemas}</span><p class="ip">${el.addtime}</p></div>
+							<div class="fate fr" style="margin-right:.3rem;">${el.fee} ${el.coinname}</div>
+						</div>`
+	    		});
+	    		return html;
+	        },
+	        onBeforeRefresh : function () {
+	          console.log("brefore refresh")
+	        },
+	        onBeforeLoad : function () {
+	        	
+	          console.log("brefore load")
+	        },
+	        onRefresh: function() {
+	            console.log("refreshed")
+	        },
+	        onLoad: function() {
+	            console.log("loaded")
+	        }
+	    });
+	    
+	 $('.bui-loading-cell').remove()
+	 $('.bui-loading-text').text('') 
+}
+var uiPickerdate = bui.pickerdate({
+	handle: "#datepicker_input",
+	bindValue: true,
+	formatValue: "yyyy-MM-dd",
+	onChange: function(value) {},
+	callback: function(e) {
+		console.log(e.target)
+		$('.paddle-time1').text(this.value())
+	},
+});
+var uiPickerdate2 = bui.pickerdate({
+	handle: "#datepicker_input2",
+	bindValue: true, 
+	formatValue: "yyyy-MM-dd",
+	onChange: function(value) {},
+	callback: function(e) {
+		console.log(e.target)
+		$('.paddle-time2').text(this.value())
+	},
+});
+uiPickerdate.cols({
+	hour: "none",
+	minute: "none",
+	second: "none"
+})
+uiPickerdate2.cols({
+	hour: "none",
+	minute: "none",
+	second: "none"
+})
+
+</script>

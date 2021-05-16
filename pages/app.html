@@ -1,0 +1,103 @@
+
+<style>
+  .app-head{
+  	    text-align: center;
+    margin-top: 1rem;
+  }
+  .app-head img{
+  	    width: 4.5rem;
+  }
+   .app-head-tit{
+   	display: inline-block;
+    font-size: .34rem;
+    color: #319eb0;
+    margin-top: 0rem;
+    vertical-align: middle;
+    margin-left: .2rem;
+   }
+  .app-head-tit div{
+  	    margin-top: .1rem;
+  }
+  .app-download{
+  	    margin-top: 70%;
+    text-align: center;
+  }
+  .app-download a{
+  	    width: 5rem;
+    height: 1.1rem;
+    display: block;
+    color: #fff;
+    line-height: 1.1rem;
+    margin: .4rem auto;
+    border-radius: .1rem;
+  }
+   
+  .app-download-and{
+  	
+    background: #78bc43;
+  }
+  .app-download-ios{
+  	background: #1386e4;
+  }
+  .app-download a img{
+  	height: .6rem;
+  }
+  .app-download a .app-download-and-d{
+  	 display: inline-block;
+    vertical-align: middle;
+    line-height: .36rem;
+    font-size: .26rem;
+    text-align: left;
+    margin-left: .3rem;
+
+  }
+   .app-download a .app-download-and-d span{
+  	    font-size: .24rem;
+  }
+  .app-down{
+  	    color: #fff;
+    text-align: center;
+    margin-top: 1rem;
+  }
+</style>
+<div class="bui-page"  style="background:#00a1b3;">
+	<main style="background:url(/Public/images/app_bg.png) no-repeat;background-size:100%;">
+		<div class="app-head">
+			<img class="app-head-img head_img_class" src="" />
+		</div>
+		<div class="app-download">
+			<a href="#" class="app-download-and and_url">
+					<img class="app-head-img app_log" src="/Public/images/app_and.png" />
+					<div class="app-download-and-d">
+						<div>Android 下载</div>
+						<span>大小 : <i class="android">0</i>M</span>
+					</div>
+			</a>
+			<a href="#" class="app-download-ios ios_url">
+				<img class="app-head-img" src="/Public/images/app_ios.png" />
+					<div class="app-download-and-d">
+						<div>iphone 下载</div>
+						<span>大小 : <i class="iphone">0</i>M</span>
+					</div>
+			</a>
+		</div>
+		<div class="app-down">
+			<span class="web_title">--</span> APP 下载
+		</div>
+	</main>
+</div>
+<script>
+bui.ajax({
+	url: "/Home/Index/app_mas",
+	data: {}
+}).then(function(res){
+	if(res['status']==1){
+		$('.head_img_class').attr('src','/Upload/logo/'+res['data']['app_logo']);
+		$('.android').html(res['data']['app_and']);
+		$('.iphone').html(res['data']['app_ios']);
+		$('.web_title').html(res['data']['web_title']);
+		$('.and_url').attr('href',res['data']['app_http']+"://"+res['data']['app_url']);
+		$('.ios_url').attr('href',res['data']['app_http2']+"://"+res['data']['app_url2']);
+	}
+});
+</script>

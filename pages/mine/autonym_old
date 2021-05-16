@@ -1,0 +1,172 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page" >
+	<main>
+		<div class="head-ban" style="background: none;">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="autonym_tz()"></div>
+			<div class="head-main">实名认证</div>
+			<div class="head-right"></div>
+		</div>
+		<div class="auto-mn">
+			<div class="auto-mn-t">
+				实名认证
+			</div>
+			<div class="auto-mn-n chenggong2"><img src="/Public/images/gth.png"/> <font class="auth_zhuangtai2">请确认是您本人，验证完后不可修改</font></div>
+		</div>
+		<div class="auto-in">
+			<form class="autonym_index authentication_wait" style="display:none;">
+				<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">真实姓名</span>
+						<input type="text" name="truename" maxlength="50" class="autonym_true_name" placeholder="输入真实姓名">
+					</div>
+				</div>
+				<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">手机号码</span>
+						<input type="text" name="true_mobile" id="" class="autonym_true_mobile" maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="请填写手机号码">
+					</div>
+				</div>
+				<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">身份证号</span>
+						<input type="text" name="idcard" class="autonym_true_idcard" oninput = "value=value.replace(/[^\a-\z\A-\Z0-9]/g,'')" name="idcard" placeholder="请填写身份证号">
+					</div>
+				</div>
+				<div class="regis-main-te">
+					<div class="regis-main-tx">
+						<span class="regis-main-th">银行卡号</span>
+						<input type="text" name="card" class="autonym_true_card" onkeyup="this.value=this.value.replace(/\D/g,'')" maxlength="25" id="" placeholder="请填写银行卡号">
+					</div>
+				</div>
+			</form>
+		</div>
+    	<div class="aoto-suc authentication_ok" style="display: none;">
+    		 <div class="aoto-suc-hd">
+    		 	<img style="display:none;" class="chenggong" src="/Public/images/succeed.png">
+    		 	<div class="auth_zhuangtai" style="color:#444444;background:none;height:  .4rem;line-height: .4rem;"></div>
+    		 </div>
+    		 <div class="aoto-suc-mn">
+    		 	<div class="aoto-suc-mnd">真实姓名<span class="autonym_name"></span></div>
+    		 	<div class="aoto-suc-mnd">手机号码<span class="autonym_mobile"></span></div>
+    		 	<div class="aoto-suc-mnd">身份证号<span class="autonym_idcard"></span></div>
+    		 	<div class="aoto-suc-mnd">银行卡号<span class="autonym_card"></span></div>
+    		 </div>
+    	</div>
+	</main>
+	<footer style="display:none;" class="anniuxs">
+		<div class="addres-btn phont-btn">
+    		<button style="border-radius: .44rem;" type="button" class="autonym_index_tj">提交认证</button>
+    	</div>
+	</footer>
+</div>
+<script>
+ bui.ready(function(){
+	$(".autonym_index_tj").on("click",function (argument) {
+		var data = $('.autonym_index').serialize();
+		$.ajax({
+			url: '/Home/User/auth_ajax',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					autonym_sx();
+				}
+			}
+		})
+	});
+}); 
+
+function autonym_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				mine_sx();
+			})
+		}
+	})
+}
+
+function autonym_sx(){
+	bui.ajax({
+		url: "/Home/User/user_mas",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			if(res['shiming']==1){
+				if(res['user']['idstate']==1){
+					$('.auth_zhuangtai').html('待审核');
+					$('.chenggong2').hide();
+					$('.authentication_wait').hide();
+					$('.authentication_ok').show();
+					$('.autonym_name').html(res['user']['truename']);
+					$('.autonym_mobile').html(res['user']['true_mobile']);
+					$('.autonym_idcard').html(res['user']['idcard']);
+					$('.autonym_card').html(res['user']['card']);
+					$('.anniuxs').hide();
+				}else if(res['user']['idstate']==2){
+					$('.auth_zhuangtai').html('实名认证已通过');
+					$('.chenggong').show();
+					$('.authentication_wait').hide();
+					$('.authentication_ok').show();
+					$('.autonym_name').html(res['user']['truename']);
+					$('.autonym_mobile').html(res['user']['true_mobile']);
+					$('.autonym_idcard').html(res['user']['idcard']);
+					$('.autonym_card').html(res['user']['card']);
+					$('.anniuxs').hide();
+				}else if(res['user']['idstate']==8){
+					$('.auth_zhuangtai2').html('驳回原因：'+res['user']['idcardinfo']);
+					$('.autonym_true_name').val(res['user']['truename']);
+					$('.autonym_true_mobile').val(res['user']['true_mobile']);
+					$('.autonym_true_idcard').val(res['user']['idcard2']);
+					$('.autonym_true_card').val(res['user']['card2']);
+					$('.authentication_wait').show();
+					$('.authentication_ok').hide();
+					$('.anniuxs').show();
+				}else{
+					$('.anniuxs').show();
+				}
+			}else{
+				$('.authentication_wait').show();
+				$('.authentication_ok').hide();
+				$('.anniuxs').show();
+			}
+		}
+	});
+}
+autonym_sx();
+$('input').blur(function () {
+	window.scroll(0,0);
+	
+})
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1e3);
+	return false;
+});
+</script>

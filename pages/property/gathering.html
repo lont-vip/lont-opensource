@@ -1,0 +1,214 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main>
+		<div class="head-ban">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="gathering_tz()" /></div>
+			<div class="head-main" >转入</div>
+			<div class="head-right bui-btn" onclick="gathering_tz2()" style="text-align: center;line-height: 1rem"><img src="/Public/images/lj.png"/></div>
+		</div>
+		<div class="tran-kind">
+			<span class="tran-kind-coin">
+				<img class="rollout_img" src="/Public/images/usdt.png"> <span class="rollout_name"></span>
+			</span>
+			<span class="tran-kind-right">选择币种 <img src="/Public/images/right.png"></span>
+		</div>
+		<input type="hidden" class="qianbao_fh" value="" />
+		<input type="hidden" class="qianbao_yemian" value="" />
+		<div class="gath-zw">
+			<div class="gath-zw-h">选择主网</div>
+			<div class="gath-zw-d"><span class="active">ERC20</span></div>
+		</div>
+		<div class="gath-qr">
+			<div>收款二维码</div><img class="rollout_erweima" src="/Public/images/1234567.jpg" />
+		</div>	
+		<div  class="gath-qr">
+			<div>收款地址</div><span class="rollout_address"></span>
+		</div>
+		<div class="gath-k-mn">
+			<button type="button" class="rec_fu rollout_address2" data-clipboard-text="">复制钱包地址</button>
+		</div>
+		<div class="gath-gth">
+			<div>温馨提示：</div>
+			<span>禁止向以上地址充值非<span class="rollout_name"></span>资产，否则资产无法找回</span><br>
+			<span>【以太坊充值备注平台登录账号】</span>
+		</div>
+		<span class="prompt_box invit_fuzcg" style="display: none;">复制成功</span>
+	</main>
+	<div class="tran-kind-tan" >
+		<div class="tran-kind-k">
+			<div class="tran-kind-head">
+				<span>转账币种</span><img class="tran-kind-off" src="/Public/images/off2.png">
+			</div>
+			<div class="gathering_list"></div>
+		</div>
+	</div>
+</div>
+<script>
+function gathering_tz2(){
+	var coin=$('.qianbao_fh').val();
+	bui.load({ url: "pages/property/rs_record?coin="+coin });
+}
+function gathering_tz(){
+	var coin=$('.qianbao_fh').val();
+	var yemian=$('.qianbao_yemian').val();
+	if(coin!='' && coin!=undefined){
+		if(yemian=='home'){
+			router.back({
+				callback: function(mod) {
+					loader.require(["main"], function(main) {
+						
+					})
+				}
+			})
+		}else if(yemian=='property'){
+			router.back({
+				callback: function(mod) {
+					loader.require(["pages/property/particulars"], function(main) {
+						
+					})
+				}
+			})
+		}else{
+			router.back({
+				callback: function(mod) {
+					loader.require(["pages/property/particulars"], function(main) {
+						particulars_sx(coin);
+					})
+				}
+			})
+		}
+	}else{
+		router.back({
+			callback: function(mod) {
+				loader.require(["pages/total"], function(main) {
+					
+				})
+			}
+		})
+	}
+}
+function xuanze_bi(coin){
+	$('.tran-kind-tan').hide();
+	$('.qianbao_fh').val(coin);
+		bui.ajax({
+			url: "/Home/property/shoukuan_mas",
+			data: {coin:coin},
+			async:false
+		}).then(function(res){
+			if(res['qianbao_mas']!='' && res['qianbao_mas']!=null){
+				$('.rollout_address').html(res['qianbao_mas']);
+				$('.shoukuan_cuowu').show();
+				$('.rollout_name').html(res['coin']['name_d']);
+				$('.rollout_img').attr('src','/Upload/coin/'+res['coin']['img']);
+				$('.rollout_erweima').attr('src','/Home/Finance/wallet_erweima_x?name='+res['qianbao_mas']);
+			}else{
+				$('.shoukuan_wuneirong').show();
+				$('.shoukuan_script_fuzhi').html(res['coin']['script']);
+				$('.rollout_address2').attr('data-clipboard-text',res['usercoin'][coin+'b']);
+				$('.rollout_address').html(res['usercoin'][coin+'b']);
+				$('.rollout_name').html(res['coin']['name_d']);
+				$('.shoukuan_img').attr('src','/Upload/coin/'+res['coin']['img']);
+					$('.rollout_img').attr('src','/Upload/coin/'+res['coin']['img']);
+				$('.rollout_erweima').attr('src','/Home/Finance/wallet_erweima_x?name='+res['usercoin'][coin+'b']);
+			}
+			if(res['coinlist']){
+				var coin_mas='';
+				var coin_cd=res['coinlist'].length;
+				for(j=0;j<coin_cd;j++) {
+					coin_mas+='<div class="tran-kind-z" onclick=xuanze_bi("'+res['coinlist'][j]['name']+'")><img src="/Upload/coin/'+res['coinlist'][j]['img']+'"> <span>'+res['coinlist'][j]['js_yw']+'</span></div>';
+				}
+				$('.gathering_list').html(coin_mas);
+			}
+		});
+		
+}
+function gathering_sx(coin_name){
+	var getParams = bui.getPageParams();
+	getParams.done(function(result){
+		$('.qianbao_yemian').val(result['yemian']);
+		$('.qianbao_fh').val(result['coin']);
+		if(coin_name=='b'){
+			if(result['coin']=='' || result['coin']==undefined){
+				bui.ajax({
+					url: "/Home/property/moren_coin",
+					data: {},
+					async:false
+				}).then(function(res){
+					result['coin']=res['coin'];
+					$('.qianbao_fh').val(res['coin']);
+				});
+			}
+		}else{
+			result['coin']=coin_name;
+			$('.qianbao_fh').val(coin_name);
+		}
+		
+		var coin=result['coin'];
+		bui.ajax({
+			url: "/Home/property/shoukuan_mas",
+			data: {coin:result['coin']},
+			async:false
+		}).then(function(res){
+		    
+		    console.log(res);
+			if(res['qianbao_mas']!='' && res['qianbao_mas']!=null){
+				$('.rollout_address').html(res['qianbao_mas']);
+				$('.shoukuan_cuowu').show();
+				$('.rollout_name').html(res['coin']['name_d']);
+					$('.rollout_img').attr('src','/Upload/coin/'+res['coin']['img']);
+				$('.rollout_erweima').attr('src','/Home/Finance/wallet_erweima_x?name='+res['qianbao_mas']);
+			}else{
+				$('.shoukuan_wuneirong').show();
+				$('.shoukuan_script_fuzhi').html(res['coin']['script']);
+				$('.rollout_address2').attr('data-clipboard-text',res['usercoin'][coin+'b']);
+				$('.rollout_address').html(res['usercoin'][coin+'b']);
+				$('.rollout_name').html(res['coin']['name_d']);
+				$('.shoukuan_img').attr('src','/Upload/coin/'+res['coin']['img']);
+					$('.rollout_img').attr('src','/Upload/coin/'+res['coin']['img']);
+				$('.rollout_erweima').attr('src','/Home/Finance/wallet_erweima_x?name='+res['usercoin'][coin+'b']);
+			}
+			if(res['coinlist']){
+				var coin_mas='';
+				var coin_cd=res['coinlist'].length;
+				for(j=0;j<coin_cd;j++) {
+					coin_mas+='<div class="tran-kind-z" onclick=xuanze_bi("'+res['coinlist'][j]['name']+'")><img src="/Upload/coin/'+res['coinlist'][j]['img']+'"> <span>'+res['coinlist'][j]['js_yw']+'</span></div>';
+				}
+				$('.gathering_list').html(coin_mas);
+			}
+		});
+	});
+}
+gathering_sx('b');
+var btn = document.getElementsByClassName('rec_fu');
+var clipboard = new Clipboard(btn);
+//复制成功执行的回调，可选
+clipboard.on('success', function(e) {
+	document.querySelector(".prompt_box").style.display = "block";
+	setTimeout(function() {
+		document.querySelector(".prompt_box").style.display = "none";
+	}, 2000);
+}); //复制失败执行的回调，可选
+clipboard.on('error', function(e) {
+	console.log(e);
+});
+$('.tran-kind').click(function(){
+	$('.tran-kind-tan').show();
+});
+$('.tran-kind-off').click(function(){
+	$('.tran-kind-tan').hide();
+});
+$('.tran-kind-z').click(function(){
+	$('.tran-kind-coin').html($(this).html());
+	$('.tran-kind-tan').hide();
+})
+</script>

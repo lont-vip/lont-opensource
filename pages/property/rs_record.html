@@ -1,0 +1,141 @@
+<div class="bui-page">
+	<main>
+		<div class="bui-scroll item_record zr_record_scrollList"><!--传ajax数据 class放这里-->
+			<input type="hidden" class="par_coin" value="" />
+			<input type="hidden" class="par_type" value="" />
+			<input type="hidden" class="yemian" value="" />
+            <div class="bui-scroll-head"></div>
+            <div class="bui-scroll-main" style="background: none;">
+				<div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png" onclick="rs_record_tz()" /></div>
+					<div class="head-main" >历史记录</div>
+					<div class="head-right">
+					</div>
+				</div>
+				<div class="bui-navbar bui-box-align-middle inte-nav team-nav">
+	                <div class="span1" id="uiSlideNavbar4">
+	                    <ul id="uiNewsTabNav4" class="bui-nav row">
+	                        <li onclick="xuanze_lc(1)" class="bui-btn active" href="pages/property/rs_record1.html"><span>转入</span></li>
+	                        <li onclick="xuanze_lc(2)" class="bui-btn"  href="pages/property/rs_record2.html"><span>转出</span></li>
+	                    </ul>
+	                </div>
+	           </div>
+	           <input type="hidden" class="rs_record_lx" value="1" />
+	           <input type="hidden" class="par_coin" value="" />
+	           <input type="hidden" class="yemian" value="" />
+	           	<div id="uiNewsTab4" class="bui-tab"><div class="bui-tab-main"><ul><li></li><li></li></ul></div></div>
+				<div class="reco-top">
+					 <ul class="bui-list bui-list-thumbnail row"></ul>
+				</div>
+				<div class="no-reco rs_record_xianshi" style="display:none;">
+					<img src="/Public/images/no.png" />
+				</div>
+			 </div>
+            <div class="bui-scroll-foot"></div>
+        </div>	
+        <div class="recora-box">
+        	<div class="recora-box-t rs_record_coin"></div>
+        </div>
+	</main>
+</div>
+<script>
+function rs_record_tz(){
+	var par_coin=$('.par_coin').val();
+	var par_type=$('.par_type').val();
+	var yemian=$('.yemian').val();
+	if(yemian=='particulars'){
+			router.back({
+				callback: function(mod) {
+					loader.require(["pages/property/particulars"], function(main) {
+						particulars_sx(par_coin);
+					})
+				}
+			})
+			/*
+			router.back({
+		callback: function(mod) {
+			loader.require(["pages/property"], function(main) {
+				property_sx();
+			})
+		}
+	})
+		*/
+	}else if(par_coin=='' || par_coin==undefined){
+		router.back({
+			callback: function(mod) {
+				loader.require(["pages/total"], function(main) {
+					gathering_sx();
+				})
+			}
+		})
+	}else{
+		if(par_type==2){
+			router.back({
+				callback: function(mod) {
+					loader.require(["pages/property/transfer"], function(main) {
+						tranx(par_coin);
+					})
+				}
+			})
+		}else{
+			router.back({
+				callback: function(mod) {
+					loader.require(["pages/property/gathering"], function(main) {
+						gathering_sx(par_coin);
+					})
+				}
+			})
+		}
+	}
+}
+function xuanze_lc(num){
+	$('.rs_record_lx').val(num);
+}
+function xuanze_bi(coin){
+	$('.bui-mask').click();
+	$('.recora-box').toggle();
+	uiList.empty();
+	var lx=$('.rs_record_lx').val();
+	if(lx==1){
+		rs_record1_sx2(coin);
+	}else{
+		zc_record2_sx2(coin);
+	}
+}
+
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	$('.par_coin').val(result['coin']);
+	$('.par_type').val(result['type']);
+	$('.yemian').val(result['yemian']);
+	bui.ajax({
+		url: "/Home/Property/coin_list",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['coinlist']){
+			var cd=res['coinlist'].length;
+			var rs_record_coin='';
+			for(var j=0;j<cd;j++){
+				rs_record_coin+='<div class="tran-kind-z" onclick=xuanze_bi("'+res['coinlist'][j]['name']+'")><img src="/Upload/coin/'+res['coinlist'][j]['img']+'"> <span>'+res['coinlist'][j]['js_yw']+'</span></div>';
+			}
+			$('.rs_record_coin').html(rs_record_coin);
+		}
+	});
+	
+});
+$('.reco-xz div').click(function  () {
+	$('.reco-xz div').attr('class','');
+	$(this).attr('class','active');
+	if ( $(this).data('val') === "1" ) {
+		$('.reco-dep').hide();
+		$('.reco-top').show();
+	} else{
+		$('.reco-dep').show();
+		$('.reco-top').hide();
+	}
+})
+$('.reco-sx').click(function  () {
+	$('.recora-box').toggle();
+})
+</script>

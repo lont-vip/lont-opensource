@@ -1,0 +1,181 @@
+<div class="bui-page" style="background:#fafafa;">
+       <main style="background:#fafafa;">
+       	<style>
+       		@keyframes loader{from{transform:scale(0,0)}to{transform:scale(1,1)}}
+@-webkit-keyframes loader{from{-webkit-transform:scale(0,0)}to{-webkit-transform:scale(1,1)}}
+       	</style>
+	       	<div class="head-ban" style="background: none;">
+				<div class="head-left"><img src="images/left.png" onclick="bui.back()" /></div>
+				<div class="head-main" ></div>
+				<div class="head-right"></div>
+			</div>
+	       <div class="top-fukuan">
+				<div class="part-head-l">
+					<span class="status_zt">请付款  <span>14:39</span></span>
+					<div class="zt_type">您已成功下单，请及时付款</div>
+				</div>
+				<a href="sms:13764567708" class="lianxi">
+					<div class="part-head-r">
+						<img src="images/lxdf.png" />
+						<div class="liax">联系对方</div>
+					</div>
+				</a>
+			</div>
+			
+			<div class="part-center-b  buy_info">
+					<div class="part-jy">
+						<span class="part-jy-s1">交易金额</span>
+						<span class="part-jy-s2">99900.00 <span>CNY</span></span>
+					</div>
+					<div class="part-center-bd  botmm">
+						<span class="part-center-bdl part-center-bdl2"><img src="images/photo.png" style="width: .4rem;margin-bottom: .05rem;"/> Yonghu</span>
+						<span class="part-center-bdr bank_namesm"><img src="images/xtel.png" style="width: .4rem;margin-top: .1rem;" /></span>
+					</div>
+					<div class="part-center-bd  botmm">
+						<span class="part-center-bdl">交易单价</span>
+						<span class="part-center-bdr bank_namesm">￥7.00</span>
+					</div>
+					<div class="part-center-bd botmm part-center-yhk">
+						<span class="part-center-bdl pay_name_class">交易数量</span>
+						<span class="part-center-bdr bank_zhi">999.000000 LVLC</span>
+					</div>
+					<div class="part-center-bd botmm part-center-yhk">
+						<span class="part-center-bdl pay_name_class">手续费</span>
+						<span class="part-center-bdr bank_zhi">0.000001 LVLC</span>
+					</div>
+					<div class="part-center-bd botmm part-center-yhk">
+						<span class="part-center-bdl pay_name_class">下单时间</span>
+						<span class="part-center-bdr bank_zhi">2020.01.17 12:12:12</span>
+					</div>
+					
+					<div class="part-center-bd botmm part-center-yhk">
+						<span class="part-center-bdl pay_hao_class">订单编号</span>
+						<span class="part-center-bdr">
+							<i class="bank_card">123152465465486</i>
+							<img src="images/cuto.png" data-clipboard-text="6230580000267213184" class="rec_fu funzhi1" style="margin-left: 0.2rem;margin-bottom: .15rem;width: .35rem;">
+						</span>
+					</div>
+				</div>
+				
+				<div class="part-center-yfk maiji_info   aaaaa " >
+					<div class="part-center-yfkh sss">买家已付款，请释放</div>
+					<div id="pullUp">
+						<div class="loader">
+							<span></span>
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
+					</div>
+					
+					<div class="part-center-a row  b_dfk3" style="">
+						<button class="part-center-al shenshu_class" style="width: 35%;height: .8rem;border-radius: 0.05rem;background:#46bcf3;">我要申诉</button>
+						<button class="part-center-ar qrsk" style="margin-left:2%;width: 60%;height: .8rem;border-radius: 0.05rem;">确认释放</button>
+					</div>
+				</div>
+				<div class="part-bottom tx2" style="margin-top: 0.21rem;padding-bottom: 0.2rem;padding-top: 0.2rem;margin-bottom: 0.2rem;/* display:none; */">
+	    			<div class="part-bottom-t1">
+	    				<img src="images/warn.png">交易提醒
+	    			</div>
+	    			<div style="color: #a0a0a0;line-height: 0.4rem;" class="part-bottom-t2">1、汇款将直接进入您的账户</div>
+	    			<div style="color: #a0a0a0;line-height: 0.4rem;" class="part-bottom-t2">2、请在规定时间内确认收款，并务必标记“释放”，确认收款后，会将<n class="coin">BTC</n>划转到买方的账户。</div>
+	    			
+	    		</div>
+				<span class="prompt_box" style="display: none;font-size: .3rem;">复制成功</span>
+        </main>
+     <div class="popup-tan confirm1" >
+			<div id="td" class="confirm">
+				<div class="top-h">
+					确认释放<g class="coin">UTI</g>
+				</div> 
+				<div class="queren">
+					<p>请确认是否收到来自<span style="color:#f9aa39;"><c class="sell_name">111111</c></span>的付款</p>
+					<div style="color:#283440;">金额: <span>￥<c class="zongjia">500.00</c></span></div>
+					<p>如未收到,请勿释放</p>
+					<div><input class="gcs-checkbox" type="checkbox" value="1"><label for=""></label>&nbsp;&nbsp; 我确认已收到款项,并核对收款无误</div> 
+				</div>
+				<div class="btn-open">
+					<button class="qx">取消</button>
+					<button class="affirm queding" onclick="sfbtc()">确认</button>
+				</div>
+			</div> 
+		
+		</div>
+		<div class="tran-tan choice-p">
+			<div class="tran-k">
+				<div class="tran-hd">
+					<img class="tran-hd-off" src="images/off2.png" />
+					<div>安全验证</div>
+					<span>需要进行安全验证</span>
+				</div>
+				<div class="tran-mm tran-mm1">
+					<div class="tran-mm-h">资产密码</div>
+					<div class="tran-mm-inp">
+						<input type="text" placeholder="请输入资产密码" />
+					</div>
+				</div>
+				<div class="tran-mm tran-mm2" style="display: none;">
+					<div class="tran-mm-h">短信验证码</div>
+					<div class="tran-mm-inp">
+						<input type="text" placeholder="请输入短信验证码" />
+						<span>获取验证码</span>
+					</div>
+				</div>
+				<div class="tran-k-btn tran-k-btn1">
+					<button>下一步</button>
+				</div>
+				<div class="tran-k-btn tran-k-btn2" style="display: none;">
+					<button>确定</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			
+			$('.qux-but').click(function(){
+	$('.popup-qr').hide();
+})
+
+$('.tran-k-btn1').click(function  () {
+				$('.tran-k-btn2').show();
+				$('.tran-mm2').show();
+				$('.tran-k-btn1').hide();
+				$('.tran-mm1').hide();
+			})
+
+$('.parti-qx').click(function  () {
+	$('.popup-tan').hide();
+});
+$('.tran-hd-off').click(function  () {
+				$('.tran-tan').hide();
+			})
+
+$('.popup-zf').click(function  () {
+	$('.popup-tan').hide();
+});
+
+$('.popup-wc').click(function  () {
+	$('.popup-tan').hide();
+});
+$('.qx').click(function  () {
+	$('.popup-tan').hide();
+});
+
+$('.qrsk').click(function(){
+	$('.confirm1').show();
+	$('.confirm').show();
+})
+		var btn = document.getElementsByClassName('rec_fu');
+var clipboard = new Clipboard(btn); 
+
+//复制成功执行的回调，可选
+clipboard.on('success', function(e) {
+document.querySelector(".prompt_box").style.display = "block";
+setTimeout(function() {
+	document.querySelector(".prompt_box").style.display = "none";
+}, 2000);
+}); //复制失败执行的回调，可选
+clipboard.on('error', function(e) {
+console.log(e);
+});
+		</script>
+</div>

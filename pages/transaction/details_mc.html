@@ -1,0 +1,455 @@
+<div class="bui-page" style="background:#fafafa;">
+	<main style="background:#fafafa;">
+	<style>
+		.disabled { pointer-events: none; }
+		@keyframes loader{from{transform:scale(0,0)}to{transform:scale(1,1)}}
+		@-webkit-keyframes loader{from{-webkit-transform:scale(0,0)}to{-webkit-transform:scale(1,1)}}
+	</style>
+		<style>
+		.img-box{
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,.5);
+			top: 0;
+			left: 0;
+			display: none;
+			text-align: center;
+		}
+		.img-box img{
+			width: 5rem;
+			margin-top: 2rem;
+		}
+	</style>
+		<div class="head-ban" style="background: none;">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="mc_tz()" /></div><div class="head-main" ></div><div class="head-right"></div>
+		</div>
+		<div class="top-fukuan">
+			<div class="part-head-l">
+				<span class="status_zt"> </span>&nbsp;&nbsp;&nbsp;<span style="display:none;" class="shijian_xshi2 "></span>
+				<div class="zt_type"></div>
+			</div>
+			<a href="sms:" style="display:none;" class="lianxi">
+				<div class="part-head-r"><img src="/Public/images/lxdf.png" /><div class="liax">短信联系</div></div>
+			</a>
+		</div>
+		<div class="part-center-b  buy_info">
+			<div class="part-jy">
+				<span class="part-jy-s1">交易总价</span>
+				<span class="part-jy-s2"><font class="order_money"></font> <span class="order_coin_2"></span></span>
+			</div>
+			<div class="part-center-bd  botmm">
+				<span class="part-center-bdl part-center-bdl2">
+					<img class="order_userimg" src="" style="width: .4rem;margin-bottom: .05rem;"/> <span class="order_username"></span>
+				</span>
+				<span class="part-center-bdr bank_namesm" style="display:none;">
+					<a href="" class="lianxi2"><img src="/Public/images/xtel.png" style="width: .4rem;margin-top: .1rem;" /></a>
+				</span>
+			</div>
+			<div class="part-center-bd  botmm">
+				<span class="part-center-bdl">交易单价</span><span class="part-center-bdr order_price"></span>
+			</div>
+			<div class="part-center-bd botmm part-center-yhk">
+				<span class="part-center-bdl pay_name_class">交易数量</span><span class="part-center-bdr bank_zhi order_num"></span>
+			</div>
+			<div class="part-center-bd botmm part-center-yhk">
+				<span class="part-center-bdl pay_name_class">扣经验值</span><span class="part-center-bdr bank_zhi order_jyzhi"></span>
+			</div>
+			<div class="part-center-bd botmm part-center-yhk">
+				<span class="part-center-bdl pay_name_class">扣除手续费</span><span class="part-center-bdr bank_zhi order_fee"></span>
+			</div>
+			<div class="part-center-bd botmm part-center-yhk">
+				<span class="part-center-bdl pay_name_class">下单时间</span><span class="part-center-bdr bank_zhi order_addtime"></span>
+			</div>
+			<div class="part-center-bd botmm part-center-yhk">
+				<span class="part-center-bdl pay_hao_class">订单编号</span>
+				<span class="part-center-bdr">
+					<i class="bank_card order_orderid"></i>
+					<img src="/Public/images/cuto.png" data-clipboard-text="" class="rec_fu funzhi1 order_orderid2" style="margin-left: 0.2rem;margin-bottom: .15rem;width: .35rem;">
+				</span>
+			</div>
+			<div class="part-center-bd botmm part-center-yhk dk_jt dk_img">
+				<span class="part-center-bdl pay_hao_class">打款截图</span>
+				<span class="part-center-bdr">
+					<img src="/Public/images/er.png" style="margin-left: 0.2rem;margin-bottom: .15rem;width: .35rem;">
+				</span>
+			</div>
+			<div class="part-center-bd botmm part-center-yhk fukuan_fs" style="display:none;">
+				<span class="part-center-bdl pay_name_class">付款方式</span><span class="part-center-bdr bank_zhi order_fukuan"></span>
+			</div>
+			<div class="part-center-bd botmm part-center-wx fukuan_fs_img" style="display:none;" >
+				<span class="part-center-bdl pay_name_class_wx">付款凭证</span>
+				<span class="part-center-bdr ">
+					<img src="" class="rec_fu xinxi_img dk_img" style="margin-left: 0.2rem;margin-bottom: .15rem;width: .35rem;">
+				</span>
+			</div>
+			<div class="part-center-bd botmm part-center-yhk shensu_meirong" style="display:none;">
+				<span class="part-center-bdl pay_name_class">申诉内容</span><span class="part-center-bdr bank_zhi shensu_meirong_mas"></span>
+			</div>
+		</div>
+		<div class="part-center-yfk maiji_infoss maishu_daifukuan" style="display:none;">
+			<div class="part-center-yfkh sss">等待买家付款</div>
+			<div id="pullUp">
+				<div class="loader"><span></span><span></span><span></span><span></span></div>
+				<button type="button" onclick="shensu()" class="part-center-al shenshu_class">我要申诉</button>
+			</div>
+		</div>
+		<div class="part-center-yfk maiji_info aaaaa maishu_shifang" style="display:none;">
+			<div class="part-center-yfkh sss">买家已付款，请释放</div>
+			<div id="pullUp"><div class="loader"><span></span><span></span><span></span><span></span></div></div>
+			<div class="part-center-a row  b_dfk3" style="">
+				<button type="button" onclick="shensu()" class="part-center-al shenshu_class" style="width: 35%;height: .8rem;border-radius: 0.05rem;background:#46bcf3;">我要申诉</button>
+				<button onclick="sfbtc()" type="button" class="part-center-ar qrsk" style="margin-left:2%;width:60%;height:0.8rem;border-radius:0.05rem;">确认释放</button>
+			</div>
+		</div>
+		<div class="part-bottom tx2 maishu_shifang" style="margin-top: 0.21rem;padding-bottom: 0.2rem;padding-top: 0.2rem;margin-bottom: 0.2rem; display:none;">
+			<div class="part-bottom-t1"><img src="/Public/images/warn.png">交易提醒</div>
+			<div style="color: #a0a0a0;line-height: 0.4rem;" class="part-bottom-t2">1、汇款将直接进入您的账户</div>
+			<div style="color: #a0a0a0;line-height: 0.4rem;" class="part-bottom-t2">
+				2、请在规定时间内确认收款，并务必标记“释放”，确认收款后，会将<n class="coin order_coin_1"></n>划转到买方的账户。
+			</div>
+		</div>
+		<span class="prompt_box" style="display: none;font-size: .3rem;">复制成功</span>
+	</main>
+	<input type="hidden" value="0" class="sta_shensu2" />
+	<div class="lock-tan maichu_shensu">
+		<div class="lock-k">
+			<form class="shensu_index">
+				<span class="lock-k-q">申诉</span><br />
+				<input type="hidden" class="maichu_shensu_id" name="shensu_id" value="0" />
+				<input type="text" name="mas" value="" placeholder="请输入申诉内容" />
+				<div class="lock-k-btn">
+					<button type="button" onclick="quxiaoxx()" class="lock-btn-off">取消</button>
+					<button class="loadToSuccess shensu_index_tj" type="button" style="background: linear-gradient(to right,#2ab7a1,#3be3ad);color: #FFFFFF;margin-left: .15rem;">确定</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="popup-tan confirm1" >
+		<div id="td" class="confirm">
+			<form class="yanzheng_index">
+				<input type="hidden" class="maichu_yanzheng_id" name="yanzheng_id" value="0" />
+				<div class="top-h">确认释放<g class="coin order_coin_1"></g></div> 
+				<div class="queren">
+					<p>请确认是否收到来自<span style="color:#f9aa39;"><c class="sell_name order_username"></c></span>的付款</p>
+					<div style="color:#283440;">金额: <span><c class="zongjia order_num"></c><font class="order_coin_1"></font></span></div>
+					<p>如未收到,请勿释放</p>
+					<div><input class="gcs-checkbox" name="quer" type="checkbox" value="1"><label for=""></label>&nbsp;&nbsp; 我确认已收到款项,并核对收款无误</div> 
+				</div>
+				<div class="btn-open">
+					<button type="button" onclick="quxiaoxx()" class="qx">取消</button>
+					<button type="button" class="affirm queding loadToSuccess yanzheng_index_tj">确认</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="tran-tan choice-p">
+		<div class="tran-k">
+			<form class="shifang_index">
+				<input type="hidden" class="maichu_shifang_id" name="shifang_id" value="0" />
+				<div class="tran-hd"><img onclick="quxiaoxx()" class="tran-hd-off" src="/Public/images/off2.png" /><div>安全验证</div><span>需要进行安全验证</span></div>
+				<div class="tran-mm tran-mm1">
+					<div class="tran-mm-h">资产密码</div>
+					<div class="tran-mm-inp">
+						<input type="password" name="paypassword" value="" placeholder="请输入资产密码" />
+					</div>
+				</div>
+				<!--<div class="tran-mm tran-mm2" style="display: none;">
+					<div class="tran-mm-h">短信验证码</div>
+					<div class="tran-mm-inp">
+						<input type="tel" name="code" maxlength="6" placeholder="请输入短信验证码" />
+						<span class="trade_mobile_regBtn" onclick="SendCode_mobile()">获取验证码</span>
+					</div>
+				</div>-->
+				<div class="tran-k-btn tran-k-btn1 shifang_index_tj"><button type="button">确定</button></div>
+				<!--<div class="tran-k-btn tran-k-btn2 loadToSuccess shifang_index_tj" style="display: none;"><button type="button">确定</button></div>-->
+			</form>
+		</div>
+	</div>
+</div>
+<div class="img-box">
+				<img class="dk_tu"  />
+			</div>
+<script>
+
+var timer2;
+clearInterval(timer2);
+function mc_tz(){
+	clearInterval(timer2);
+	bui.back();
+}
+function timer(intDiff){
+	timer2  = setInterval(function(){
+		var day=0,
+		hour=0,
+        minute=0,
+        second=0;//时间默认值    
+        if(intDiff > 0){
+        	day = Math.floor(intDiff / (60 * 60 * 24));
+        	hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+        	minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+        	second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+        }else{
+        	//当时间耗尽，刷新页面
+        	/*
+        	var mairu_shensu_id=$('.maichu_shensu_id').val();
+        	$.ajax({
+				url: '/Home/Entruy/shensu_zdong',
+				type: 'POST',
+				dataType: 'json',
+				data:{id:mairu_shensu_id,type:2},
+				cache:false,
+				success:function(data){
+					if(data['status']==1){
+						$('.maichu_shensu').hide();
+						$('.shijian_xshi2').hide();
+						maichu_xiangqing_sx();
+						clearInterval(timer2);
+					}
+				}
+			})
+			*/
+        }
+        if (minute <= 9) minute = '0' + minute;
+        if (second <= 9) second = '0' + second;
+        $(".timeShow").html('剩余'+minute+'分'+second+'秒');
+        $(".shijian_xshi2").html(minute+':'+second);
+        intDiff--;
+	}, 1000);
+} 
+	$('.dk_img').click(function(){
+		$('.img-box').show();
+	})
+	$('.img-box').click(function(){
+		$('.img-box').hide();
+	})
+function SendCode_mobile(){
+	$.post("/Home/Entruy/trade_mobile",{},function(data){
+      	bui.hint({content:data.info, position:"center" , effect:"fadeInDown"});
+		if(data.status==1){
+			var obj=$('.trade_mobile_regBtn');
+			$('.trade_mobile_regBtn').addClass('disabled');
+			var wait=300;
+			var interval=setInterval(function(){
+				$('.trade_mobile_regBtn').text(wait + '秒重发');
+				wait--;
+				if(wait<0){
+					clearInterval(interval);
+					$('.trade_mobile_regBtn').text('获取验证码');
+					$('.trade_mobile_regBtn').removeClass('disabled');
+				}
+			},1000);
+		}
+	},"json");
+}
+
+bui.ready(function(){
+	$(".shifang_index_tj").on("click",function (argument) {
+		var data = $('.shifang_index').serialize();
+		$.ajax({
+			url: '/Home/Entruy/sfbtc_ajax',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				if(data.status==1){
+					maichu_xiangqing_sx();
+					$('.tran-tan').hide();
+					$('.confirm1').hide();
+					$('.maichu_shensu').hide();
+				}else{
+					bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			}
+		})
+	});
+});
+bui.ready(function(){
+	$(".shifang_index_tj1").on("click",function (argument) {
+		var data = $('.shifang_index').serialize();
+		$.ajax({
+			url: '/Home/Entruy/password_yz',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				if(data.status==1){
+					$('.tran-k-btn2').show();
+					$('.tran-mm2').show();
+					$('.tran-k-btn1').hide();
+					$('.tran-mm1').hide();
+				}else{
+					bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			}
+		})
+	});
+});
+bui.ready(function(){
+	$(".yanzheng_index_tj").on("click",function (argument) {
+		var data = $('.yanzheng_index').serialize();
+		$.ajax({
+			url: '/Home/Entruy/trade_yz',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				if(data.status==1){
+					$('.confirm1').hide();
+					$('.choice-p').show();
+				}else{
+					bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			}
+		})
+	});
+});
+function sfbtc(){
+	$('.confirm1').show();
+	$('.confirm').show();
+}
+function quxiaoxx(){
+	$('.popup-tan').hide();
+	$('.lock-tan').hide();
+	$('.tran-tan').hide();
+}
+function shensu(){
+	var sta_shensu2=$('.sta_shensu2').val();
+	if(sta_shensu2==1){
+		bui.hint({content:'已申诉', position:"center" , effect:"fadeInDown"});return false;
+	}
+	$('.maichu_shensu').show();
+}
+
+//提交申诉
+bui.ready(function(){
+	$(".shensu_index_tj").on("click",function (argument) {
+		var data = $('.shensu_index').serialize();
+		$.ajax({
+			url: '/Home/Entruy/shensu_ajax',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					$('.lock-tan').hide();
+					maichu_xiangqing_sx();
+				}
+			}
+		})
+	});
+});
+
+function maichu_xiangqing_sx(){
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	
+	$.ajax({
+		url: '/Home/Entruy/details_mc',
+		type: 'POST',
+		dataType: 'json',
+		data:{id:result['id']},
+		cache:false,
+		async:false,
+		success:function(data){
+			if(data['status']==1){
+				if(data['order']['sta_zf']!=3 && data['order']['sta_zf']!=4){
+					if(data['order']['sta_su_mr']==1){
+						$('.shensu_meirong').show();
+						$('.shensu_meirong_mas').html(data['order']['mas_su_mr']);
+					}else if(data['order']['sta_su_mc']==1){
+						$('.shensu_meirong').show();
+						$('.shensu_meirong_mas').html(data['order']['mas_su_mc']);
+					}
+					$('.lianxi').show();
+					$('.bank_namesm').show();
+				}
+				if(data['order']['sta_zf']==2){
+					
+				}
+				//if(data['order']['fenqu']=='cny'){
+					if(data['order']['sta_zf']==3){
+						$('.fukuan_fs').show();
+						$('.order_fukuan').html(data['order']['fangshi']);
+					}
+				//}
+				
+				
+				
+				
+				if(data['order']['sta_zf']==1){
+					if(data['order']['sta_su_mr']==1 || data['order']['sta_su_mc']==1){
+						$('.maishu_daifukuan').hide();
+					}else{
+						$('.maishu_daifukuan').show();
+						$('.dk_jt').hide();
+					}
+				}else{
+					$('.maishu_daifukuan').hide();
+				}
+				if(data['order']['sta_zf']==2){
+					if(data['order']['sta_su_mr']==1 || data['order']['sta_su_mc']==1){
+						$('.maishu_shifang').hide();
+						$('.shijian_xshi2').hide();
+					}else{
+						timer(data['order']['time_shengyu']);
+						$('.maishu_shifang').show();
+						$('.shijian_xshi2').show();
+					}
+				}else{
+					$('.maishu_shifang').hide();
+					$('.shijian_xshi2').hide();
+				}
+				$('.dk_tu').attr('src','/Upload/fukuan/'+data['order']['img']);
+				$('.order_username').html(data['order']['username']);
+				$('.order_userimg').attr('src',data['order']['headimg']);
+				$('.maichu_shensu_id').val(data['order']['id']);
+				$('.maichu_yanzheng_id').val(data['order']['id']);
+				$('.maichu_shifang_id').val(data['order']['id']);
+				$('.sta_shensu').val(data['order']['sta_zf']);
+				$('.sta_shensu2').val(data['order']['sta_su_mc']);
+				$('.status_zt').html(data['order']['status_zt']);
+				$('.zt_type').html(data['order']['zt_type']);
+				$('.lianxi').attr('href','sms:'+data['order']['mobile']);
+				$('.lianxi2').attr('href','tel:'+data['order']['mobile']);
+				$('.order_money').html(data['order']['money']*1);
+				$('.order_coin_2').html(data['order']['coin_1']);
+				$('.order_price').html(data['order']['price']);
+				
+				//$('.order_num_zong').html(data['order']['num_zong']);
+				$('.order_num').html(data['order']['num_shiji']);
+				$('.order_jyzhi').html(data['order']['jyzhi']*1);
+				$('.order_fee').html(data['order']['fee']);
+				
+				
+				$('.order_addtime').html(data['order']['xiadan_time']);
+				$('.order_orderid').html(data['order']['order_no']);
+				$('.order_orderid2').attr('data-clipboard-text',data['order']['order_no']);
+				
+			}
+		}
+	});
+	
+});
+}
+maichu_xiangqing_sx();
+
+
+var btn = document.getElementsByClassName('rec_fu');
+var clipboard = new Clipboard(btn); 
+//复制成功执行的回调，可选
+clipboard.on('success', function(e) {
+document.querySelector(".prompt_box").style.display = "block";
+setTimeout(function() {
+	document.querySelector(".prompt_box").style.display = "none";
+}, 2000);
+}); //复制失败执行的回调，可选
+clipboard.on('error', function(e) {
+console.log(e);
+});
+</script>

@@ -1,0 +1,125 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="mine-set row">
+			<img class="bui-btn" href="pages/mine/set" src="/Public/images/set.png" />
+			<img class="bui-btn" href="pages/mine/feelback" src="/Public/images/feelback.png" />
+		</div>
+		<div class="mine-hd">
+			<img class="mine-hd-img mine_img" src="" />
+			<div class="mine-hd-left">
+				<div class="mine-hd-name ">ID:<span class="mine_username"></span> <img class="mine_tu_user" src="" alt="" /><img class="crown mine_tu_tuandui" src="" alt="" /></div>
+				<div class="mine-hd-tel">
+					<img src="/Public/images/mine_tel.png"/>
+					<font class="mine_mobile"></font>
+					
+				</div>
+				<div class="mine-hd-btn" style="display:none;">
+					<button class="mine-hd-btn1">
+						<img src="/Public/images/class.png"/><font class="mine_user"></font>
+					</button>
+					<button class="mine-hd-btn2">
+						<img src="/Public/images/diadema.png"/><font class="mine_tuandui"></font>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="mine-price row mine_shengji" style="display:none;">
+			<div class="mine-price-left">
+				<div>经验值</div>
+				<span class="mine_jyzhi"></span>
+			</div>
+			<div class="mine-price-right mine_shengji2" style="display:none;">
+				<div class="mine-price-up">升级到下一等级还需要</div>
+				<div class="mine-price-pian">
+					<span class="mine_jyzjdt"></span>
+				</div>
+				<div class="mine-price-num mine_jyzhi_xia"></div>
+			</div>
+		</div>
+		<div class="mine-main">
+			<div class="bui-btn mine-main-d" href="pages/mine/commission">
+				<img class="mine-main-dimg" src="/Public/images/home_rotate.png">
+				<span>推荐返佣</span>
+         		<img class="mine-main-dr" src="/Public/images/right.png">
+         	</div>
+			<div class="bui-btn mine-main-d" href="pages/mine/invite">
+				<img class="mine-main-dimg" src="/Public/images/invitation.png">
+				<span>邀请好友</span>
+         		<img class="mine-main-dr" src="/Public/images/right.png">
+         	</div>
+         	<div class="bui-btn mine-main-d" href="pages/mine/team">
+         		<img class="mine-main-dimg" src="/Public/images/myfriend.png">
+         		<span>我的好友</span>
+         		<img class="mine-main-dr" src="/Public/images/right.png">
+         	</div>
+         	<div class="bui-btn mine-main-d" style="border: none;" href="pages/mine/generalize">
+         		<img class="mine-main-dimg" src="/Public/images/generalize.png">
+         		<span>团队奖励</span>
+         		<img class="mine-main-dr" src="/Public/images/right.png">
+         	</div>
+        </div>
+        <div class="mine-main">
+         	<div class="bui-btn mine-main-d mine_shiming" href="pages/mine/autonym">
+         		<img class="mine-main-dimg" src="/Public/images/autonym.png">
+         		<span>实名认证</span>
+         		<span class="mine-main-dspan"> <font class="mine_renzheng"></font><img class="mine-main-dr" src="/Public/images/right.png"></span>
+         	</div>
+         	<div class="bui-btn mine-main-d" href="pages/mine/financial">
+         		<img class="mine-main-dimg" src="/Public/images/gathering.png">
+         		<span>收款信息</span>
+         		<img class="mine-main-dr" src="/Public/images/right.png">
+         	</div>
+         	<div class="bui-btn mine-main-d" style="border: none;" href="pages/mine/security">
+         		<img class="mine-main-dimg" src="/Public/images/security.png">
+         		<span>安全中心</span>
+         		<img class="mine-main-dr" src="/Public/images/right.png">
+         	</div>
+        </div>
+	</main>
+</div>
+<script>
+function mine_sx(){
+	bui.ajax({
+		url: "/Home/User/mine_mas",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			$('.mine_shiming').attr('href',res['user']['renzheng_url']);
+			$('.mine_renzheng').html(res['user']['renzheng']);
+			$('.mine_username').html(res['user']['id']);
+			$('.mine_mobile').html(res['user']['mobile']);
+			$('.mine_img').attr('src',res['user']['headimg']);
+			$('.mine_user').html(res['user']['level_user_name']);
+			$('.mine_tuandui').html(res['user']['level_tuandui_name']);
+			$('.mine_tu_user').attr('src',res['user']['img_user']);
+			$('.mine_tu_tuandui').attr('src',res['user']['img_tuandui']);
+			if(res['user']['zgj']>0){
+				if(res['user']['zgj']==2){
+					$('.mine_jyzhi').html(res['user']['jyzhi']*1);
+					$('.mine_shengji').show();
+					$('.mine_shengji2').hide();
+				}else{
+					$('.mine_jyzjdt').css('width',res['user']['shengyu']);
+					$('.mine_jyzhi').html(res['user']['jyzhi']*1);
+					$('.mine_jyzhi_xia').html(res['user']['yjz_xia']);
+					$('.mine_shengji').show();
+					$('.mine_shengji2').show();
+				}
+			}
+		}
+	});
+}
+mine_sx();
+</script>

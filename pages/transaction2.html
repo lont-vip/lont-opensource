@@ -1,0 +1,111 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="tab-home-news">
+    <div id="uiScroll" class="bui-scroll transaction2_scrollList">
+        <div class="bui-scroll-head"></div>
+        <div class="bui-scroll-main" style="background: none;">
+            <!-- 列表 -->
+            <ul class="bui-list news-list trade_bot2"></ul>
+        </div>
+        <div class="bui-scroll-foot"></div>
+    </div>
+</div>
+<script>
+var uiList_mc;
+function transaction_mc(market,field,desc){
+	listHeight = $(window).height() - $(".tran-height").height() - $("#tabDynamicNav").height();
+	uiList_mc = bui.list({
+		id: ".transaction2_scrollList",
+		url: "/Home/Entruy/transaction2",
+		pageSize: 6,
+		refresh:false,
+		height: listHeight,
+		data: {market:market,field:field,desc:desc},
+		field: {
+			page: "page",
+			size: "pageSize",
+			data: "data"
+		},
+		callback: function(e) {
+			console.log($(e.target).closest(".bui-btn").attr("class"))
+		},
+		template: function(data,info,status) {
+			if(info.status==1){
+				var html = "";
+				data.forEach(function(el, index) {
+					html += `<div class="trade_botz">
+	                <div class="left fl">
+                      	<p class="p1"><img src="${el.avatar}">${el.enname}</p>
+                      	<p class="p2">数量 : <span>${el.num} ${el.coin_1}</span></p>
+                      	<p class="p2">最小限额: <span>${el.num_min} ${el.coin_1}</span></p>
+                        <p class="p4">${el.fkimg}</p>
+	                </div>
+	                 <div class="right fr">
+	                    <p class="p1">单价</p><p class="p-jia">${el.price}<i style="font-size:0.24rem">${el.coin_3}</i></p>
+	          			<button type="button" onclick="want_sell(${el.id})" class="trade-buy">出售</button>
+	                </div>
+	           </div>`;
+			});
+			return html;
+		}
+	},
+	onBeforeRefresh : function () {
+		console.log("brefore refresh")
+	},
+	onBeforeLoad : function () {
+		console.log("brefore load")
+	},
+	onRefresh: function() {
+		console.log("refreshed")
+	},
+	onLoad: function() {
+		console.log("loaded")
+	}
+})
+
+}
+	// time2 = setInterval(function  () {
+	// 	uiList_mc.refresh();
+	// },1000);
+	setTimeout(function(){
+		transaction_mc('kkkkk','id',2);
+		/*
+				var getParams = bui.getPageParams();
+getParams.done(function(result){
+	console.log('---'+result['market']+'---')
+	//var dq_bizhong=$('.dq_bizhong').val();
+	if(result['market']=='' || result['market']==undefined){
+		bui.ajax({
+			url: "/Home/Entruy/market_moren",
+			data: {},
+			async:false
+		}).then(function(res){
+			transaction_mc('kkkkk');
+			
+		});
+		
+	}else{
+		transaction_mc('kkkkk','id',2);
+		console.log(result['market'])
+	}
+});
+*/
+			},100)
+
+
+$('.trade-buy').click(function  () {
+	$('.anquan2').show();
+})
+$('.popup-cha').click(function(){
+	$('.anquan2').hide();
+})
+</script>

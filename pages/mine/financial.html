@@ -1,0 +1,258 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main>
+			<style>
+		.img-box{
+			position: fixed;
+			width: 100%;
+			height: 100%;
+			background: rgba(0,0,0,.5);
+			top: 0;
+			left: 0;
+			display: none;
+			text-align: center;
+		}
+		.img-box img{
+			width: 5rem;
+			margin-top: 2rem;
+		}
+	</style>
+		<div class="financial_scrollList bui-scroll">
+			<div class="bui-scroll-main" style="background:none;">
+				<div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png" onclick="financial_tz()" /></div>
+					<div class="head-main" >收款信息</div>
+					<div class="head-right"></div>
+				</div>
+				<div class="ment financial_zfb_xianshi" style="display:none;" id="slideDeleteBox">
+					<div class="touch-box">
+						<div class="ment1 touch">
+							<div class="users1">
+								<p class="fl bui-btn" href="pages/mine/alipay"><img src="/Public/images/zfb.png">支付宝</p>
+								<div style="float: right;width: 2.2rem;">
+								   	<div class="fl financial_zfb_img" style="margin-top: 0.05rem;" onclick="mm_zfb(this,1)"></div>
+								    <div onclick="mm_del(1)" class="del"><img style="width: 0.5rem; margin-right:0;" src="/Public/images/shanchu.png"></div>
+								</div>
+							</div>
+							<div>
+								<div class="users fl"><i class="financial_zfb_name"></i><p style="font-size: .38rem;" class="financial_zfb_card"></p></div>
+								<img class="fr dk_img1" style="width: 0.5rem;margin-top: 0.4rem;" src="/Public/images/er.png">
+							</div>
+						</div>
+					
+					</div>
+				</div>
+				<div class="ment financial_wx_xianshi" id="slideDeleteBox">
+					<div class="touch-box">
+						<div class="ment1 touch">
+							<div class="users1">
+								<p class="fl bui-btn" href="pages/mine/wechat"><img src="/Public/images/wx-wx.png">微信</p>
+								<div style="float: right;width: 2.2rem;">
+								   	<div class="fl financial_wx_img" style="margin-top: 0.05rem;" onclick="mm_zfb(this,2)"></div>
+								    <div onclick="mm_del(2)" class="del"><img style="width: 0.5rem; margin-right:0;" src="/Public/images/shanchu.png"></div>
+								</div>
+							</div>
+							<div>
+								<div class="users fl"><i class="financial_wx_name"></i><p style="font-size: .38rem;" class="financial_wx_card"></p></div>
+								<img class="fr dk_img2" style="width: 0.5rem;margin-top: 0.4rem;" src="/Public/images/er.png">
+							</div>
+						</div>
+					</div>
+				</div>
+				<ul class="bui-list bui-list-thumbnail row" style="margin: 0;padding-bottom: 0.2rem;"></ul>
+			</div>
+			<div class="add-yh"><img src="/Public/images/add2.png"/> 添加收款方式</div>
+			<div class="popup-tan add-fangshi">
+				<div class="wirter store-info-form">
+					<div class="hot-city-title" style="padding: 0;height: .5rem;">
+						<h4><span class="new-left"></span>添加收款方式</h4>
+						<img class="hot-city-title-off" src="/Public/images/off2.png">
+					</div>
+					<ul>
+						<li class="payment_coin_zfb bui-btn" href="pages/mine/alipay"><img src="/Public/images/zfb.png">支付宝</li>
+						<li class="payment_coin_wx bui-btn" href="pages/mine/wechat" ><img src="/Public/images/wx-wx.png">微信</li>
+						<li class="bui-btn" href="pages/mine/bank"><img src="/Public/images/card.png">银行卡</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+			<div class="img-box img-box1">
+				<img class="dk_tu zhi_img"  />
+			</div>
+				<div class="img-box img-box2">
+				<img class="dk_tu wei_img"  />
+			</div>
+	</main>
+</div>
+<script>
+$('body').on('click','.dk_img1',function(){
+		$('.img-box1').show();
+	})
+	$('body').on('click','.dk_img2',function(){
+		$('.img-box2').show();
+	})
+	$('.img-box').click(function(){
+		$('.img-box').hide();
+	})
+function mm_zfb(a,status){
+	$(a).children('span').toggle();
+	$.ajax({
+		url: '/Home/User/financial_sta',
+		type: 'POST',
+		dataType: 'json',
+		data:{type:status},
+		cache:false,
+		success:function(data){
+			if(data.status==1){
+				financial_sx();
+			}else{
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+			}
+		}
+	})
+}
+function mm_del(status){
+	$.ajax({
+		url: '/Home/User/financial_sta_del',
+		type: 'POST',
+		dataType: 'json',
+		data:{type:status},
+		cache:false,
+		success:function(data){
+			if(data.status==1){
+				financial_sx();
+			}else{
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+			}
+		}
+	})
+}
+function financial_sx(){
+	bui.ajax({
+		url: "/Home/User/financial_mas",
+		data: {},
+		async:false
+	}).then(function(res){
+		if(res['status']==1){
+			if(res['user']['wx']){
+				$('.financial_wx_xianshi').show();
+				$('.payment_coin_wx').hide();
+				$('.financial_wx_name').html(res['user']['wx']['name']);
+				$('.financial_wx_card').html(res['user']['wx']['card']);
+				$('.financial_wx_img').html(res['user']['wx_tupian']);
+				$('.wei_img').attr('src','/Upload/wx/'+res['user']['wx']['img']);
+			}else{
+				$('.financial_wx_xianshi').hide();
+				$('.payment_coin_wx').show();
+			}
+			if(res['user']['zfb']){
+				$('.financial_zfb_xianshi').show();
+				$('.payment_coin_zfb').hide();
+				$('.financial_zfb_name').html(res['user']['zfb']['name']);
+				$('.financial_zfb_card').html(res['user']['zfb']['card']);
+				$('.zhi_img').attr('src','/Upload/zfb/'+res['user']['zfb']['img']);
+				$('.financial_zfb_img').html(res['user']['zfb_tupian']);
+			}else{
+				$('.financial_zfb_xianshi').hide();
+				$('.payment_coin_zfb').show();
+			}
+		}
+	});
+}
+financial_sx();
+
+function shanchu(id){
+		$.ajax({
+			url: '/Home/User/addcard_del',
+			type: 'POST',
+			dataType: 'json',
+			data:{id:id},
+			cache:false,
+			success:function(data){
+              	bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					uiList.reload();
+				}
+			}
+		})
+}
+function financial_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["main"], function(main) {
+				mine_sx();
+			})
+		}
+	})
+}
+function mm(a,id,status){
+	$(a).children('span').toggle();
+		$.ajax({
+			url: '/Home/User/addcard_no',
+			type: 'POST',
+			dataType: 'json',
+			data:{id:id,status:status},
+			cache:false,
+			success:function(data){
+				if(data.status==1){
+					uiList.reload();
+				}else{
+					bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			}
+		})
+}
+var uiList = bui.list({
+	id: ".financial_scrollList",
+	url: "/Home/User/user_bank",
+	pageSize: 6,
+	refresh:false,
+	data: {},
+	field: {
+		page: "page",
+		size: "pageSize",
+		data: "data"
+	},
+	callback: function(e) {
+		console.log($(e.target).closest(".bui-btn").attr("class"))
+	},
+	template: function(data) {
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="ment" id="slideDeleteBox">
+						<div class="touch-box">
+							<div class="ment1 touch">
+								<div class="users1">
+									<p class="fl bui-btn" href="pages/mine/editbank?id=${el.id}" ><img src="/Public/images/card.png">${el.bank}</p>
+									<div style="float: right;width: 2.2rem;">
+									   	<div class="fl" style="margin-top: 0.05rem;" onclick="mm(this,${el.id},${el.status})">${el.img}</div>
+									    <div onclick="shanchu(${el.id})" class="del"><img style="width: 0.5rem; margin-right:0;" src="/Public/images/shanchu.png"></div>
+									</div>
+								</div>
+								<div><div class="users fl"><i>${el.name}</i><p style="font-size: .38rem;">${el.bankcard}</p></div></div>
+							</div>
+						
+						</div>
+					</div>`
+                });
+                return html;
+        },
+     
+    });
+$('.add-yh').click(function(){
+	$('.add-fangshi').show();
+})
+$('.hot-city-title-off').click(function(){
+	$('.add-fangshi').hide();
+})
+</script>

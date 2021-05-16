@@ -1,0 +1,86 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="bui-scroll item_record new_log_scrollList"><!--传ajax数据 class放这里-->
+            <div class="bui-scroll-head"></div>
+            <div class="bui-scroll-main" style="background: none;">
+				<div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png" onclick="news_tz()"></div>
+					<div class="head-main">系统公告</div>
+					<div class="head-right"></div>
+				</div>
+		        <div class="home-new">
+		        	<ul class="bui-list bui-list-thumbnail  row"></ul>	
+		        </div>
+        	 </div>
+            <div class="bui-scroll-foot"></div>
+        </div>
+	</main>
+</div>
+<script>
+function news_tz(id){
+  	router.back({
+  		callback: function(mod) {
+  			loader.require(["pages/total"], function(main) {
+  				
+  			})
+  		}
+	})
+}
+var uiList = bui.list({
+	id: ".new_log_scrollList",
+	url: "/Home/News/news_list",
+	pageSize: 6,
+	refresh:false,
+	data: {},
+	field: {
+		page: "page",
+		size: "pageSize",
+		data: "data"
+	},
+	callback: function(e) {
+		console.log($(e.target).closest(".bui-btn").attr("class"))
+	},
+	template: function(data) {
+            var html = "";
+            data.forEach(function(el, index) {
+                html += `<div class="new-text row">
+			        		<div class="new-tin row bui-btn" href="pages/news/news_mas?id=${el.id}">
+			        			<div class="new-nt">${el.title}</div>
+			        			<div class="new-nr">${el.mas}</div>
+			        			<span class="new-tin-r">${el.addtime}</span>
+			        		</div>
+			        	</div>`
+                });
+                return html;
+        },
+        onBeforeRefresh : function () {
+          console.log("brefore refresh")
+        },
+        onBeforeLoad : function () {
+          console.log("brefore load")
+        },
+        onRefresh: function() {
+            console.log("refreshed")
+        },
+        onLoad: function() {
+            console.log("loaded")
+        }
+    });
+var mySwiper = new Swiper('.home-ban',{	
+	autoplay: true,//可选选项，自动滑动
+	pagination: {
+		el: '.swiper-pagination',
+	}
+});
+</script>

@@ -1,0 +1,103 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page">
+	<main >
+		<div class="head-ban" style="background: none;">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="bank_tz()" /></div>
+			<div class="head-main" ></div>
+			<div class="head-right"></div>
+		</div>
+		<div class="add-mn">
+			<form class="bank_index">
+				<div class="add-mn-t">添加银行卡</div>
+				<div class="auto-in"> 
+					<div class="car-d1">真实姓名</div>
+					<div class="car-d2">
+		        		<input type="text" name="name" maxlength="20" placeholder="输入姓名" />
+		        	</div>
+		        	<div class="car-d1">银行卡号</div>
+					<div class="car-d2">
+		        		<input type="text" placeholder="请填写银行卡号" name="card" maxlength="20" oninput = "value=value.replace(/[^\d]/g,'')" />
+		        	</div>
+		        	<div class="car-d1">开户银行</div>
+					<div class="car-d2">
+		        		<input type="text" placeholder="请填写开户银行" name="bank" maxlength="30" />
+		        	</div>
+		        	<div class="car-d1">开户地址(选填)</div>
+					<div class="car-d2">
+		        		<input type="text" name="address"  maxlength="100"  placeholder="输入开户行地址" />
+		        	</div>
+				</div>
+			</form>
+		</div>
+	</main>
+	<footer>
+		<div class="addres-btn phont-btn">
+    		<button style="border-radius: .44rem;" type="button" class="loadToSuccess bank_index_tj">保存信息</button>
+    	</div>
+	</footer>
+</div>
+<script>
+function bank_tz() {
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/mine/financial"], function(main) {
+				$('.add-fangshi').hide();
+				uiList.reload();
+				financial_sx();
+			})
+		}
+	})
+}
+//发布提交
+bui.ready(function(){
+	$(".bank_index_tj").on("click",function (argument) {
+		var data = $('.bank_index').serialize();
+		$.ajax({
+			url: '/Home/User/bank_add_ajax',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					bank_tz();
+				}
+			}
+		})
+	});
+});
+$('.add-yh').click(function(){
+	$('.add-fangshi').show();
+})
+$('.qx').click(function(){
+	$('.add-fangshi').hide();
+})
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1000);
+	return false;
+}); 
+</script>

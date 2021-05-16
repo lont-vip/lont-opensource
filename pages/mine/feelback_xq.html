@@ -1,0 +1,207 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page"  style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="bui-scroll fee_scrollList">
+			<div class="bui-scroll-head"></div>
+			<div class="bui-scroll-main" style="background: none;">
+				<div class="head-ban">
+					<div class="head-left"><img src="/Public/images/left.png" onclick="feedback_xq_tz()"></div>
+					<div class="head-main">我的反馈</div>
+					<div class="head-right mine-serv" style="color: #ffae00;"></div>
+				</div>
+				<div class="bui-list bui-list-thumbnail row"></div>
+	         </div>
+	     </div>
+	</main>
+	<footer>
+		<form class="feelback_xq_index">
+			<input type="hidden" class="huifu_id" name="hf_id" value="0" />
+	    	<div class="addres-btn phont-btn">
+	    		<!--<div class="feed-pic">
+					<img class="portrait" src="/Public/images/picture.png" />
+					<input type="file" id="file_idimg1" accept="image/*" value="">
+				</div>-->
+	    		<div class="home-luse" style="width: 93%;text-align: left;">
+		        		<span class="home-luse-l"></span>
+		        		<span style="font-size: .3rem;">请继续描述你的问题</span>
+		        	</div>
+		        <textarea class="feel-text message" name="content" rows="" cols="" placeholder="在此处输入你要反馈的内容"></textarea>	
+	    		<button type="button" class="loadToSuccess feelback_xq_index_tj" style="border-radius: .44rem;text-align: center;">发布反馈</button>
+	    	</div>
+	    </form>
+    </footer>
+</div>
+<script>
+
+function feedback_xq_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/mine/feedback"], function(main) {
+				uiList.reload();
+			})
+		}
+	})
+}
+
+
+//发布提交
+bui.ready(function(){
+	$(".feelback_xq_index_tj").on("click",function (argument) {
+		var data = $('.feelback_xq_index').serialize();
+		$.ajax({
+			url: '/Home/Feed/repair',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					feedback_xq_tz();
+				}
+			}
+		})
+	});
+});
+
+$(document).ready(function () {
+	//响应文件添加成功事件
+	$("#file_idimg1").change(function () {
+		//创建FormData对象
+		var data = new FormData();
+		//为FormData对象添加数据
+		$.each($('#file_idimg1')[0].files, function (i, file) {
+			data.append('upload_file' + i, file);
+		});
+		var sdid=$('.huifu_id').val();
+		//发送数据
+		$.ajax({
+			url: '/Home/Feed/feedback_img',
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			cache: false,
+			contentType: false, //不可缺参数
+			processData: false, //不可缺参数
+			success: function (data) {
+				if (data['status']==1) {
+					uiList.empty();
+					feedback_xq_sx(sdid);
+				}else{
+					bui.hint({content:'上传出错'+data['info'], position:"center" , effect:"fadeInDown"});
+				}
+			},
+			error: function () {
+				bui.hint({content:'上传出错', position:"center" , effect:"fadeInDown"});
+				$(".loading").hide(); //加载失败移除加载图片
+			}
+		});
+
+	});
+});	
+
+var uiList;
+function feedback_xq_sx(id){
+ uiList = bui.list({
+       id: ".fee_scrollList",
+       url: "/Home/Feed/feed_log",
+       pageSize: 6,
+       refresh:false,
+       data: {id:id},
+       field: {
+              page: "page",
+              size: "pageSize",
+              data: "data"
+       },
+       callback: function(e) {
+              console.log($(e.target).closest(".bui-btn").attr("class"))
+       },
+       template: function(data) {
+              var html = "";
+              data.forEach(function(el, index) {
+                if(el.type==1){
+                 	 html += `<div class="feel-w"><span class="feel-w-span">问</span>${el.content}</div>`;
+                 }else{
+                 	 html += `<div class="feel-d"><span class="feel-d-span">答</span>${el.reply}</div>`;
+                 }
+            });
+            return html;
+        },
+        onBeforeRefresh : function () {
+          console.log("brefore refresh")
+        },
+        onBeforeLoad : function () {
+          console.log("brefore load")
+        },
+        onRefresh: function() {
+            // 刷新以后执行
+            console.log("refreshed")
+        },
+        onLoad: function() {
+            // 刷新以后执行
+            console.log("loaded")
+        }
+    })
+    $('.mine-serv').click(function(){
+	$('.mine-box').show();
+})
+}
+
+    
+    
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	$('.huifu_id').val(result['id']);
+	feedback_xq_sx(result['id']);
+});
+    
+  	 $('.mine-serv').click(function(){
+	$('.mine-box').show();
+})
+
+$('.mine-tan-off').click(function(){
+	$('.mine-box').hide();
+})
+var btn = document.getElementsByClassName('rec_fu');
+var clipboard = new Clipboard(btn); 
+//复制成功执行的回调，可选
+clipboard.on('success', function(e) {
+	document.querySelector(".prompt_box").style.display = "block";
+	setTimeout(function() {
+		document.querySelector(".prompt_box").style.display = "none";
+	}, 2000);
+}); //复制失败执行的回调，可选
+clipboard.on('error', function(e) {
+	console.log(e);
+});
+  
+ 	
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1000);
+	return false;
+});
+        
+    </script>

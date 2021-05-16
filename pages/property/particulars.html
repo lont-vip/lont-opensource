@@ -1,0 +1,219 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+	<style>
+			.loader2 {
+	position:fixed;
+	left:50%;
+	top:50%;
+	margin:-0.2em 0 0 -0.2em;
+	text-indent:-9999em;
+	border-top:0.3em solid rgba(0,0,0,0.1);
+	border-right:0.3em solid rgba(0,0,0,0.1);
+	border-bottom:0.3em solid rgba(0,0,0,0.1);
+	border-left:0.3em solid #555;
+	-moz-transform:translateZ(0);
+	-webkit-transform:translateZ(0);
+	transform:translateZ(0);
+	-moz-animation:loader 300ms infinite linear;
+	-webkit-animation:loader 300ms infinite linear;
+	animation:loader 300ms infinite linear;
+	-moz-transition:all 500ms ease;
+	-o-transition:all 500ms ease;
+	-webkit-transition:all 500ms ease;
+	transition:all 500ms ease;
+}
+.loader2,.loader2:after {
+	border-radius:50%;
+	width:2em;
+	height:2em;
+}
+.curtain {
+	position:fixed;
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;
+	-moz-transition:all 600ms ease;
+	-o-transition:all 600ms ease;
+	-webkit-transition:all 600ms ease;
+	transition:all 600ms ease;
+	filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+	opacity:0;
+	z-index:0;
+	overflow:hidden;
+}
+@-webkit-keyframes loader {
+	0% {
+	-webkit-transform:rotate(0deg);
+	transform:rotate(0deg);
+}
+100% {
+	-webkit-transform:rotate(360deg);
+	transform:rotate(360deg);
+}
+}@-moz-keyframes loader {
+	0% {
+	-moz-transform:rotate(0deg);
+	transform:rotate(0deg);
+}
+100% {
+	-moz-transform:rotate(360deg);
+	transform:rotate(360deg);
+}
+}@keyframes loader {
+	0% {
+	-webkit-transform:rotate(0deg);
+	transform:rotate(0deg);
+}
+100% {
+	-webkit-transform:rotate(360deg);
+	transform:rotate(360deg);
+}
+}.is-loading {
+	overflow:hidden;
+	display: none;
+}
+.is-loading .curtain {
+	filter:progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+	opacity:1;
+	z-index:99;
+}
+.is-loading .loader {
+	filter:progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+	opacity:1;
+}
+.loader2{
+	 font-size: .3rem;
+}
+	</style>
+<div class="bui-page">
+	<main>
+		<div class="is-loading">
+		    <div class="curtain">
+		        <div class="loader2">
+		        </div>
+		    </div>
+		</div>
+		<div class="head-ban">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="particulars_tz()"></div>
+			<div class="head-main"></div>
+			<div class="head-right"></div>
+		</div>
+		<div class="part-hd">
+			<img class="particulars_img" src="" />
+			<font class="particulars_title"></font>
+		</div>
+		<div class="property-list-py">
+			<ul class="row">
+				<li><div>可用</div><span class="particulars_keyong"></span></li>
+				<li><div>冻结</div><span class="particulars_dongjie"></span></li>
+				<li style="text-align: right;"><div>折合(CNY)</div><span>≈<font class="particulars_zhehe"></font></span></li>
+			</ul>
+		</div>
+		<div style="height: .2rem;background-color: #fafafa;margin-top: .5rem;"></div>
+		<div class="part-new-head">
+    		<span class="part-new-head-l">最新记录</span>
+    		<span class="part-new-head-r bui-btn gengduo_jl" href="pages/property/rs_record.html">
+    			全部记录<img src="/Public/images/right.png">
+    		</span>
+    	</div>
+    	<div class="no-reco particulars_list">
+				</div>
+	</main>
+	<input type="hidden" class="par_coin" value="" />
+	<footer>
+    	<div class="parti-foot row">
+    		<div class="parti-foot-r">
+    			<button class="bui-btn" onclick="cz()" style="background-color: #25bfe6;">
+    				<img src="/Public/images/to.png">转入
+    			</button>
+    			<button class="bui-btn particulars_zhuanzhang"  onclick="cz4()" style="background-color: #3880ff;">
+    				<img src="/Public/images/sell.png">转出
+    			</button>
+    		</div>
+    	</div>
+    </footer>
+</div>
+
+<script>
+uiList = '';
+function cz(){
+	$('.is-loading').show();
+	var coin=$('.par_coin').val();
+	bui.load({ url: "pages/property/gathering?coin="+coin});
+	setTimeout(function  () {
+		$('.is-loading').hide();    
+	},1000)
+}
+function cz4(){
+	var coin=$('.par_coin').val();
+	bui.load({ url: "pages/property/transfer?coin="+coin});
+	setTimeout(function  () {
+		$('.is-loading').hide();    
+	},1000)
+}
+function particulars_sx(coin_name){
+	console.log(coin_name);
+	var getParams = bui.getPageParams();
+	getParams.done(function(result){
+		if(coin_name!='b'){
+			result['coin']=coin_name;
+		}
+		$('.par_coin').val(result['coin']);
+		$('.gengduo_jl').attr('href','pages/property/rs_record.html?yemian=particulars&coin='+result['coin']);
+		bui.ajax({
+			url: "/Home/property/coin_mas",
+			data: {coin:result['coin']},
+			async:false
+		}).then(function(res){
+			if(res['status']==1){
+				$(".particulars_coin").html(res['coin']['js_yw']);
+				$(".particulars_title").html(res['coin']['title']);
+				$('.particulars_img').attr('src','/Upload/coin/'+res['coin']['img']);
+				$(".particulars_keyong").html(res['coin']['keyong']);
+				$(".particulars_dongjie").html(res['coin']['dongjie']);
+				$(".particulars_zhehe").html(res['coin']['zong']);
+				//$('.particulars_zhuanzhang').attr('href','pages/property/transfer?coin='+res['coin']['name']);
+			}
+		});
+		bui.ajax({
+			url: "/Home/Finance/zrzc_all",
+			data: {coin:result['coin']},
+			async:false
+		}).then(function(res){
+			if(res['data']){
+				var particulars_mas='';
+				var new_cd=res['data'].length;
+				for(j=0;j<new_cd;j++) {
+					particulars_mas+='<div class="into bui-btn" href="pages/property/'+res['data'][j]['yemian']+'?id='+res['data'][j]['id']+'"><img class="pari-img-l" src="/Public/images/'+res['data'][j]['ye']+'.png" /><div class="bizh-min fl"><span class="wait">'+res['data'][j]['num']+'<i>'+res['data'][j]['coinname']+'</i></span><p class="ip">'+res['data'][j]['addtime']+'</p></div><img class="pari-img" src="/Public/images/right_b.png"><div class="fate fr"><p style="'+res['data'][j]['color']+'">'+res['data'][j]['mas']+'</p></div></div>';
+				}
+				$('.particulars_list').html(particulars_mas);
+			}else{
+				$('.particulars_list').html('<img src="/Public/images/no.png" /><br />暂无记录');
+			}
+		});
+	});
+}
+particulars_sx('b');
+function particulars_tz(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/property"], function(main) {
+				//property_sx();
+			})
+		}
+	})
+}
+setTimeout(function  () {
+	$('.layui-layer-shade').remove();
+},1000)
+</script>

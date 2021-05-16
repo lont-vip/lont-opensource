@@ -1,0 +1,50 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page" style="background: #fbfbfb;">
+	<main style="background: #fbfbfb;">
+		<div class="property-head">
+			<span>我的资产</span>
+			<img src="" />
+		</div>
+		<div class="property-total">
+			<div class="property-total-hd">总资产市值(≈)</div>
+			<div class="property-total-num">
+				<span class="property-total-num-l">￥ <font class="zhehe_zong_rmb"></font></span>
+			</div>
+		</div>
+		<div class="pro-my">
+			<span class="pro-my-l">资产详情</span>
+		</div>	
+		<div class="property_list"></div>
+	</main>
+</div>
+<script>
+function property_sx(){
+	bui.ajax({
+		url: "/Home/property/wallet_mas",
+		data: {}
+	}).then(function(res){
+		if(res['status']==1){
+			$('.zhehe_zong_rmb').html(res['zhehe_cny']);
+			if(res['coinlist']){
+				var property_list='';
+				var new_cd=res['coinlist'].length;
+				for(i=0;i<new_cd;i++) {
+					property_list+='<div class="property-list row bui-btn" href="pages/property/particulars?coin='+res['coinlist'][i]['name']+'"><div class="property-list-left"><img src="/Upload/coin/'+res['coinlist'][i]['img']+'" />'+res['coinlist'][i]['js_yw']+'</div><div class="property-list-center"><div class="property-list-cd1">可用</div><div class="property-list-cd2">'+res['coinlist'][i]['keyong']+'</div><div class="property-list-cd3">≈￥'+res['coinlist'][i]['rmb']+'</div></div><div class="property-list-right"><div class="property-list-rd1">冻结</div><div class="property-list-rd2">'+res['coinlist'][i]['dongjie']+'</div><div class="property-list-rd3"><img src="/Public/images/right_s.png"/></div></div></div>';
+				}
+				$('.property_list').html(property_list);
+			}
+		}
+	});
+}
+property_sx();
+</script>

@@ -1,0 +1,412 @@
+<script>
+bui.ajax({
+	url: "/Home/Home/sfdl",
+	data: {},
+	async:false
+}).then(function(res){
+	if(res['status']==0){
+		bui.load({ url: "pages/login", replace:true });
+	}
+});
+</script>
+<div class="bui-page" style="background:#fbfbfb;">
+	<main style="background:#fbfbfb;">
+		<div class="head-ban">
+			<div class="head-left"><img src="/Public/images/left.png" onclick="fabu_tz()" /></div>
+			<div class="head-main" >
+				<div class="i-want">
+					<span class="niusq activity-w" onclick="xuanze_s(1,this)" data-type='1'>我要购买</span>
+					<span class="niusq" onclick="xuanze_s(2,this)" data-type='2' >我要出售</span>
+				</div>
+			</div>
+			<div class="head-right"></div>
+		</div>
+		<div class="box-mint">
+			<form class="fabu_index">
+				<input type="hidden" value="1" name="type" class="fabu_type"/>
+				<input type="hidden" value="" name="market" class="fabu_market"/>
+				<input type="hidden" value="0" name="pay_1"   class="fabu_pay_1">
+				<input type="hidden" value="0" name="pay_2"  class="fabu_pay_2">
+				<input type="hidden" value="0" name="pay_3"  class="fabu_pay_3">
+				<input type="hidden" value="0" name="num"  class="fabu_num">
+				<div class="type-r">
+					<div class="choice-h">
+						交易币对
+						<span><font class="fabu_market_name"></font> <img src="/Public/images/sele.png"/></span>
+					</div>
+					<div class="choice-n">
+						<div class="currenci">
+							<label style="margin-bottom: 0.2rem;">交易单价</label>
+							<div class="inp-text-w" style="">
+								<input class="heig-dd danprice" name="price" style="width: 80%;border:none;background:none;font-size: 0.28rem;" type="text"  placeholder="请输入交易价格" oninput="fabu_zongjia()" maxlength="12" onkeyup="nu2(this)" />
+								<span style="float: right;color:#2d2d2d;font-size: 0.28rem;font-weight:600;margin-top: .05rem;margin-right: .15rem;" class="fabu_coin_2"></span>
+							</div>
+						</div>
+						<div class="currenci" style="border: none;">
+							<label style="margin-bottom: 0.2rem;">交易数量</label>
+							<div class="currenci-ul">
+								<ul class="row fabu_num_list"></ul>
+							</div>
+						</div>
+						<div class="currenci" style="border: none;">
+							<label style="    margin-bottom: 0.2rem;">交易总价</label>
+							<div class="inp-text-w" style="">
+								<input class="heig-dd fabu_zongjia" style="width: 80%;border:none;background:none;font-size: 0.28rem;font-weight: 600;" type="text"  value="0.00" readonly="readonly" />
+								<span style="float: right;color:#2d2d2d;font-size: 0.28rem;font-weight:600;margin-top: .05rem;margin-right: .15rem;" class="fabu_coin_2"></span>
+							</div>
+						</div>
+					</div>
+					<div class="choice-n">
+						<div class="yijia yijia2 fabu_fkuan" style="display:none;">
+							<label class="mai_buy">付款方式：</label>
+							<label class="sk-inn mai_sell" style="display: none;">收款方式</label>
+							<div class="form-item">
+								<div class="controls controls-store controls-city" >
+									<div class="city-wrapper current-o current-o1" style="height:1rem;">
+										<input type="text" id="city" style="padding: 0;margin-left: 0;" name="cit3" class="current-city city11" readonly placeholder="选择付款方式">
+										<img class="mode wxx" src="/Public/images/wx-wx.png"/>
+										<img class="mode zfbb"src="/Public/images/zfb.png" />
+										<img class="mode cardd"src="/Public/images/card.png" />
+									</div>
+								</div>
+								<img class="xiala-ico" src="/Public/images/sele.png"/>
+							</div>
+						</div>
+						<div class="yijia" style="clear:both;">
+							<label>最小交易数量</label>
+							<div class="inp-text mins">
+								<input type="text" class="min_limit" name="money_min" maxlength="12" onkeyup="nu2(this)" placeholder="输入最小交易数量" />
+								<span class="fabu_coin_1"></span>
+							</div>
+						</div>
+						<!--<div class="yijia" style="border: none;clear:both;">
+							<label>最大额度</label>
+							<div class="inp-text mins">
+								<input type="text" class="min_limit" name="money_max" maxlength="12" onkeyup="nu2(this)" placeholder="输入最大额度" />
+								<span class="fabu_coin_2"></span>
+							</div>
+						</div>-->
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="ord loadToSuccess fabu_index_tj"><button>发布订单</button></div>
+		<form class="store-info-form info-form-page">
+			<div class="masker hidden"></div>
+			<div class="city-box hidden cit-box3" style="display: none;">
+				<section class="express-city-box">
+					<div class="hot-city-title"><h4><span class="new-left"></span>付款方式</h4></div>
+					<div class="hot-city hot-city3">
+						<div class="hot hotad"style="height: initial;padding-top: inherit;padding-bottom: inherit;">
+							<a data-value="0" class="mai-h card xuanzhefukuan pay_method_xs_1" style="display:none;" data-type="pay_method">
+								<img src="/Public/images/card.png"/>银行卡
+								<img class="m1" style="margin-top: 0.1rem; float: right; width: 0.3rem;display: none;" src="/Public/images/dui_g.png">
+							</a>
+							<a data-value="0" class="buy-h z-fb xuanzhefukuan pay_method_xs_2" style="display:none;" data-type="pay_method2">
+								<img src="/Public/images/zfb.png"/>支付宝
+								<img class="m1" style="margin-top: 0.1rem; float: right; width: 0.3rem;display: none;" src="/Public/images/dui_g.png">
+							</a>
+							<a data-value="0" class="mai-h s-wx xuanzhefukuan pay_method_xs_3" style="display:none;" data-type="pay_method3">
+								<img src="/Public/images/wx-wx.png"/>微信
+								<img class="m1" style="margin-top: 0.1rem; float: right; width: 0.3rem;display: none;" src="/Public/images/dui_g.png">
+							</a>
+							<div class="btn-seaew row" style="width: 86%;margin: 0 auto;margin-top: 0.35rem;margin-bottom: 0.35rem;">
+								<button type="button"  class="ggbb pay_quxiao">取消</button>
+								<button type="button"  class="queding">确定</button>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</form>
+		<div class="popup-tan bd-box">
+			<div class="bd-box-n store-info-form">
+				<div class="hot-city-title"><h4><span class="new-left"></span>交易币对</h4><img class="hot-city-title-off" src="/Public/images/off2.png" /></div>
+				<div class="bd-box-mn fabu_coin_list"></div>
+			</div>
+		</div>
+	</main>
+</div>
+<script>
+function fabu_zongjia(){
+	var market=$('.fabu_market').val();
+	var danprice=$('.danprice').val();
+	var fabu_num=$('.fabu_num').val();
+	if(danprice>0 && fabu_num>0){
+		$.ajax({
+			url: '/Home/Entruy/num_ajax',
+			type: 'POST',
+			dataType: 'json',
+			data:{price:danprice,num:fabu_num,market:market},
+			cache:false,
+			success:function(data){
+				$('.fabu_zongjia').val(data['money']);
+			}
+		})
+	}else{
+		$('.fabu_zongjia').val(0);
+	}
+}
+
+$('.niusq').click(function(){
+	var type = $(this).data('type');
+	$('.niusq').removeClass('activity-w');
+	$(this).addClass('activity-w');
+	$('.buytype').val(type);
+	$('.fabu_type').val(type);
+	if(type == 2){
+		$('.mai_sell').show();
+		$('.mai_buy').hide();
+	}else{
+		$('.mai_buy').show();
+		$('.mai_sell').hide();	
+   	}
+})
+
+function fabu_num_xz(num,zj){
+	$('.currenci-ul li').attr('class','');
+ 		$(zj).attr('class','active');
+	$('.fabu_num').val(num);
+	fabu_zongjia();
+}
+
+$('.pay_quxiao').click(function(){
+	$('.fabu_pay_1').val('0');
+	$('.fabu_pay_2').val('0');
+	$('.fabu_pay_3').val('0');
+	$('.hot >a').data('value',0);
+	$('.hot >a>.m1').hide();
+	$('.current-o1').find('input').show();
+	$('.current-o1 > img').removeClass('line_dis');
+	$('.cit-box3').slideUp(500);
+    $('.masker').addClass('hidden');
+})
+
+//选择付款方式
+$('.xuanzhefukuan').click(function(){
+	var num = $(this).data('value');// 付款方式状态 1选中
+	$('.city11').hide()
+	var pay = $(this).data('type');
+	$(this).children('.m1').toggle();
+	if(num == 1){
+		if(pay == 'pay_method'){
+			$('.cardd').removeClass('line_dis');
+			$(this).data('value',0);
+			$('.fabu_pay_1').val('0');
+		}
+		if(pay == 'pay_method3'){
+			$('.wxx').removeClass('line_dis');
+			$(this).data('value',0);
+			$('.fabu_pay_3').val('0');
+		}
+		if(pay == 'pay_method2'){
+			$('.zfbb').removeClass('line_dis');
+			$(this).data('value',0);
+			$('.fabu_pay_2').val('0');
+		}
+		if($('.current-o1 .line_dis').length<=0){
+			$('.current-o1 input').show();
+		}
+	}else{
+		if(pay == 'pay_method'){
+			$('.cardd').addClass('line_dis');	
+			$(this).data('value',1);
+			$('.fabu_pay_1').val('1');
+		}
+		if(pay == 'pay_method3'){
+			$('.wxx').addClass('line_dis');	
+			$(this).data('value',1);
+			$('.fabu_pay_3').val('1');
+		}
+		if(pay == 'pay_method2'){
+			$('.zfbb').addClass('line_dis');	
+			$(this).data('value',1);
+			$('.fabu_pay_2').val('1');
+		}
+		if($('.current-o1 .line_dis').length<=0){
+			$('.current-o1 input').show();
+		}
+	}	
+})
+
+function fabu_sx(market){
+	bui.ajax({
+		url: "/Home/Entruy/entruy_mas",
+		data: {market:market},
+		async:false
+	}).then(function(res){
+		$('.fabu_market').val(res['data']['name']);
+		if(res['data']['fenqu']=='cny'){
+			$('.fabu_fkuan').show();
+		}else{
+			$('.fabu_fkuan').hide();
+		}
+		
+		$('.danprice').attr('placeholder',res['data']['price_min']+' - '+res['data']['price_max']+' '+res['data']['coin'][1]);
+		
+		if(res['data']['num_list']){
+			$('.fabu_num').val(res['data']['num_list'][0]);
+			var fabu_num_list='';
+			var num_cd=res['data']['num_list'].length;
+			for(var k=0;k<num_cd;k++){
+				if(k==0){
+					fabu_num_list+='<li onclick="fabu_num_xz('+res['data']['num_list'][k]+',this)" class="active"><span>'+res['data']['num_list'][k]+' '+res['data']['coin'][0]+'</span></li>';
+				}else{
+					fabu_num_list+='<li onclick="fabu_num_xz('+res['data']['num_list'][k]+',this)"><span>'+res['data']['num_list'][k]+' '+res['data']['coin'][0]+'</span></li>';
+				}
+			}
+			$('.fabu_num_list').html(fabu_num_list);
+		}
+		$('.fabu_coin_1').html(res['data']['coin'][0]);
+		$('.fabu_coin_2').html(res['data']['coin'][1]);
+		$('.fabu_market_name').html(res['data']['market_name']);
+		
+		//查询绑定的信息
+		if(res['user']['yhk']==1){
+			$('.pay_method_xs_1').show();
+		}
+		if(res['user']['zfb']==1){
+			$('.pay_method_xs_2').show();
+		}
+		if(res['user']['wx']==1){
+			$('.pay_method_xs_3').show();
+		}
+		
+		if(res['market_arr']){
+			var fabu_coin_list='';
+			var market_cd=res['market_arr'].length;
+			for(var j=0;j<market_cd;j++){
+				fabu_coin_list+='<div onclick=fabu_market_xz("'+res['market_arr'][j]['name']+'") class="bd-box-div">'+res['market_arr'][j]['name2']+'</div>';
+			}
+			$('.fabu_coin_list').html(fabu_coin_list);
+		}
+	});
+}
+
+function fabu_market_xz(market){
+	fabu_sx(market);
+	$('.bd-box').hide();
+}
+
+var getParams = bui.getPageParams();
+getParams.done(function(result){
+	fabu_sx(result['market']);
+});
+
+function xuanze_s(num,zj){
+	var type = $(zj).data('type');
+	console.log(type)
+   		if(type === 1){		
+   			
+   			//$('.yijia2').show();
+   		}else{	
+   			
+   			//$('.yijia2').hide();
+   		}
+	$('.fabu_type').val(num);
+}
+
+
+//发布提交
+bui.ready(function(){
+	$(".fabu_index_tj").on("click",function (argument) {
+		var data = $('.fabu_index').serialize();
+		$.ajax({
+			url: '/Home/Entruy/fabu_ajax',
+			type: 'POST',
+			dataType: 'json',
+			data:data,
+			cache:false,
+			success:function(data){
+				bui.hint({content:data['info'], position:"center" , effect:"fadeInDown"});
+				if(data.status==1){
+					bui.load({ url: "pages/transaction/advertising" });
+				}
+			}
+		})
+	});
+});
+$('.queding').click(function(){
+	$('.cit-box3').slideUp(500);
+    $('.masker').addClass('hidden');
+})
+$('.current-o1').click(function(){
+  	$('.current-o1 input').hide()
+    $('.cit-box3').slideDown(500,function(){
+    
+    });
+    $('.masker').removeClass('hidden');
+})
+function nu(obj){
+	obj.value = obj.value.replace(/[^0-9\.]/g,''); //清除"数字"和"."以外的字符
+	obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+	obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
+	obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+	obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d).*$/,'$1$2.$3'); //只能输入两个小数  几个\d保留几位小数
+    
+}
+
+function nu2(obj){
+	obj.value = obj.value.replace(/[^0-9\.]/g,''); //清除"数字"和"."以外的字符
+	obj.value = obj.value.replace(/^\./g,""); //验证第一个字符是数字
+	obj.value = obj.value.replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的
+	obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+	obj.value = obj.value.replace(/^(\-)*(\d+)\.(\d\d\d\d\d\d).*$/,'$1$2.$3'); //只能输入两个小数  几个\d保留几位小数
+    
+}
+
+function fabu_tz2(){
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/advertising"], function(main) {
+				uiList.reload();
+			})
+		}
+	})
+}
+function fabu_tz() {
+	var market=$('.fabu_market').val();
+	router.back({
+		callback: function(mod) {
+			loader.require(["pages/transaction"], function(main) {
+				xuanzedq(market);
+			})
+		}
+	})
+}
+
+
+
+
+
+
+
+
+
+
+$('.choice-h').click(function  () {
+	$('.bd-box').show();
+}) 	
+$('.hot-city-title-off').click(function  () {
+	$('.bd-box').hide();
+})
+
+
+$(document).on("click", ".loadToSuccess", function(e) {
+	var opts = {
+		lines: 10,length: 8,width: 5,radius: 10,corners: 1,rotate: 0,color: '#FFF',speed: 1,trail: 60,shadow: false,hwaccel: false,className: 'spinner',zIndex: 2e9,top: 'auto',left: 'auto'
+	};
+	var target = document.createElement("div");
+	target.className = "cz";
+	document.body.appendChild(target);
+	var spinner = new Spinner(opts).spin(target);
+	var overlay = iosOverlay({
+		spinner: spinner
+	});
+	window.setTimeout(function() {
+		overlay.hide();
+		document.querySelector(".cz").remove();
+	}, 1000);
+	return false;
+});
+</script>
